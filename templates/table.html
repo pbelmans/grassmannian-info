@@ -1,0 +1,41 @@
+{% import "entry.html" as entry %}
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+
+<table>
+  {# type A #}
+  {% for n in range(1, 11) %}
+
+  {% endfor %}
+
+  {# type B #}
+  {% for n in range(1, 11) %}
+    <tr>
+      <th class="dynkin">
+        $\mathrm{B}_{ {{ n }} }$
+      </th>
+    </tr>
+  {% endfor %}
+
+  {# type C #}
+  {% for n in range(1, 11) %}
+
+  {% endfor %}
+
+  {# type D #}
+  {% for n in range(1, 11) %}
+
+  {% endfor %}
+</table>
+
+
