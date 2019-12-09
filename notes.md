@@ -38,6 +38,11 @@
   - below the table: list of the references
   - hovering in the table highlights the reference below and vice versa
 
+* Hochschild cohomology: a second table, with
+  - Hochschild affine: green, (light green if no description)
+  - Hochschild non-affine: red, (light red if no description)
+  - not clear: grey
+
 
 # To be done
 
