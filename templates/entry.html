@@ -1,21 +1,22 @@
-
 {% macro entry(G) %}
-<td class="entry" data-label="{{ G["type"] }}-{{ G["parabolic"] }}">
-  ${{ G["latex"] | safe }}$
+<td class="entry" data-type="{% if G["cominuscule"] %}cominuscule {% endif %}{% if G["minuscule"] %}minuscule {% endif %}{% if G["adjoint"] %}adjoint {% endif %}{% if G["coadjoint"] %}coadjoint{% endif %}" data-label="{{ G["type"] }}-{{ G["parabolic"] }}">
+  <div class="alpha">
+    ${{ G["latex"] | safe }}$
 
-  <div class="information">
+    <div class="information">
+      \begin{align*}
+        d&={{ G["dimension"] }} \\
+        i&={{ G["index"] }} \\
+        r&={{ G["rank"] }}
+      \end{align*}
+    </div>
+    <!--
     \begin{align*}
-      d&={{ G["dimension"] }} \\
-      i&={{ G["index"] }} \\
-      r&={{ G["rank"] }}
+      \dim&={{ G["dimension"] }} \\
+      \index&={{ G["index"] }} \\
+      \rk&={{ G["rank"] }}
     \end{align*}
+    -->
   </div>
-  <!--
-  \begin{align*}
-    \dim&={{ G["dimension"] }} \\
-    \index&={{ G["index"] }} \\
-    \rk&={{ G["rank"] }}
-  \end{align*}
-  -->
 </td>
 {% endmacro %}

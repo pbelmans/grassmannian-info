@@ -1,5 +1,5 @@
 table {
-  font-size: 9px;
+  font-size: 10px;
   table-layout: fixed;
   width: 600px;
   margin: 10px 0;
@@ -13,25 +13,65 @@ table {
   }
 
   td.entry {
+    padding: 0;
     width: 50px;
     max-width: 50px;
     overflow: hidden;
     text-align: center;
     border: 1px solid #ddd;
     vertical-align: middle;
-    padding-top: 5px;
 
     p {
       vertical-align: middle;
     }
-
-    div.information {
-      display: none;
-    }
   }
 
-  td.active {
-    background-color: #ddd;
+  td.mincomin[data-type~=cominuscule] {
+    background-color: rgba(0, 123, 255, 0.3);
+  }
+
+  td.mincomin[data-type~=minuscule] {
+    background-color: rgba(255, 53, 69, 0.3);
+  }
+
+  td.mincomin[data-type~=cominuscule][data-type~=minuscule] {
+    background-color: rgba(40, 167, 69, 0.3);
+  }
+
+  td.adjcoadj[data-type~=coadjoint] {
+    background-color: rgba(0, 123, 255, 0.3);
+  }
+
+  td.adjcoadj[data-type~=adjoint] {
+    background-color: rgba(255, 53, 69, 0.3);
+  }
+
+  td.adjcoadj[data-type~=adjoint][data-type~=coadjoint] {
+    background-color: rgba(40, 167, 69, 0.3);
+  }
+
+  div.alpha {
+    height: 100%;
+    width: 100%;
+    display: block;
+  }
+
+  div.information {
+    display: none;
+  }
+
+  td.active > div.alpha {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+table.expanded {
+  tr {
+    height: 100px;
+  }
+
+  div.information {
+    display: block;
   }
 }
 

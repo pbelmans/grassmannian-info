@@ -23,6 +23,7 @@ MathJax = {
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
   </head>
   <body>
+
 <div class="d-none">
 \begin{equation}
 \DeclareMathOperator\Gr{Gr}
@@ -94,12 +95,44 @@ MathJax = {
 
 
 {% import "entry.html" as entry %}
-<div class="container">
+<div class="container" style="max-width: 1200px">
+  <form id="controls" class="form-group row">
+    <div class="col-6">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="no-colors" name="color" value="no-colors" checked>
+        <label class="form-check-label" for="no-colors">no colors</label>
+      </div>
+
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="mincomin" name="color" value="mincomin">
+        <label class="form-check-label" for="mincomin">(co)minuscule</label>
+      </div>
+
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="adjcoadj" name="color" value="adjcoadj">
+        <label class="form-check-label" for="adjcoadj">(co)adjoint</label>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="minimum" name="information" value="minimum" checked>
+        <label class="form-check-label" for="minimum">minimum</label>
+      </div>
+
+      <div class="form-check">
+        <input class="form-check-input" type="radio" id="more-info" name="information" value="more-info">
+        <label class="form-check-label" for="more-info">more information</label>
+      </div>
+    </div>
+  </form>
+  </form>
+
   <div class="row">
     <div class="col-12 col-xl-6">
       <table class="">
         <colgroup>
-          <col style="width: 100px">
+          <col style="width: 120px">
           <col style="width: 50px">
           <col style="width: 50px">
           <col style="width: 50px">
@@ -126,7 +159,7 @@ MathJax = {
     <div class="col-12 col-xl-6">
       <table class="">
         <colgroup>
-          <col style="width: 100px">
+          <col style="width: 120px">
           <col style="width: 50px">
           <col style="width: 50px">
           <col style="width: 50px">
@@ -154,7 +187,7 @@ MathJax = {
     <div class="col-12 col-xl-6">
       <table class="">
         <colgroup>
-          <col style="width: 100px">
+          <col style="width: 120px">
           <col style="width: 50px">
           <col style="width: 50px">
           <col style="width: 50px">
@@ -181,7 +214,7 @@ MathJax = {
     <div class="col-12 col-xl-6">
       <table class="">
         <colgroup>
-          <col style="width: 100px">
+          <col style="width: 120px">
           <col style="width: 50px">
           <col style="width: 50px">
           <col style="width: 50px">
@@ -211,7 +244,7 @@ MathJax = {
     {% for T in "EFG" %}
       <table class="">
         <colgroup>
-          <col style="width: 100px">
+          <col style="width: 120px">
           <col style="width: 50px">
           <col style="width: 50px">
           <col style="width: 50px">
@@ -283,20 +316,46 @@ function isomorphisms(label) {
   return [...new Set(result)];
 }
 
-// TODO make it more robust? event bubbling?
 $("td.entry").mouseenter(function(e) {
   // remove this always
   $("td.entry, circle").removeClass("active");
 
   // make the isomorphic ones look active
-  console.log(isomorphisms($(e.target).data("label")))
-  var isomorphic = $("*[data-label='" + isomorphisms($(e.target).data("label")).join("'], *[data-label='") + "']");
+  var isomorphic = $("*[data-label='" + isomorphisms($(e.currentTarget).data("label")).join("'], *[data-label='") + "']");
   isomorphic.addClass("active");
 });
 
 $("td.entry").mouseleave(function() {
   $("td.entry, circle").removeClass("active");
 });
+
+// change the color
+// TODO make a legend
+$("input[type=radio][name=color]").change(function() {
+  $("td.entry").removeClass("adjcoadj mincomin");
+  switch (this.value) {
+    case "mincomin":
+      $("td.entry").addClass("mincomin");
+      break;
+    case "adjcoadj":
+      $("td.entry").addClass("adjcoadj");
+      break;
+  }
+});
+
+// toggle between no or lots of information
+$("input[type=radio][name=information]").change(function() {
+  switch (this.value) {
+    case "minimum":
+      $("table").removeClass("expanded");
+      break;
+    case "more-info":
+      $("table").addClass("expanded");
+      break;
+  }
+});
+
+
 
 </script>
 
