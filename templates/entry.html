@@ -1,5 +1,21 @@
-{% macro cell(name, dimension, rank, index) %}
-<td class="entry">
-  ${{ name | safe }}$
+
+{% macro entry(G) %}
+<td class="entry" data-label="{{ G["type"] }}-{{ G["parabolic"] }}">
+  ${{ G["latex"] | safe }}$
+
+  <div class="information">
+    \begin{align*}
+      d&={{ G["dimension"] }} \\
+      i&={{ G["index"] }} \\
+      r&={{ G["rank"] }}
+    \end{align*}
+  </div>
+  <!--
+  \begin{align*}
+    \dim&={{ G["dimension"] }} \\
+    \index&={{ G["index"] }} \\
+    \rk&={{ G["rank"] }}
+  \end{align*}
+  -->
 </td>
 {% endmacro %}

@@ -1,0 +1,40 @@
+table {
+  font-size: 9px;
+  table-layout: fixed;
+  width: 600px;
+  margin: 10px 0;
+
+  tr {
+    height: 30px;
+  }
+
+  th {
+    text-align: center;
+  }
+
+  td.entry {
+    width: 50px;
+    max-width: 50px;
+    overflow: hidden;
+    text-align: center;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+    padding-top: 5px;
+
+    p {
+      vertical-align: middle;
+    }
+
+    div.information {
+      display: none;
+    }
+  }
+
+  td.active {
+    background-color: #ddd;
+  }
+}
+
+circle.active {
+  fill: black;
+}
