@@ -15,11 +15,14 @@ def latex(T, n, k):
 
     elif T == "B":
         if k == 1: return "\\mathrm{{Q}}^{{{}}}".format(2*n - 1)
+        elif n == 2 and k == 2: return "\\mathbb{{P}}^{{3}}"
         else: return "\\OGr({},{})".format(k, 2*n + 1)
 
     elif T == "C":
         if k == 1: return "\\mathbb{{P}}^{{{}}}".format(2*n - 1)
-        elif k == n: return "\\LGr({},{})".format(k, 2*n)
+        elif k == n:
+            if n == 2: return "\\mathrm{{Q}}^{{3}}"
+            else: return "\\LGr({},{})".format(k, 2*n)
         else: return "\\SGr({},{})".format(k, 2*n)
 
     elif T == "D":
