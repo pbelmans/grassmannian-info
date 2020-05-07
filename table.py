@@ -1,12 +1,9 @@
 from flask import Flask
 from flask import render_template
-from flask_scss import Scss
 
 import json
 
 app = Flask(__name__)
-Scss(app, static_dir="static", asset_dir="assets")
-print("hi")
 
 grassmannians = {letter : {} for letter in "ABCDEFG"}
 
