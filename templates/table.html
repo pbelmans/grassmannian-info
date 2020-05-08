@@ -130,17 +130,17 @@ MathJax = {
 
   <div class="row">
     <div class="col-12 col-xl-6">
-      <table class="">
+      <table class="atlas">
         <colgroup>
           <col style="width: 120px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
         </colgroup>
         {% for n in grassmannians["A"] %}
           <tr>
@@ -157,17 +157,17 @@ MathJax = {
     </div>
 
     <div class="col-12 col-xl-6">
-      <table class="">
+      <table class="atlas">
         <colgroup>
           <col style="width: 120px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
         </colgroup>
         <tr class="d-none d-xl-block"></tr>
         {% for n in grassmannians["B"] %}
@@ -185,17 +185,17 @@ MathJax = {
     </div>
 
     <div class="col-12 col-xl-6">
-      <table class="">
+      <table class="atlas">
         <colgroup>
           <col style="width: 120px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
         </colgroup>
         {% for n in grassmannians["C"] %}
           <tr>
@@ -212,17 +212,17 @@ MathJax = {
     </div>
 
     <div class="col-12 col-xl-6">
-      <table class="">
+      <table class="atlas">
         <colgroup>
           <col style="width: 120px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
         </colgroup>
         <tr class="d-none d-xl-block"></tr>
         <tr class="d-none d-xl-block"></tr>
@@ -240,19 +240,19 @@ MathJax = {
       </table>
     </div>
 
-    <div class="col-12 col-xl-8">
+    <div class="col-12 col-xl-7">
     {% for T in "EFG" %}
-      <table class="">
+      <table class="atlas">
         <colgroup>
           <col style="width: 120px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
-          <col style="width: 50px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
+          <col style="width: 60px">
         </colgroup>
         {% for n in grassmannians[T] %}
           <tr>
@@ -269,8 +269,30 @@ MathJax = {
     {% endfor %}
     </div>
 
-    <div class="col-xl-4">
-      specific information goes here
+    <div class="col-xl-5">
+      <h4>Information</h4>
+      <table class="table table-striped table-sm information">
+        <tr>
+          <th scope="row">name(s)</th>
+          <td id="name"></td>
+        </tr>
+        <tr>
+          <th scope="row">dimension</th>
+          <td id="dimension"></td>
+        </tr>
+        <tr>
+          <th scope="row">index</th>
+          <td id="index"></td>
+        </tr>
+        <tr>
+          <th scope="row">Euler&nbsp;characteristic</th>
+          <td id="euler"></td>
+        </tr>
+        <tr>
+          <th scope="row">type</th>
+          <td id="type"></td>
+        </tr>
+      </table>
     </div>
   </div>
 </div>
@@ -284,19 +306,20 @@ function isomorphisms(label) {
   var k = parseInt(label.split("-")[1]);
 
   var result = [label];
-  console.log(label, T, n, k);
 
   switch (T) {
     case "A":
       result.push([T, n, "-", n - k + 1].join(""))
       break;
     case "B":
-      // TODO maybe B_2 and C_2
+      if (n == 2 && k == 1) result.push("C2-2");
+      if (n == 2 && k == 2) result.push("A3-1", "A3-3", "C2-1");
       if (n == 3 && k == 1) result.push("G2-1");
       if (k == n) result.push(["D", n + 1, "-", n].join(""), ["D", n + 1, "-", n + 1].join(""));
       break;
     case "C":
       if (k == 1) result.push(["A", 2*n - 1, "-", 1].join(""), ["A", 2*n - 1, "-", 2*n].join(""));
+      if (n == 2 && k == 2) result.push("B2-1");
       break;
     case "D":
       if (n == 4 && (k == 1 || k == 3 || k == 4)) result.push("D4-1", "D4-3", "D4-4");
@@ -316,20 +339,36 @@ function isomorphisms(label) {
   return [...new Set(result)];
 }
 
+// the data fields
+var fields = ["name", "dimension", "index", "euler", "type"];
+
+// interact with the table
 $("td.entry").mouseenter(function(e) {
-  // remove this always
+  // clear the color on other cells
   $("td.entry, circle").removeClass("active");
 
   // make the isomorphic ones look active
   var isomorphic = $("*[data-label='" + isomorphisms($(e.currentTarget).data("label")).join("'], *[data-label='") + "']");
   isomorphic.addClass("active");
+
+  // display the specific data
+  fields.forEach(function (field) {
+    $("td#" + field).text($(e.currentTarget).data(field));
+  });
+
 });
 
 $("td.entry").mouseleave(function() {
+  // clear the color
   $("td.entry, circle").removeClass("active");
+
+  // clear the fields
+  fields.forEach(function (field) {
+    $("td#" + field).text("");
+  });
 });
 
-// change the color
+// change the color by activating a class which triggers the styling
 // TODO make a legend
 $("input[type=radio][name=color]").change(function() {
   $("td.entry").removeClass("adjcoadj mincomin");
@@ -343,7 +382,7 @@ $("input[type=radio][name=color]").change(function() {
   }
 });
 
-// toggle between no or lots of information
+// toggle between no or lots of information by activating a class which triggers the styling
 $("input[type=radio][name=information]").change(function() {
   switch (this.value) {
     case "minimum":

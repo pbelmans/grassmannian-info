@@ -1,7 +1,7 @@
-table {
+table.atlas {
   font-size: 10px;
   table-layout: fixed;
-  width: 600px;
+  width: 650px;
   margin: 10px 0;
 
   tr {
@@ -14,8 +14,8 @@ table {
 
   td.entry {
     padding: 0;
-    width: 50px;
-    max-width: 50px;
+    width: 55px;
+    max-width: 55px;
     overflow: hidden;
     text-align: center;
     border: 1px solid #ddd;
@@ -65,7 +65,7 @@ table {
   }
 }
 
-table.expanded {
+table.atlas.expanded {
   tr {
     height: 100px;
   }
@@ -78,3 +78,17 @@ table.expanded {
 circle.active {
   fill: black;
 }
+
+
+table.information {
+  font-size: 14px;
+
+  th {
+    width: 1px;
+  }
+
+  td {
+    text-align: right;
+  }
+}
+

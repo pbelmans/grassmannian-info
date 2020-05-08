@@ -1,5 +1,16 @@
+{% macro type(G) -%}
+  {%- if G["cominuscule"] -%}cominuscule {% endif %}
+  {%- if G["minuscule"] -%}minuscule {% endif %}
+  {%- if G["adjoint"] -%}adjoint {% endif %}
+  {%- if G["coadjoint"] -%}coadjoint{% endif %}
+{%- endmacro %}
+
+{% macro data(G) -%}
+data-dimension="{{ G["dimension"] }}" data-index="{{ G["index"] }}" data-euler="{{ G["rank"] }}"
+{%- endmacro %}
+
 {% macro entry(G) %}
-<td class="entry" data-type="{% if G["cominuscule"] %}cominuscule {% endif %}{% if G["minuscule"] %}minuscule {% endif %}{% if G["adjoint"] %}adjoint {% endif %}{% if G["coadjoint"] %}coadjoint{% endif %}" data-label="{{ G["type"] }}-{{ G["parabolic"] }}">
+<td class="entry" data-type="{{ type(G) }}" {{ data(G) }} data-label="{{ G["type"] }}-{{ G["parabolic"] }}">
   <div class="alpha">
     ${{ G["latex"] | safe }}$
 
@@ -7,16 +18,9 @@
       \begin{align*}
         d&={{ G["dimension"] }} \\
         i&={{ G["index"] }} \\
-        r&={{ G["rank"] }}
+        \chi&={{ G["rank"] }}
       \end{align*}
     </div>
-    <!--
-    \begin{align*}
-      \dim&={{ G["dimension"] }} \\
-      \index&={{ G["index"] }} \\
-      \rk&={{ G["rank"] }}
-    \end{align*}
-    -->
   </div>
 </td>
 {% endmacro %}
