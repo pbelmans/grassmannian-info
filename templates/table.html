@@ -38,7 +38,7 @@ MathJax = {
 </div>
 
 {% macro dynkin(T, n) %}
-<svg height="30" viewBox="-10 -10 {% if T == "E" %}{{ n * 20 - 10 }}{% else %}{{ n * 20 }}{% endif %} 40">
+<svg height="30" id="dynkin-{{ T }}{{ n}}" viewBox="-10 -10 {% if T == "E" %}{{ n * 20 - 10 }}{% else %}{{ n * 20 }}{% endif %} 40">
   <g style="stroke-width:0.8; stroke-linejoin:bevel; stroke-linecap:butt; stroke:black; fill:white">
     {% if T == "A" %}
       <polyline points="0,10 {{ (n - 1) * 20 }},10" />
@@ -69,10 +69,11 @@ MathJax = {
     {% elif T == "E" %}
       <polyline points="0,20 {{ (n - 2) * 20 }},20" />
       <polyline points="40,20 40,0" />
-      {% for i in range(n - 1) %}<circle cx="{{ i * 20 }}" cy="20" r="5" data-label="E{{ n }}-{{ i + 1 }}" />{% endfor %}
-      <circle cx="40" cy="0" r="5" />
+      <circle cx="0" cy="20" r="5" data-label="E{{ n }}-1" />
+      {% for i in range(1, n - 1) %}<circle cx="{{ i * 20 }}" cy="20" r="5" data-label="E{{ n }}-{{ i + 2 }}" />{% endfor %}
+      <circle cx="40" cy="0" r="5" data-label="E{{ n }}-2" />
     {% elif T == "F" %}
-      <polyline points="33,17 27,10 33,3" />
+      <polyline points="27,17 33,10 27,3" />
       <polyline points="0,10 20,10" />
       <polyline points="20,8 40,8" />
       <polyline points="20,12 40,12" />
