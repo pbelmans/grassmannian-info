@@ -36,9 +36,45 @@ def latex(T, n, k):
         if n == 6 and k == 6: return "\\mathbb{OP}^{2,\\vee}"
 
     elif T == "G":
-        if k == 1: return latex("B", 3, 1)
+        if k == 1: return latex("B", 3, 1) # TODO do this more systematically for the other coincidences too
 
-    return "\\mathrm{{{}}}{}/\\mathrm{{P}}{}".format(T, n, k)
+    return "\\mathrm{{{}}}_{{{}}}/\\mathrm{{P}}_{{{}}}".format(T, n, k)
+
+
+def name(T, n, k):
+    if T == "A":
+        if k == 1: return "projective space"
+        elif k == n: return "dual projective space".format(n)
+        else: return "Grassmannian"
+
+    elif T == "B":
+        if k == 1: return "quadric"
+        elif n == 2 and k == 2: return "projective space"
+        else: return "orthogonal Grassmannian"
+
+    elif T == "C":
+        if k == 1: return "projective space"
+        elif k == n:
+            if n == 2: return "quadric"
+            else: return "Lagrangian Grassmannian"
+        else: return "symplectic Grassmannian"
+
+    elif T == "D":
+        if k == 1: return "quadric"
+        elif n == 4 and k in [3, 4]: return "quadric"
+        elif k <= n - 2: return "orthogonal Grassmannian"
+        else: return "orthogonal Grassmannian, spinor variety"
+
+    elif T == "E":
+        if n == 6 and k == 1: return "Cayley plane"
+        if n == 6 and k == 6: return "dual Cayley plane"
+        if n == 7 and k == 7: return "Freudenthal variety"
+
+    elif T == "G":
+        if k == 1: return name("B", 3, 1)
+        if k == 2: return "\\mathrm{G}_2$-Grassmannian"
+
+    return "generalised Grassmannian of type ($\\mathrm{{{}}}_{{{}}}/\mathrm{{P}}_{{{}}}$)".format(T, n, k)
 
 
 # load the Sage-generated JSON file
@@ -54,6 +90,7 @@ with open("grassmannians.json") as f:
         if T in "ABCD" and n > 7: continue
 
         G["latex"] = latex(T, n, G["parabolic"])
+        G["name"] = name(T, n, G["parabolic"])
 
         # indicate type of Grassmannian
         G["cominuscule"] = G["minuscule"] = G["adjoint"] = G["coadjoint"] = False
@@ -77,9 +114,9 @@ with open("grassmannians.json") as f:
         if T == "G" and k == 1: G["coadjoint"] = True
         if T == "G" and k == 2: G["adjoint"] = True
 
+        # assigning the Grassmannian to the dictionary
         if n not in grassmannians[T]:
             grassmannians[T][n] = {}
-
         grassmannians[T][n][k] = G
 
 
