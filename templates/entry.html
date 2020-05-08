@@ -6,7 +6,7 @@
 {%- endmacro %}
 
 {% macro data(G) -%}
-data-dimension="{{ G["dimension"] }}" data-index="{{ G["index"] }}" data-euler="{{ G["rank"] }}"
+data-dimension="{{ G["dimension"] }}" data-index="{{ G["index"] }}" data-euler="{{ G["rank"] }}" data-name="{{ G["name"] }}"
 {%- endmacro %}
 
 {% macro entry(G) %}

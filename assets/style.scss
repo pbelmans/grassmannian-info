@@ -85,10 +85,15 @@ table.information {
 
   th {
     width: 1px;
+    text-align: right;
   }
 
   td {
-    text-align: right;
+    text-align: center;
+  }
+
+  td#dynkin {
+    text-align: center;
   }
 }
 

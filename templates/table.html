@@ -293,7 +293,11 @@ MathJax = {
           <th scope="row">type</th>
           <td id="type"></td>
         </tr>
+        <tr>
+          <th scope="row">Dynkin diagram</th>
+          <td id="dynkin">
       </table>
+
     </div>
   </div>
 </div>
@@ -348,8 +352,10 @@ $("td.entry").mouseenter(function(e) {
   // clear the color on other cells
   $("td.entry, circle").removeClass("active");
 
+  var label = $(e.currentTarget).data("label");
+
   // make the isomorphic ones look active
-  var isomorphic = $("*[data-label='" + isomorphisms($(e.currentTarget).data("label")).join("'], *[data-label='") + "']");
+  var isomorphic = $("*[data-label='" + isomorphisms(label).join("'], *[data-label='") + "']");
   isomorphic.addClass("active");
 
   // display the specific data
@@ -357,6 +363,8 @@ $("td.entry").mouseenter(function(e) {
     $("td#" + field).text($(e.currentTarget).data(field));
   });
 
+  // copy the Dynkin diagram
+  $("svg#dynkin-" + label.split("-")[0]).clone().appendTo($("td#dynkin"));
 });
 
 $("td.entry").mouseleave(function() {
@@ -367,6 +375,9 @@ $("td.entry").mouseleave(function() {
   fields.forEach(function (field) {
     $("td#" + field).text("");
   });
+
+  // clear the Dynkin diagram
+  $("td#dynkin").empty();
 });
 
 // change the color by activating a class which triggers the styling
