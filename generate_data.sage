@@ -28,58 +28,66 @@ def rank(D, k):
 
     return WG.cardinality() / WL.cardinality()
 
-def dimension(D, T):
+def dimension(D, k):
     def dimGB(D):
         dimG = len(D.root_system().root_poset()) * 2 + D.rank()
         dimB = len(D.root_system().root_poset()) + D.rank()
         return (dimG, dimB)
 
     D = DynkinDiagram(D)
+    I = [i for i in D.vertices() if i != k]
 
-    return dimGB(D)[0] - dimGB(D)[1] - (dimGB(D.subtype(T))[0] - dimGB(D.subtype(T))[1])
+    return dimGB(D)[0] - dimGB(D)[1] - (dimGB(D.subtype(I))[0] - dimGB(D.subtype(I))[1])
+
+
+def betti(D, k):
+    W = WeylGroup(D)
+    I = [i for i in DynkinDiagram(D).vertices() if i != k]
+
+    cosets = set([w.coset_representative(index_set=I) for w in W])
+    lengths = [len(w.reduced_word()) for w in cosets]
+    d = max(lengths)
+
+    diagonal = [0]*(d + 1)
+
+    for i in range(d + 1):
+        diagonal[i] = len([l for l in lengths if l == i])
+
+    return diagonal
 
 
 grassmannians = []
 
-# needs special attention
-G = {"type" : "A1", "parabolic" : 1, "dimension" : 1 , "index" : 2, "rank" : 2}
+# needs special attention, script isn't 100% robust
+G = {"type" : "A1", "parabolic" : 1, "dimension" : 1 , "index" : 2, "rank" : 2, "betti" : [1, 1]}
 grassmannians.append(G)
 
+
+def grassmannian(D, k):
+    return {"type" : D, "parabolic" : k, "dimension" : dimension(D, k), "index" : index(D, k), "rank" : rank(D, k), "betti": betti(D, k)}
+
+
+types = []
 for prefix in ["A", "B", "C", "D"]:
     for n in range(2, 11):
         # let's not do D3 and D4
-        if prefix == "D" and n < 4:
-            continue
+        if prefix == "D" and n < 4: continue
 
         D = prefix + str(n)
 
-        for k in range(1, n + 1):
-            G = {"type" : D, "parabolic" : k, "dimension" : dimension(D, [i for i in range(1, n + 1) if i != k]), "index" : index(D, k), "rank" : rank(D, k)}
-            grassmannians.append(G)
+        for k in DynkinDiagram(D).vertices():
+            types.append((D, k),)
 
-D = "E6"
-for k in range(1, 7):
-    G = {"type" : D, "parabolic" : k, "dimension" : dimension(D, [i for i in range(1, 6 + 1) if i != k]), "index" : index(D, k), "rank" : rank(D, k)}
-    grassmannians.append(G)
+exceptional = ["E6", "E7", "E8", "F4", "G2"]
+for D in exceptional:
+    for k in DynkinDiagram(D).vertices():
+        types.append((D, k),)
 
-D = "E7"
-for k in range(1, 8):
-    G = {"type" : D, "parabolic" : k, "dimension" : dimension(D, [i for i in range(1, 7 + 1) if i != k]), "index" : index(D, k), "rank" : rank(D, k)}
-    grassmannians.append(G)
-
-D = "E8"
-for k in range(1, 9):
-    G = {"type" : D, "parabolic" : k, "dimension" : dimension(D, [i for i in range(1, 8 + 1) if i != k]), "index" : index(D, k), "rank" : rank(D, k)}
-    grassmannians.append(G)
-
-D = "F4"
-for k in range(1, 5):
-    G = {"type" : D, "parabolic" : k, "dimension" : dimension(D, [i for i in range(1, 4 + 1) if i != k]), "index" : index(D, k), "rank" : rank(D, k)}
-    grassmannians.append(G)
-
-D = "G2"
-for k in range(1, 3):
-    G = {"type" : D, "parabolic" : k, "dimension" : dimension(D, [i for i in range(1, 2 + 1) if i != k]), "index" : index(D, k), "rank" : rank(D, k)}
+# generate the Grassmannians
+for (D, k) in types:
+    print(D, k)
+    G = grassmannian(D, k)
+    print(G)
     grassmannians.append(G)
 
 # JSON module needs actual int's
