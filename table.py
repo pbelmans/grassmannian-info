@@ -27,7 +27,9 @@ def latex(T, n, k):
 
     elif T == "D":
         if k == 1: return "\\mathrm{{Q}}^{{{}}}".format(2*n - 2)
-        else: return "\\OGr({},{})".format(k, 2*n)
+        elif n == 4 and k in [3, 4]: return "\\mathrm{{Q}}^{{{}}}".format(2*n - 2)
+        elif k <= n - 2: return "\\OGr({},{})".format(k, 2*n)
+        else: return "\\OGr_+({},{})".format(n, 2*n)
 
     elif T == "E":
         if n == 6 and k == 1: return "\\mathbb{OP}^2"
