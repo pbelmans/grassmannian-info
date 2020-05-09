@@ -162,3 +162,14 @@ table.information {
   }
 }
 
+svg.lefschetz {
+  rect.block {
+    fill: white;
+    stroke-width: 1;
+    stroke: black;
+  }
+
+  rect.block.original {
+    fill: rgba(0, 0, 0, 0.3);
+  }
+}

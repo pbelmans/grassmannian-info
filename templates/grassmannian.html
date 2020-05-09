@@ -1,0 +1,48 @@
+{% extends "page.html" %}
+
+{% block title %}{{ grassmannian["name"] }} {{ grassmannian["plaintext"] }}{% endblock %}
+{# TODO nice human-readable name #}
+
+{% macro component(title, content, id="") %}
+<div id="{{ id }}" class="card" style="min-width: 1px">
+  <div class="card-header">{{- title }}</div>
+
+  <div class="card-body">
+    {{ content }}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro basic(grassmannian) %}
+<dl class="row">
+  <dt class="col-6 text-right">dimension
+  <dd class="col-6">{{ grassmannian["dimension"] }}
+
+  <dt class="col-6 text-right">index
+  <dd class="col-6">{{ grassmannian["index"] }}
+
+  <dt class="col-6 text-right">topological Euler characteristic
+  <dd class="col-6">{{ grassmannian["rank"] }}
+</dl>
+{% endmacro %}
+
+{% macro hpd(grassmannian) %}
+
+<svg class="lefschetz" viewBow="0 0 {{ grassmannian["hpd"]["support"][0] * 20 }} {{ grassmannian["hpd"]["total"] * 20 }}">
+  {% for i in range(grassmannian["hpd"]["total"]) %}
+    {% for j in range(grassmannian["hpd"]["support"][0]) %}
+    <rect x="{{ i * 20 }}" y="{{ j * 20 }}" width="20" height="20" class="block{% if i < grassmannian["hpd"]["support"] | length and j < grassmannian["hpd"]["support"][i] %} original{% endif %} " />
+    {% endfor %}
+  {% endfor %}
+</svg>
+{% endmacro %}
+
+{% block content %}
+  <h2>{{ grassmannian["name"] }}</h2>
+
+  <div class="card-columns">
+    {{ component("Basic information", basic(grassmannian)) }}
+
+  </div>
+  {{ component("Homological projective duality", hpd(grassmannian)) }}
+{% endblock %}

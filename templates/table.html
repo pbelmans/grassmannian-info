@@ -111,7 +111,7 @@
       {% for n in grassmannians[T] %}
         <tr>
           <th>
-            {{ dynkin(T, n) }}
+            {{ macros.dynkin(T, n) }}
           </th>
 
           {% for k in grassmannians[T][n] %}

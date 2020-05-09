@@ -152,6 +152,13 @@ with open("grassmannians.json") as f:
         if T == "G" and k == 1: G["coadjoint"] = True
         if T == "G" and k == 2: G["adjoint"] = True
 
+        # hardcoding HPD data for now
+        G["hpd"] = {}
+        G["hpd"]["dual"] = "good description comes here"
+        # for now this is the Gr(2,6) example as on page 17 of http://www.mi-ras.ru/~akuznet/publications/1404.3143.pdf
+        G["hpd"]["support"] = [3, 3, 3, 2, 2, 2]
+        G["hpd"]["total"] = 15 # TODO better name for this? is another invariant maybe a better choice?
+
         # assigning the Grassmannian to the dictionary
         if n not in grassmannians[T]:
             grassmannians[T][n] = {}
@@ -172,3 +179,9 @@ def show_about():
 @app.route("/explained")
 def show_explained():
     return render_template("explained.html")
+
+
+@app.route("/<string:T><int:n>/<int:k>")
+def show_grassmannian(T, n, k):
+    G = grassmannians[T][n][k]
+    return render_template("grassmannian.html", grassmannian=G)
