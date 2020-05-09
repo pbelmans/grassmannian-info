@@ -19,6 +19,7 @@ def index(D, k):
 
     return rho.dot_product(beta + betabar) / xi.dot_product(beta)
 
+
 def rank(D, k):
     D = DynkinDiagram(D)
     T = [r for r in D.vertices() if r != k]
@@ -27,6 +28,7 @@ def rank(D, k):
     WL = D.subtype(T).root_system().root_lattice().weyl_group()
 
     return WG.cardinality() / WL.cardinality()
+
 
 def dimension(D, k):
     def dimGB(D):
@@ -56,15 +58,42 @@ def betti(D, k):
     return diagonal
 
 
+def embedding(D, k):
+    R = WeylCharacterRing(D)
+
+    # minimal embedding
+    fw = R.fundamental_weights()[k]
+
+    # adjoint type C is funny (TODO: are there others?)
+    if D[0] == "C" and k == 1:
+        fw = 2*fw
+
+    return R(fw)
+
+
+def hilbert_series(D, k):
+    V = embedding(D, k)
+
+    return [int(V.parent()(i*V.highest_weight()).degree()) for i in range(10)]
+
+
 grassmannians = []
 
 # needs special attention, script isn't 100% robust
-G = {"type" : "A1", "parabolic" : 1, "dimension" : 1 , "index" : 2, "rank" : 2, "betti" : [1, 1]}
+G = {"type" : "A1", "parabolic" : 1, "dimension" : 1 , "index" : 2, "rank" : 2, "embedding" : 1, "hilbert" : hilbert_series("A1", 1)}
 grassmannians.append(G)
 
 
 def grassmannian(D, k):
-    return {"type" : D, "parabolic" : k, "dimension" : dimension(D, k), "index" : index(D, k), "rank" : rank(D, k), "betti": betti(D, k)}
+    return {
+            "type" : D,
+            "parabolic" : k,
+            "dimension" : dimension(D, k),
+            "index" : index(D, k),
+            "rank" : rank(D, k),
+            "embedding" : embedding(D, k).degree(),
+            "hilbert" : hilbert_series(D, k)
+            } #, "betti": betti(D, k)}
 
 
 types = []
@@ -85,14 +114,13 @@ for D in exceptional:
 
 # generate the Grassmannians
 for (D, k) in types:
-    print(D, k)
     G = grassmannian(D, k)
-    print(G)
     grassmannians.append(G)
 
 # JSON module needs actual int's
 for G in grassmannians:
-    for key in ["parabolic", "dimension", "index", "rank"]:
+    for key in ["parabolic", "dimension", "index", "rank", "embedding"]:
+        if not key in G: continue
         G[key] = int(G[key])
 
 with open("grassmannians.json", "w") as f:
