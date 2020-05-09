@@ -124,5 +124,15 @@ with open("grassmannians.json") as f:
 
 
 @app.route("/")
-def table():
+def show_table():
     return render_template("table.html", grassmannians=grassmannians)
+
+
+@app.route("/about")
+def show_about():
+    return render_template("about.html")
+
+
+@app.route("/explained")
+def show_explained():
+    return render_template("explained.html")

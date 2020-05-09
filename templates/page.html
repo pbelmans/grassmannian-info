@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-339565-16"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-339565-16');
+    </script>
+
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/png" href="/static/favicon.png"/>
+
+    <title>{% block title %}{% endblock %}&mdash;grassmannian.info</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/style.css">
+
+    <script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  },
+  svg: {
+    fontCache: 'global'
+  },
+  noReflows: true,
+};
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+  </head>
+  <body>
+
+<div class="d-none">
+\begin{equation}
+\DeclareMathOperator\Gr{Gr}
+\DeclareMathOperator\LGr{LGr}
+\DeclareMathOperator\OGr{OGr}
+\DeclareMathOperator\SGr{SGr}
+
+\DeclareMathOperator\Kzero{K_0}
+\DeclareMathOperator\index{i}
+\DeclareMathOperator\rk{rk}
+\end{equation}
+</div>
+
+<div id="menu" class="d-print-none">
+  <ul class="list-inline">
+    <li class="list-inline-item"><a href="/explained">explanation</a>
+    <li class="list-inline-item"><a href="/about">about</a>
+  </ul>
+</div>
+
+<div id="title">
+  <h1><a href="/">Grassmannians</a></h1>
+  <p id="slogan">A periodic table of (generalised) Grassmannians.</p>
+</div>
+
+<div class="container" style="max-width: 1200px">
+  {% block content %}{% endblock %}
+</div>
+
+  </body>
+</html>

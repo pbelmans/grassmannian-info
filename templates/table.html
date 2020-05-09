@@ -1,55 +1,6 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-339565-16"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+{% extends "page.html" %}
 
-      gtag('config', 'UA-339565-16');
-    </script>
-
-    <meta charset="utf-8">
-    <link rel="shortcut icon" type="image/png" href="/static/favicon.png"/>
-
-    <title>Grassmannians</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="static/style.css">
-
-    <script>
-MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
-  },
-  svg: {
-    fontCache: 'global'
-  },
-  noReflows: true,
-};
-    </script>
-    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
-  </head>
-  <body>
-
-<div class="d-none">
-\begin{equation}
-\DeclareMathOperator\Gr{Gr}
-\DeclareMathOperator\LGr{LGr}
-\DeclareMathOperator\OGr{OGr}
-\DeclareMathOperator\SGr{SGr}
-
-\DeclareMathOperator\Kzero{K_0}
-\DeclareMathOperator\index{i}
-\DeclareMathOperator\rk{rk}
-\end{equation}
-</div>
+{% import "entry.html" as entry %}
 
 {% macro dynkin(T, n) %}
 <svg height="25" id="dynkin-{{ T }}{{ n}}" viewBox="-10 -10 {% if T == "E" %}{{ n * 20 - 10 }}{% else %}{{ n * 20 }}{% endif %} 40">
@@ -104,224 +55,207 @@ MathJax = {
 </svg>
 {% endmacro %}
 
-<!--
-<div id="menu" class="d-print-none">
-  <ul class="list-inline">
-    <li class="list-inline-item"><a href="/explained">explanation</a>
-    <li class="list-inline-item"><a href="/about">about</a>
-  </ul>
-</div>
--->
-
-<div id="title" class="sticky-top">
-  <h1><a href="/">Grassmannians</a></h1>
-  <p id="slogan">A periodic table of (generalised) Grassmannians.</p>
-</div>
-
-{% import "entry.html" as entry %}
-<div class="container" style="max-width: 1200px">
-  <form id="controls" class="form-group row">
-    <div class="col-6">
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="no-colors" name="color" value="no-colors" checked>
-        <label class="form-check-label" for="no-colors">no colors</label>
-      </div>
-
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="mincomin" name="color" value="mincomin">
-        <label class="form-check-label" for="mincomin">(co)minuscule</label>
-      </div>
-
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="adjcoadj" name="color" value="adjcoadj">
-        <label class="form-check-label" for="adjcoadj">(co)adjoint</label>
-      </div>
+{% block content %}
+<form id="controls" class="form-group row">
+  <div class="col-6">
+    <div class="form-check">
+      <input class="form-check-input" type="radio" id="no-colors" name="color" value="no-colors" checked>
+      <label class="form-check-label" for="no-colors">no colors</label>
     </div>
 
-    <div class="col-6">
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="minimum" name="information" value="minimum" checked>
-        <label class="form-check-label" for="minimum">minimum</label>
-      </div>
-
-      <div class="form-check">
-        <input class="form-check-input" type="radio" id="more-info" name="information" value="more-info">
-        <label class="form-check-label" for="more-info">more information</label>
-      </div>
-    </div>
-  </form>
-  </form>
-
-  <div class="row">
-    <div class="col-12 col-xl-6">
-      <table class="atlas">
-        <colgroup>
-          <col style="width: 120px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-        </colgroup>
-        {% for n in grassmannians["A"] %}
-          <tr>
-            <th>
-              {{ dynkin("A", n) }}
-            </th>
-
-            {% for k in grassmannians["A"][n] %}
-              {{ entry.entry(grassmannians["A"][n][k]) }}
-            {% endfor %}
-          </tr>
-        {% endfor %}
-      </table>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" id="mincomin" name="color" value="mincomin">
+      <label class="form-check-label" for="mincomin">(co)minuscule</label>
     </div>
 
-    <div class="col-12 col-xl-6">
-      <table class="atlas">
-        <colgroup>
-          <col style="width: 120px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-        </colgroup>
-        <tr class="d-none d-xl-block"></tr>
-        {% for n in grassmannians["B"] %}
-          <tr>
-            <th>
-              {{ dynkin("B", n) }}
-            </th>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" id="adjcoadj" name="color" value="adjcoadj">
+      <label class="form-check-label" for="adjcoadj">(co)adjoint</label>
+    </div>
+  </div>
 
-            {% for k in grassmannians["B"][n] %}
-              {{ entry.entry(grassmannians["B"][n][k]) }}
-            {% endfor %}
-          </tr>
-        {% endfor %}
-      </table>
+  <div class="col-6">
+    <div class="form-check">
+      <input class="form-check-input" type="radio" id="minimum" name="information" value="minimum" checked>
+      <label class="form-check-label" for="minimum">minimum</label>
     </div>
 
-    <div class="col-12 col-xl-6">
-      <table class="atlas">
-        <colgroup>
-          <col style="width: 120px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-        </colgroup>
-        {% for n in grassmannians["C"] %}
-          <tr>
-            <th>
-              {{ dynkin("C", n) }}
-            </th>
-
-            {% for k in grassmannians["C"][n] %}
-              {{ entry.entry(grassmannians["C"][n][k]) }}
-            {% endfor %}
-          </tr>
-        {% endfor %}
-      </table>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" id="more-info" name="information" value="more-info">
+      <label class="form-check-label" for="more-info">more information</label>
     </div>
+  </div>
+</form>
+</form>
 
-    <div class="col-12 col-xl-6">
-      <table class="atlas">
-        <colgroup>
-          <col style="width: 120px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-        </colgroup>
-        <tr class="d-none d-xl-block"></tr>
-        <tr class="d-none d-xl-block"></tr>
-        {% for n in grassmannians["D"] %}
-          <tr>
-            <th>
-              {{ dynkin("D", n) }}
-            </th>
-
-            {% for k in grassmannians["D"][n] %}
-              {{ entry.entry(grassmannians["D"][n][k]) }}
-            {% endfor %}
-          </tr>
-        {% endfor %}
-      </table>
-    </div>
-
-    <div class="col-12 col-xl-7">
-    {% for T in "EFG" %}
-      <table class="atlas">
-        <colgroup>
-          <col style="width: 120px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-          <col style="width: 60px">
-        </colgroup>
-        {% for n in grassmannians[T] %}
-          <tr>
-            <th>
-              {{ dynkin(T, n) }}
-            </th>
-
-            {% for k in grassmannians[T][n] %}
-              {{ entry.entry(grassmannians[T][n][k]) }}
-            {% endfor %}
-          </tr>
-        {% endfor %}
-      </table>
-    {% endfor %}
-    </div>
-
-    <div class="col-xl-5">
-      <h4>Information</h4>
-      <table class="table table-striped table-sm information">
+<div class="row">
+  <div class="col-12 col-xl-6">
+    <table class="atlas">
+      <colgroup>
+        <col style="width: 120px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+      </colgroup>
+      {% for n in grassmannians["A"] %}
         <tr>
-          <th scope="row">name(s)</th>
-          <td id="name"></td>
+          <th>
+            {{ dynkin("A", n) }}
+          </th>
+
+          {% for k in grassmannians["A"][n] %}
+            {{ entry.entry(grassmannians["A"][n][k]) }}
+          {% endfor %}
         </tr>
-        <tr>
-          <th scope="row">dimension</th>
-          <td id="dimension"></td>
-        </tr>
-        <tr>
-          <th scope="row">index</th>
-          <td id="index"></td>
-        </tr>
-        <tr>
-          <th scope="row">Euler&nbsp;characteristic</th>
-          <td id="euler"></td>
-        </tr>
-        <tr>
-          <th scope="row">type</th>
-          <td id="type"></td>
-        </tr>
-        <tr>
-          <th scope="row">Dynkin diagram</th>
-          <td id="dynkin">
-      </table>
+      {% endfor %}
+    </table>
+  </div>
 
-    </div>
+  <div class="col-12 col-xl-6">
+    <table class="atlas">
+      <colgroup>
+        <col style="width: 120px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+      </colgroup>
+      <tr class="d-none d-xl-block"></tr>
+      {% for n in grassmannians["B"] %}
+        <tr>
+          <th>
+            {{ dynkin("B", n) }}
+          </th>
+
+          {% for k in grassmannians["B"][n] %}
+            {{ entry.entry(grassmannians["B"][n][k]) }}
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="col-12 col-xl-6">
+    <table class="atlas">
+      <colgroup>
+        <col style="width: 120px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+      </colgroup>
+      {% for n in grassmannians["C"] %}
+        <tr>
+          <th>
+            {{ dynkin("C", n) }}
+          </th>
+
+          {% for k in grassmannians["C"][n] %}
+            {{ entry.entry(grassmannians["C"][n][k]) }}
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="col-12 col-xl-6">
+    <table class="atlas">
+      <colgroup>
+        <col style="width: 120px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+      </colgroup>
+      <tr class="d-none d-xl-block"></tr>
+      <tr class="d-none d-xl-block"></tr>
+      {% for n in grassmannians["D"] %}
+        <tr>
+          <th>
+            {{ dynkin("D", n) }}
+          </th>
+
+          {% for k in grassmannians["D"][n] %}
+            {{ entry.entry(grassmannians["D"][n][k]) }}
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="col-12 col-xl-7">
+  {% for T in "EFG" %}
+    <table class="atlas">
+      <colgroup>
+        <col style="width: 120px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+        <col style="width: 60px">
+      </colgroup>
+      {% for n in grassmannians[T] %}
+        <tr>
+          <th>
+            {{ dynkin(T, n) }}
+          </th>
+
+          {% for k in grassmannians[T][n] %}
+            {{ entry.entry(grassmannians[T][n][k]) }}
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+  {% endfor %}
+  </div>
+
+  <div class="col-xl-5">
+    <h4>Information</h4>
+    <table class="table table-striped table-sm information">
+      <tr>
+        <th scope="row">name(s)</th>
+        <td id="name"></td>
+      </tr>
+      <tr>
+        <th scope="row">dimension</th>
+        <td id="dimension"></td>
+      </tr>
+      <tr>
+        <th scope="row">index</th>
+        <td id="index"></td>
+      </tr>
+      <tr>
+        <th scope="row">Euler&nbsp;characteristic</th>
+        <td id="euler"></td>
+      </tr>
+      <tr>
+        <th scope="row">type</th>
+        <td id="type"></td>
+      </tr>
+      <tr>
+        <th scope="row">Dynkin diagram</th>
+        <td id="dynkin">
+    </table>
   </div>
 </div>
 
@@ -430,8 +364,5 @@ $("input[type=radio][name=information]").change(function() {
   }
 });
 
-
-
 </script>
-
-</html>
+{% endblock %}
