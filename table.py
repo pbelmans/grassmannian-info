@@ -44,8 +44,8 @@ def latex(T, n, k):
 
 def plaintext(T, n, k):
     if T == "A":
-        if k == 1: return "P^{}".format(n)
-        elif k == n: return "P^{}".format(n)
+        if k == 1: return "P{}".format(n)
+        elif k == n: return "P{}".format(n)
         else: return "Gr({},{})".format(k, n + 1)
 
     elif T == "B":
@@ -57,7 +57,7 @@ def plaintext(T, n, k):
     elif T == "C":
         if k == 1: return plaintext("A", 2*n - 1, 1)
         elif k == n:
-            if n == 2: return "Q^3"
+            if n == 2: return "Q3"
             else: return "LGr({},{})".format(k, 2*n)
         else: return "SGr({},{})".format(k, 2*n)
 
@@ -68,8 +68,8 @@ def plaintext(T, n, k):
         else: return "OGr+({},{})".format(n, 2*n)
 
     elif T == "E":
-        if n == 6 and k == 1: return "OP^2"
-        if n == 6 and k == 6: return "OP^2"
+        if n == 6 and k == 1: return "OP2"
+        if n == 6 and k == 6: return "OP2"
 
     elif T == "G":
         if k == 1: return plaintext("B", 3, 1)
