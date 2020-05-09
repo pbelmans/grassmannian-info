@@ -15,11 +15,12 @@ def latex(T, n, k):
 
     elif T == "B":
         if k == 1: return "\\mathrm{{Q}}^{{{}}}".format(2*n - 1)
-        elif n == 2 and k == 2: return "\\mathbb{{P}}^{{3}}"
+        elif n == 2 and k == 2: return latex("A", 3, 1)
+        elif k == n: return latex("D", n + 1, n + 1) # not 100% sure this is a good idea
         else: return "\\OGr({},{})".format(k, 2*n + 1)
 
     elif T == "C":
-        if k == 1: return "\\mathbb{{P}}^{{{}}}".format(2*n - 1)
+        if k == 1: return latex("A", 2*n - 1, 1)
         elif k == n:
             if n == 2: return "\\mathrm{{Q}}^{{3}}"
             else: return "\\LGr({},{})".format(k, 2*n)
@@ -27,7 +28,7 @@ def latex(T, n, k):
 
     elif T == "D":
         if k == 1: return "\\mathrm{{Q}}^{{{}}}".format(2*n - 2)
-        elif n == 4 and k in [3, 4]: return "\\mathrm{{Q}}^{{{}}}".format(2*n - 2)
+        elif n == 4 and k in [3, 4]: return latex("D", 4, 1)
         elif k <= n - 2: return "\\OGr({},{})".format(k, 2*n)
         else: return "\\OGr_+({},{})".format(n, 2*n)
 
@@ -36,7 +37,7 @@ def latex(T, n, k):
         if n == 6 and k == 6: return "\\mathbb{OP}^{2,\\vee}"
 
     elif T == "G":
-        if k == 1: return latex("B", 3, 1) # TODO do this more systematically for the other coincidences too
+        if k == 1: return latex("B", 3, 1)
 
     return "\\mathrm{{{}}}_{{{}}}/\\mathrm{{P}}_{{{}}}".format(T, n, k)
 
@@ -49,11 +50,12 @@ def name(T, n, k):
 
     elif T == "B":
         if k == 1: return "quadric"
-        elif n == 2 and k == 2: return "projective space"
+        elif n == 2 and k == 2: return name("A", 3, 1)
+        elif k == n: return name("D", n + 1, n + 1) # not 100% sure this is a good idea
         else: return "orthogonal Grassmannian"
 
     elif T == "C":
-        if k == 1: return "projective space"
+        if k == 1: return name("A", 2*n - 1, 1)
         elif k == n:
             if n == 2: return "quadric"
             else: return "Lagrangian Grassmannian"
@@ -61,7 +63,7 @@ def name(T, n, k):
 
     elif T == "D":
         if k == 1: return "quadric"
-        elif n == 4 and k in [3, 4]: return "quadric"
+        elif n == 4 and k in [3, 4]: name("D", 4, 1)
         elif k <= n - 2: return "orthogonal Grassmannian"
         else: return "orthogonal Grassmannian, spinor variety"
 
@@ -121,9 +123,6 @@ with open("grassmannians.json") as f:
 
 
 
-print(grassmannians)
-
-
 @app.route("/")
-def hello_world():
+def table():
     return render_template("table.html", grassmannians=grassmannians)

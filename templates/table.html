@@ -343,14 +343,15 @@ function isomorphisms(label) {
       if (n == 2 && k == 1) result.push("C2-2");
       if (n == 2 && k == 2) result.push("A3-1", "A3-3", "C2-1");
       if (n == 3 && k == 1) result.push("G2-1");
-      if (k == n) result.push(["D", n + 1, "-", n].join(""), ["D", n + 1, "-", n + 1].join(""));
+      if (n == 3 && k == 3) result.push("D4-1");
+      if (n == k) result.push(["D", n + 1, "-", n].join(""), ["D", n + 1, "-", n + 1].join(""));
       break;
     case "C":
       if (k == 1) result.push(["A", 2*n - 1, "-", 1].join(""), ["A", 2*n - 1, "-", 2*n].join(""));
       if (n == 2 && k == 2) result.push("B2-1");
       break;
     case "D":
-      if (n == 4 && (k == 1 || k == 3 || k == 4)) result.push("D4-1", "D4-3", "D4-4");
+      if (n == 4 && (k == 1 || k == 3 || k == 4)) result.push("D4-1", "D4-3", "D4-4", "B3-3");
       if (k == n - 1 || k == n) result.push(["B", n - 1, "-", Math.min(n - 1, n - (k - n + 1))].join(""), ["D", n, "-", n - (k - n + 1)].join(""));
       break;
     case "E":
