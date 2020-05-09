@@ -3,59 +3,7 @@
 {% block title %}Periodic table{% endblock %}
 
 {% import "entry.html" as entry %}
-
-{% macro dynkin(T, n) %}
-<svg height="20" id="dynkin-{{ T }}{{ n}}" viewBox="-10 -10 {% if T == "E" %}{{ n * 20 - 10 }}{% else %}{{ n * 20 }}{% endif %} 40">
-  <g style="stroke-width:0.8; stroke-linejoin:bevel; stroke-linecap:butt; stroke:black; fill:white">
-    {% if T == "A" %}
-      <polyline points="0,10 {{ (n - 1) * 20 }},10" />
-      {% for i in range(n) %}
-        <circle cx="{{ i * 20 }}" cy="10" r="5" data-label="A{{ n }}-{{ i + 1 }}" />
-        <!--<text x="{{ i * 20 - 5 }}" y="10">{{ i + 1 }}</text>-->
-      {% endfor %}
-    {% elif T == "B" %}
-      <polyline points="{{ (n - 2) * 20 + 7 }},17 {{ (n - 2) * 20 + 13 }},10 {{ (n - 2) * 20 + 7 }},3" />
-      <polyline points="0,10 {{ (n - 2) * 20 }},10" />
-      <polyline points="{{ (n - 2) * 20 }},8 {{ (n - 1) * 20 }},8" />
-      <polyline points="{{ (n - 2) * 20 }},12 {{ (n - 1) * 20 }},12" />
-      {% for i in range(n) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="B{{ n }}-{{ i + 1 }}" />{% endfor %}
-    {% elif T == "C" %}
-      <polyline points="{{ (n - 2) * 20 + 13 }},17 {{ (n - 2) * 20 + 7 }},10 {{ (n - 2) * 20 + 13 }},3" />
-      <polyline points="0,10 {{ (n - 2) * 20 }},10" />
-      <polyline points="0,10 {{ (n - 2) * 20 }},10" />
-      <polyline points="{{ (n - 2) * 20 }},8 {{ (n - 1) * 20 }},8" />
-      <polyline points="{{ (n - 2) * 20 }},12 {{ (n - 1) * 20 }},12" />
-      {% for i in range(n) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="C{{ n }}-{{ i + 1 }}" />{% endfor %}
-    {% elif T == "D" %}
-      <polyline points="0,10 {{ (n - 3) * 20 }},10" />
-      <polyline points="{{ (n - 3) * 20 }},10 {{ (n - 2) * 20 }},0" />
-      <polyline points="{{ (n - 3) * 20 }},10 {{ (n - 2) * 20 }},20" />
-      {% for i in range(n - 2) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="D{{ n }}-{{ i + 1 }}" />{% endfor %}
-      <circle cx="{{ (n - 2) * 20 }}" cy="0" r="5" data-label="D{{ n }}-{{ n - 1 }}" />
-      <circle cx="{{ (n - 2) * 20 }}" cy="20" r="5" data-label="D{{ n }}-{{ n }}" />
-    {% elif T == "E" %}
-      <polyline points="0,20 {{ (n - 2) * 20 }},20" />
-      <polyline points="40,20 40,0" />
-      <circle cx="0" cy="20" r="5" data-label="E{{ n }}-1" />
-      {% for i in range(1, n - 1) %}<circle cx="{{ i * 20 }}" cy="20" r="5" data-label="E{{ n }}-{{ i + 2 }}" />{% endfor %}
-      <circle cx="40" cy="0" r="5" data-label="E{{ n }}-2" />
-    {% elif T == "F" %}
-      <polyline points="27,17 33,10 27,3" />
-      <polyline points="0,10 20,10" />
-      <polyline points="20,8 40,8" />
-      <polyline points="20,12 40,12" />
-      <polyline points="40,10 60,10" />
-      {% for i in range(n) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="F4-{{ i + 1 }}" />{% endfor %}
-    {% elif T == "G" %}
-      <polyline points="13,17 7,10 13,3" />
-      <polyline points="0,10 20,10" />
-      <polyline points="0,7 20,7" />
-      <polyline points="0,13 20,13" />
-      {% for i in range(n) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="G2-{{ i + 1 }}" />{% endfor %}
-    {% endif %}
-  </g>
-</svg>
-{% endmacro %}
+{% import "macros.html" as macros %}
 
 {% block content %}
 <form id="controls" class="form-group row">
@@ -95,7 +43,7 @@
       {% for n in grassmannians["A"] %}
         <tr>
           <th>
-            {{ dynkin("A", n) }}
+            {{ macros.dynkin("A", n) }}
           </th>
 
           {% for k in grassmannians["A"][n] %}
@@ -112,7 +60,7 @@
       {% for n in grassmannians["B"] %}
         <tr>
           <th>
-            {{ dynkin("B", n) }}
+            {{ macros.dynkin("B", n) }}
           </th>
 
           {% for k in grassmannians["B"][n] %}
@@ -128,7 +76,7 @@
       {% for n in grassmannians["C"] %}
         <tr>
           <th>
-            {{ dynkin("C", n) }}
+            {{ macros.dynkin("C", n) }}
           </th>
 
           {% for k in grassmannians["C"][n] %}
@@ -146,7 +94,7 @@
       {% for n in grassmannians["D"] %}
         <tr>
           <th>
-            {{ dynkin("D", n) }}
+            {{ macros.dynkin("D", n) }}
           </th>
 
           {% for k in grassmannians["D"][n] %}
