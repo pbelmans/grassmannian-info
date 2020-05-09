@@ -184,4 +184,26 @@ def show_explained():
 @app.route("/<string:T><int:n>/<int:k>")
 def show_grassmannian(T, n, k):
     G = grassmannians[T][n][k]
+
     return render_template("grassmannian.html", grassmannian=G)
+
+
+@app.route("/<path:plaintext>")
+def show_grassmannian_from_plaintext(plaintext):
+    # look for exact plaintext match
+    for T in grassmannians:
+        for n in grassmannians[T]:
+            for k in grassmannians[T][n]:
+                G = grassmannians[T][n][k]
+                print(G["plaintext"])
+
+                if G["plaintext"] == plaintext:
+                    return render_template("grassmannian.html", grassmannian=G)
+
+    # at this point: we should look for alternative interpretations (e.g. OGr(3,7) is Q^6 etc.)
+    # TODO
+
+    # if that also fails: error
+    # TODO
+
+

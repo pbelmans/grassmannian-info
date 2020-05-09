@@ -38,7 +38,7 @@
 {% endmacro %}
 
 {% block content %}
-  <h2>{{ grassmannian["name"] }}</h2>
+  <h2>{{ grassmannian["name"] }} ${{ grassmannian["latex"] }}$</h2>
 
   <div class="card-columns">
     {{ component("Basic information", basic(grassmannian)) }}
