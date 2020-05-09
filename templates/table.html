@@ -1,9 +1,11 @@
 {% extends "page.html" %}
 
+{% block title %}Periodic table{% endblock %}
+
 {% import "entry.html" as entry %}
 
 {% macro dynkin(T, n) %}
-<svg height="25" id="dynkin-{{ T }}{{ n}}" viewBox="-10 -10 {% if T == "E" %}{{ n * 20 - 10 }}{% else %}{{ n * 20 }}{% endif %} 40">
+<svg height="20" id="dynkin-{{ T }}{{ n}}" viewBox="-10 -10 {% if T == "E" %}{{ n * 20 - 10 }}{% else %}{{ n * 20 }}{% endif %} 40">
   <g style="stroke-width:0.8; stroke-linejoin:bevel; stroke-linecap:butt; stroke:black; fill:white">
     {% if T == "A" %}
       <polyline points="0,10 {{ (n - 1) * 20 }},10" />
