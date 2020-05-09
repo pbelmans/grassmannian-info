@@ -72,7 +72,6 @@ div#content::-webkit-scrollbar {
 table.atlas {
   font-size: 10px;
   table-layout: fixed;
-  width: 650px;
   margin: 10px 0;
 
   tr {
@@ -81,13 +80,13 @@ table.atlas {
 
   th {
     text-align: center;
+    width: 130px;
   }
 
   td.entry {
     min-height: 25px;
     padding: 0;
-    width: 55px;
-    max-width: 55px;
+    width: 60px;
     overflow: hidden;
     text-align: center;
     border: 1px solid #ddd;
