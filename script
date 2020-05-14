@@ -1,0 +1,7 @@
+set -x FLASK_APP table.py
+set -x FLASK_DEBUG true
+flask run
+
+
+sass --watch assets/style.scss static/style.css
+sass assets/style.scss static/style.css

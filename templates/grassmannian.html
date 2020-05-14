@@ -13,6 +13,7 @@
 </div>
 {% endmacro %}
 
+
 {% macro basic(grassmannian) %}
 <dl class="row">
   <dt class="col-6 text-right">dimension
@@ -26,8 +27,8 @@
 </dl>
 {% endmacro %}
 
-{% macro hpd(grassmannian) %}
 
+{% macro hpd(grassmannian) %}
 <svg class="lefschetz" viewBow="0 0 {{ grassmannian["hpd"]["support"][0] * 20 }} {{ grassmannian["hpd"]["total"] * 20 }}">
   {% for i in range(grassmannian["hpd"]["total"]) %}
     {% for j in range(grassmannian["hpd"]["support"][0]) %}
@@ -37,12 +38,30 @@
 </svg>
 {% endmacro %}
 
+
+{% macro betti(grassmannian) %}
+\begin{align*}
+{%- for betti in grassmannian["betti"] %}
+  \mathrm{b}_{ {{ loop.index }} } &= {{ betti }} {% if not loop.last %}\\{% endif %}
+{%- endfor %}
+\end{align*}
+{% endmacro %}
+
+
 {% block content %}
   <h2>{{ grassmannian["name"] }} ${{ grassmannian["latex"] }}$</h2>
 
-  <div class="card-columns">
-    {{ component("Basic information", basic(grassmannian)) }}
+  <div class="row">
+    <div class="col-2 d-none d-lg-block">
+      {{ component("Betti numbers", betti(grassmannian)) }}
+    </div>
 
+    <div class="col-10">
+      <div class="card-columns">
+        {{ component("Basic information", basic(grassmannian)) }}
+      </div>
+
+      {{ component("Homological projective duality", hpd(grassmannian)) }}
+    </div>
   </div>
-  {{ component("Homological projective duality", hpd(grassmannian)) }}
 {% endblock %}
