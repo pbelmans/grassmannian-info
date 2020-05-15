@@ -39,7 +39,7 @@
       <polyline points="20,8 40,8" />
       <polyline points="20,12 40,12" />
       <polyline points="40,10 60,10" />
-      {% for i in range(n) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="F4-{{ i + 1 }}" />{% endfor %}
+      {% for i in range(n) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="F4-{{ i + 1 }}" {% if i + 1 in k %}class="active"%{% endif %} />{% endfor %}
     {% elif T == "G" %}
       <polyline points="13,17 7,10 13,3" />
       <polyline points="0,10 20,10" />
