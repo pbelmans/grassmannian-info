@@ -195,7 +195,6 @@ def show_grassmannian_from_plaintext(plaintext):
         for n in grassmannians[T]:
             for k in grassmannians[T][n]:
                 G = grassmannians[T][n][k]
-                print(G["plaintext"])
 
                 if G["plaintext"] == plaintext:
                     return render_template("grassmannian.html", grassmannian=G)

@@ -1,5 +1,7 @@
 import json
 
+R.<t> = PolynomialRing(QQ)
+
 def index(D, k):
     R = RootSystem(D)
     L = R.root_lattice()
@@ -43,57 +45,78 @@ def dimension(D, k):
 
 
 def betti(D, k):
-    W = WeylGroup(D)
-    I = [i for i in DynkinDiagram(D).vertices() if i != k]
+    R.<x> = PolynomialRing(ZZ)
 
-    cosets = set([w.coset_representative(index_set=I) for w in W])
-    lengths = [len(w.reduced_word()) for w in cosets]
-    d = max(lengths)
+    D = DynkinDiagram(D)
+    I = [i for i in D.vertices() if i != k]
+    WG = D.root_system().root_lattice().weyl_group()
+    WL = D.subtype(I).root_system().root_lattice().weyl_group()
 
-    diagonal = [0]*(d + 1)
+    P = prod([sum([x^i for i in range(n)]) for n in WG.degrees()])
+    Q = prod([sum([x^i for i in range(n)]) for n in WL.degrees()])
 
-    for i in range(d + 1):
-        diagonal[i] = len([l for l in lengths if l == i])
-
-    return diagonal
+    return list(map(int, R(P/Q).coefficients()))
 
 
 def embedding(D, k):
-    R = WeylCharacterRing(D)
-
-    # minimal embedding
-    fw = R.fundamental_weights()[k]
-
-    # adjoint type C is funny (TODO: are there others?)
-    if D[0] == "C" and k == 1:
-        fw = 2*fw
-
-    return R(fw)
+    return int(hilbert_polynomial(D, k)(1))
 
 
-def hilbert_series(D, k):
-    V = embedding(D, k)
+def degree(D, k):
+    return int(hilbert_polynomial(D, k).leading_coefficient() * factorial(dimension(D, k)))
 
-    return [int(V.parent()(i*V.highest_weight()).degree()) for i in range(10)]
+
+def hilbert_polynomial(D, k):
+    return prod(hilbert_polynomial_factors(D, k))
+
+
+def hilbert_polynomial_factors(D, k):
+    M = RootSystem(D).ambient_space()
+    l = M.fundamental_weights()[k] # G/P_k for now, can be replaced by arbitrary weight later
+
+    return [1 + t * l.dot_product(a) / M.rho().dot_product(a) for a in M.positive_roots() if l.dot_product(a) != 0]
 
 
 grassmannians = []
 
 # needs special attention, script isn't 100% robust
-G = {"type" : "A1", "parabolic" : 1, "dimension" : 1 , "index" : 2, "rank" : 2, "embedding" : 1, "hilbert" : hilbert_series("A1", 1)}
+G = {
+     "type" : "A1",
+     "parabolic" : 1,
+
+     "dimension" : 1,
+     "index" : 2,
+     "rank" : 2,
+     "betti" : [int(1), int(1)],
+
+     "embedding" : 1,
+     "degree" : 1,
+  }
+# TODO just make the functions more robust...
 grassmannians.append(G)
 
 
 def grassmannian(D, k):
+    print(D, k)
     return {
             "type" : D,
             "parabolic" : k,
+
             "dimension" : dimension(D, k),
             "index" : index(D, k),
             "rank" : rank(D, k),
-            "embedding" : embedding(D, k).degree(),
-            "hilbert" : hilbert_series(D, k)
-            } #, "betti": betti(D, k)}
+            "betti": betti(D, k),
+
+            "embedding" : embedding(D, k),
+            "degree" : degree(D, k),
+            "hilbert_polynomial" : {
+                "latex" : latex(hilbert_polynomial(D, k)),
+                "plaintext" : str(hilbert_polynomial(D, k)),
+                "factors" : [str(f.leading_coefficient()) for f in hilbert_polynomial_factors(D, k)],
+                "factors_latex" : [latex(f.leading_coefficient()) for f in hilbert_polynomial_factors(D, k)],
+                "evaluation" : [int(hilbert_polynomial(D, k)(i)) for i in range(20)]
+            }
+        }
 
 
 types = []
@@ -119,9 +142,14 @@ for (D, k) in types:
 
 # JSON module needs actual int's
 for G in grassmannians:
-    for key in ["parabolic", "dimension", "index", "rank", "embedding"]:
+    for key in ["parabolic", "dimension", "index", "rank", "embedding", "degree"]:
         if not key in G: continue
         G[key] = int(G[key])
+
+# debugging
+#for G in grassmannians:
+#    for key in G:
+#        print(G, key, type(G[key]))
 
 with open("grassmannians.json", "w") as f:
     json.dump(grassmannians, f, indent=4)

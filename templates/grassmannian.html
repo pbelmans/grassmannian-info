@@ -16,14 +16,14 @@
 
 {% macro basic(grassmannian) %}
 <dl class="row">
-  <dt class="col-6 text-right">dimension
-  <dd class="col-6">{{ grassmannian["dimension"] }}
+  <dt class="col-3 text-right">dimension
+  <dd class="col-9">{{ grassmannian["dimension"] }}
 
-  <dt class="col-6 text-right">index
-  <dd class="col-6">{{ grassmannian["index"] }}
+  <dt class="col-3 text-right">index
+  <dd class="col-9">{{ grassmannian["index"] }}
 
-  <dt class="col-6 text-right">topological Euler characteristic
-  <dd class="col-6">{{ grassmannian["rank"] }}
+  <dt class="col-3 text-right">topological Euler characteristic
+  <dd class="col-9">{{ grassmannian["rank"] }}
 </dl>
 {% endmacro %}
 
@@ -48,20 +48,50 @@
 {% endmacro %}
 
 
+{% macro projective(grassmannian) %}
+<dl class="row">
+  <dt class="col-3 text-right">minimal embedding
+  <dd class="col-9">${{ grassmannian["latex"] }}\hookrightarrow\mathbb{P}^{ {{ grassmannian["embedding"] - 1 }} }$
+
+  <dt class="col-3 text-right">degree
+  <dd class="col-9">{{ grassmannian["degree"] }}
+
+  <dt class="col-3 text-right">Hilbert polynomial
+  <!-- TODO implement JS evaluation of Hilbert polynomial for more and more -->
+  <dd class="col-9">\begin{equation}{{ grassmannian["hilbert_polynomial"]["latex"] }}\end{equation}
+
+    \begin{equation}
+    {% for factor in grassmannian["hilbert_polynomial"]["factors"] %}
+      {% if factor == "1" %}(t+1)
+      {% else %}\left( \frac{ {{ factor.split("/")[0] }} }{ {{ factor.split("/")[1] }} }t+1 \right)
+      {% endif %}
+    {% endfor %}
+    \end{equation}
+
+  <dt class="col-3 text-right">Hilbert series
+  <dd class="col-9">
+    {% for dimension in grassmannian["hilbert_polynomial"]["evaluation"] %}
+      {{ dimension }}
+      {% if not loop.last %},{% endif %}
+    {% endfor %}
+</dl>
+{% endmacro %}
+
+
 {% block content %}
-  <h2>{{ grassmannian["name"] }} ${{ grassmannian["latex"] }}$</h2>
+<h2>{{ grassmannian["name"] }} ${{ grassmannian["latex"] }}$</h2>
 
-  <div class="row">
-    <div class="col-2 d-none d-lg-block">
-      {{ component("Betti numbers", betti(grassmannian)) }}
-    </div>
-
-    <div class="col-10">
-      <div class="card-columns">
-        {{ component("Basic information", basic(grassmannian)) }}
-      </div>
-
-      {{ component("Homological projective duality", hpd(grassmannian)) }}
-    </div>
+<div class="row">
+  <div class="col-2 d-none d-lg-block">
+    {{ component("Betti numbers", betti(grassmannian)) }}
   </div>
+
+  <div class="col-10">
+    {{ component("Basic information", basic(grassmannian)) }}
+
+    {{ component("Projective geometry", projective(grassmannian)) }}
+
+    {{ component("Homological projective duality", hpd(grassmannian)) }}
+  </div>
+</div>
 {% endblock %}
