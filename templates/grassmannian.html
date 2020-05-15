@@ -1,5 +1,7 @@
 {% extends "page.html" %}
 
+{% import "macros.html" as macros %}
+
 {% block title %}{{ grassmannian["name"] }} {{ grassmannian["plaintext"] }}{% endblock %}
 {# TODO nice human-readable name #}
 
@@ -91,7 +93,11 @@
 
 
 {% block content %}
-<h2>{{ grassmannian["name"][0] | upper  }}{{ grassmannian["name"][1:] }} ${{ grassmannian["latex"] }}$</h2>
+<div class="text-center">
+  <h2 class="mt-3">{{ grassmannian["name"][0] | upper  }}{{ grassmannian["name"][1:] }} ${{ grassmannian["latex"] }}$</h2>
+
+  {{ macros.dynkin(grassmannian["type"][0], grassmannian["type"][1:] | int, height=100, k=[grassmannian["parabolic"]]) }}
+</div>
 
 <div class="row">
   <div class="col-2 d-none d-lg-block">
