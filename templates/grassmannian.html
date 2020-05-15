@@ -24,6 +24,10 @@
 
   <dt class="col-3 text-right">topological Euler characteristic
   <dd class="col-9">{{ grassmannian["rank"] }}
+
+  <dt class="d-lg-none col-3 text-right">Betti numbers
+  <dd class="d-lg-none col-9">{{ betti_horizontal(grassmannian) }}
+
 </dl>
 {% endmacro %}
 
@@ -39,12 +43,18 @@
 {% endmacro %}
 
 
-{% macro betti(grassmannian) %}
+{% macro betti_vertical(grassmannian) %}
 \begin{align*}
 {%- for betti in grassmannian["betti"] %}
   \mathrm{b}_{ {{ loop.index }} } &= {{ betti }} {% if not loop.last %}\\{% endif %}
 {%- endfor %}
 \end{align*}
+{% endmacro %}
+
+{% macro betti_horizontal(grassmannian) %}
+{%- for betti in grassmannian["betti"] -%}
+  $\mathrm{b}_{ {{ loop.index }} } = {{ betti }}${% if not loop.last %}, {% endif %}
+{%- endfor %}
 {% endmacro %}
 
 
@@ -56,8 +66,8 @@
   <dt class="col-3 text-right">degree
   <dd class="col-9">{{ grassmannian["degree"] }}
 
+  <!--
   <dt class="col-3 text-right">Hilbert polynomial
-  <!-- TODO implement JS evaluation of Hilbert polynomial for more and more -->
   <dd class="col-9">\begin{equation}{{ grassmannian["hilbert_polynomial"]["latex"] }}\end{equation}
 
     \begin{equation}
@@ -67,26 +77,28 @@
       {% endif %}
     {% endfor %}
     \end{equation}
+  -->
 
   <dt class="col-3 text-right">Hilbert series
   <dd class="col-9">
-    {% for dimension in grassmannian["hilbert_polynomial"]["evaluation"] %}
-      {{ dimension }}
-      {% if not loop.last %},{% endif %}
-    {% endfor %}
+    {% for dimension in grassmannian["hilbert_polynomial"]["evaluation"] -%}
+      {{- dimension -}}
+      {%- if not loop.last %}, {% endif %}
+    {%- endfor -%}, ...
+    <!-- TODO implement JS evaluation of Hilbert polynomial for more and more -->
 </dl>
 {% endmacro %}
 
 
 {% block content %}
-<h2>{{ grassmannian["name"] }} ${{ grassmannian["latex"] }}$</h2>
+<h2>{{ grassmannian["name"][0] | upper  }}{{ grassmannian["name"][1:] }} ${{ grassmannian["latex"] }}$</h2>
 
 <div class="row">
   <div class="col-2 d-none d-lg-block">
-    {{ component("Betti numbers", betti(grassmannian)) }}
+    {{ component("Betti numbers", betti_vertical(grassmannian)) }}
   </div>
 
-  <div class="col-10">
+  <div class="col-12 col-lg-10">
     {{ component("Basic information", basic(grassmannian)) }}
 
     {{ component("Projective geometry", projective(grassmannian)) }}
