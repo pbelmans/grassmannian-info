@@ -23,6 +23,8 @@ def index(D, k):
 
 
 def rank(D, k):
+    if D == "A1": return 2
+
     D = DynkinDiagram(D)
     T = [r for r in D.vertices() if r != k]
 
@@ -33,6 +35,8 @@ def rank(D, k):
 
 
 def dimension(D, k):
+    if D == "A1": return 1
+
     def dimGB(D):
         dimG = len(D.root_system().root_poset()) * 2 + D.rank()
         dimB = len(D.root_system().root_poset()) + D.rank()
@@ -45,6 +49,8 @@ def dimension(D, k):
 
 
 def betti(D, k):
+    if D == "A1": return [1, 1]
+
     R.<x> = PolynomialRing(ZZ)
 
     D = DynkinDiagram(D)
@@ -55,15 +61,15 @@ def betti(D, k):
     P = prod([sum([x^i for i in range(n)]) for n in WG.degrees()])
     Q = prod([sum([x^i for i in range(n)]) for n in WL.degrees()])
 
-    return list(map(int, R(P/Q).coefficients()))
+    return R(P/Q).coefficients()
 
 
 def embedding(D, k):
-    return int(hilbert_polynomial(D, k)(1))
+    return hilbert_polynomial(D, k)(1) - 1
 
 
 def degree(D, k):
-    return int(hilbert_polynomial(D, k).leading_coefficient() * factorial(dimension(D, k)))
+    return hilbert_polynomial(D, k).leading_coefficient() * factorial(dimension(D, k))
 
 
 def hilbert_polynomial(D, k):
@@ -79,36 +85,18 @@ def hilbert_polynomial_factors(D, k):
 
 grassmannians = []
 
-# needs special attention, script isn't 100% robust
-G = {
-     "type" : "A1",
-     "parabolic" : 1,
-
-     "dimension" : 1,
-     "index" : 2,
-     "rank" : 2,
-     "betti" : [int(1), int(1)],
-
-     "embedding" : 1,
-     "degree" : 1,
-  }
-# TODO just make the functions more robust...
-grassmannians.append(G)
-
-
 def grassmannian(D, k):
-    print(D, k)
     return {
             "type" : D,
-            "parabolic" : k,
+            "parabolic" : int(k),
 
-            "dimension" : dimension(D, k),
-            "index" : index(D, k),
-            "rank" : rank(D, k),
-            "betti": betti(D, k),
+            "dimension" : int(dimension(D, k)),
+            "index" : int(index(D, k)),
+            "rank" : int(rank(D, k)),
+            "betti": list(map(int, (betti(D, k)))),
 
-            "embedding" : embedding(D, k),
-            "degree" : degree(D, k),
+            "embedding" : int(embedding(D, k)),
+            "degree" : int(degree(D, k)),
             "hilbert_polynomial" : {
                 "latex" : latex(hilbert_polynomial(D, k)),
                 "plaintext" : str(hilbert_polynomial(D, k)),
@@ -119,7 +107,7 @@ def grassmannian(D, k):
         }
 
 
-types = []
+types = [("A1", 1)]
 for prefix in ["A", "B", "C", "D"]:
     for n in range(2, 11):
         # let's not do D3 and D4
@@ -139,17 +127,6 @@ for D in exceptional:
 for (D, k) in types:
     G = grassmannian(D, k)
     grassmannians.append(G)
-
-# JSON module needs actual int's
-for G in grassmannians:
-    for key in ["parabolic", "dimension", "index", "rank", "embedding", "degree"]:
-        if not key in G: continue
-        G[key] = int(G[key])
-
-# debugging
-#for G in grassmannians:
-#    for key in G:
-#        print(G, key, type(G[key]))
 
 with open("grassmannians.json", "w") as f:
     json.dump(grassmannians, f, indent=4)
