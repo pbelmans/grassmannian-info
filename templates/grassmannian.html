@@ -107,6 +107,17 @@
   {{ macros.dynkin(G["type"][0], G["type"][1:] | int, height=100, k=[G["parabolic"]]) }}
 </div>
 
+{% if G["isomorphisms"] | length >= 2 %}
+  <div class="col mb-5">
+    There exist other realisations of this Grassmannian:
+    <ul>
+      {% for (D, k) in G["isomorphisms"] if (D, k) != (G["type"], G["parabolic"]) %}
+      <li><a href="/{{ D }}/{{ k }}">{{ macros.dynkin(D[0], D[1:] | int, height=40, k=[k]) }}</a>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
 <div class="row">
   <div class="col-2 d-none d-lg-block">
     {{ component("Betti numbers", betti_vertical(G)) }}
