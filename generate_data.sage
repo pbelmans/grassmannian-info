@@ -41,7 +41,7 @@ def canonical(D, k):
 
     # the exceptional identifications
     if T == "B" and k == n and n >= 3: return ("D" + str(n + 1), n + 1)
-    if T == "C" and k == 1: return ("A" + str(2*n), 1)
+    if T == "C" and k == 1: return ("A" + str(2*n - 1), 1)
     if T == "G" and k == 1: return ("B3", 1)
 
     return (D, k)
@@ -153,7 +153,7 @@ def grassmannian(D, k):
 
             "Aut^0" : canonical(D, k)[0],
             "pizero" : pizero(canonical(D, k)[0], canonical(D, k)[1]),
-            "dim Aut" : int(dimension(Aut(D, k))),
+            "dim Aut" : int(dimension(canonical(D, k)[0])),
         }
 
 
