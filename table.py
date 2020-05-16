@@ -149,12 +149,37 @@ with open("grassmannians.json") as f:
         if T == "G" and k == 1: G["coadjoint"] = True
         if T == "G" and k == 2: G["adjoint"] = True
 
+
+        G["isomorphisms"] = [(T + str(n), k)]
+        if T == "A":
+            G["isomorphisms"].append(("A" + str(n), n - k + 1),)
+        elif T == "B":
+            if n == 2 and k == 1: G["isomorphisms"].append(("C2", 2),)
+            if n == 2 and k == 2: G["isomorphisms"].extend([("C2", 1), ("A3", 1), ("A3", 3)])
+            if n == 3 and k == 1: G["isomorphisms"].append(("G2", 1),)
+            if n == 3 and k == 3: G["isomorphisms"].extend([("D4", 1), ("D4", 3), ("D4", 4)])
+            if n == k: G["isomorphisms"].extend([("D" + str(n + 1), n), ("D" + str(n + 1), n + 1)])
+        elif T == "C":
+            if k == 1: G["isomorphisms"].extend([("A" + str(2*n - 1), 1), ("A" + str(2*n - 1), 2*n - 1)])
+            if n == 2 and k == 1: G["isomorphisms"].append(("B2", 1),)
+        elif T == "D":
+            if n == 4 and k in [1, 3, 4]: G["isomorphisms"].extend([("D4", 1), ("D4", 3), ("D4", 4), ("B3", 3)])
+            if k in [n - 1, n]: G["isomorphisms"].extend([("B" + str(n - 1), min(n - 1, n - (k - n + 1))), ("D" + str(n), n - (k - n + 1))])
+        elif T == "E":
+            if n == 6 and k in [1, 6]: G["isomorphisms"].extend([("E6", 1), ("E6", 6)])
+            if n == 6 and k in [3, 5]: G["isomorphisms"].extend([("E6", 3), ("E6", 5)])
+        elif T == "G":
+            if k == 1: G["isomorphisms"].append(("B3", 1),)
+
+        G["isomorphisms"] = list(set(G["isomorphisms"]))
+
         # hardcoding HPD data for now
         G["hpd"] = {}
         G["hpd"]["dual"] = "good description comes here"
         # for now this is the Gr(2,6) example as on page 17 of http://www.mi-ras.ru/~akuznet/publications/1404.3143.pdf
         G["hpd"]["support"] = [3, 3, 3, 2, 2, 2]
         G["hpd"]["total"] = 15 # TODO better name for this? is another invariant maybe a better choice?
+
 
         # assigning the Grassmannian to the dictionary
         if n not in grassmannians[T]:

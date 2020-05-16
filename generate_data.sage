@@ -135,6 +135,7 @@ def grassmannian(D, k):
     return {
             "type" : D,
             "parabolic" : int(k),
+            "canonical" : [canonical(D, k)[0], int(canonical(D, k)[1])],
 
             "dimension" : int(dimension(D, k)),
             "index" : int(index(D, k)),

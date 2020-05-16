@@ -72,7 +72,7 @@
 <dl class="row">
   <dt class="col-3 text-right">minimal embedding
   <dd class="col-9"><p>${{ grassmannian["latex"] }}\hookrightarrow\mathbb{P}^{ {{ grassmannian["embedding"] }} }$</p>
-  {% if grassmannian["type"][0] == "C" and grassmannian["parabolic"] == 1 %}<p>More appropriately in this particular presentation as a quotient of the symplectic group is to consider the Grassmannian as the <strong>adjoint variety of type $\mathrm{C}_{ {{ grassmannian["type"][1:] }} }$</strong>, where the embedding is the second Veronese embedding into $\mathbb{P}(\mathrm{V}_{2\omega_1})=\mathbb{P}^{ {{ (grassmannian["embedding"] * (grassmannian["embedding"] + 3) / 2) | int }} }$.{% endif %}
+  {% if grassmannian["type"][0] == "C" and grassmannian["parabolic"] == 1 %}<p>More appropriately in this particular presentation as a quotient of the symplectic group is to consider the Grassmannian as the <em>adjoint</em> variety of type $\mathrm{C}_{ {{ grassmannian["type"][1:] }} }$, where the embedding is the second Veronese embedding into $\mathbb{P}(\mathrm{V}_{2\omega_1})=\mathbb{P}^{ {{ (grassmannian["embedding"] * (grassmannian["embedding"] + 3) / 2) | int }} }$.{% endif %}
   <dt class="col-3 text-right">degree
   <dd class="col-9">{{ grassmannian["degree"] }}
 
@@ -117,7 +117,7 @@
 
     {{ component("Projective geometry", projective(grassmannian)) }}
 
-    {{ component("Homological projective duality", hpd(grassmannian)) }}
+    {# {{ component("Homological projective duality", hpd(grassmannian)) }} #}
   </div>
 </div>
 
