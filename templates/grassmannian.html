@@ -30,10 +30,13 @@
   <dt class="d-lg-none col-3 text-right">Betti numbers
   <dd class="d-lg-none col-9">{{ betti_horizontal(grassmannian) }}
 
-  <dt class="col-3 text-right">$\mathrm{Aut}^0$
-  <dd class="col-9">{{ macros.adjoint_group(grassmannian["Aut"]) }}
+  <dt class="col-3 text-right">$\mathrm{Aut}^0({{ grassmannian["latex"] }})$
+  <dd class="col-9">{{ macros.adjoint_group(grassmannian["Aut^0"]) }}
 
-  <dt class="col-3 text-right">$\dim\mathrm{Aut}^0$
+  <dt class="col-3 text-right">$\pi_0\mathrm{Aut}({{ grassmannian["latex"] }})$
+  <dd class="col-9">${{ grassmannian["pizero"] }}$
+
+  <dt class="col-3 text-right">$\dim\mathrm{Aut}^0({{ grassmannian["latex"] }})$
   <dd class="col-9">{{ grassmannian["dim Aut"] }}
 </dl>
 {% endmacro %}

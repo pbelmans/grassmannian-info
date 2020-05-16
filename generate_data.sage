@@ -34,16 +34,17 @@ def rank(D, k):
     return WG.cardinality() / WL.cardinality()
 
 
-def Aut(D, k):
+# give the "canonical" quotient, where G is the Aut^0
+def canonical(D, k):
     T = D[0]
     n = int(D[1:])
 
     # the exceptional identifications
-    if T == "B" and k == n: return "D" + str(n + 1)
-    if T == "C" and k == 1: return "A" + str(2*n)
-    if T == "G" and k == 1: return "B3"
+    if T == "B" and k == n and n >= 3: return ("D" + str(n + 1), n + 1)
+    if T == "C" and k == 1: return ("A" + str(2*n), 1)
+    if T == "G" and k == 1: return ("B3", 1)
 
-    return D
+    return (D, k)
 
 
 def dimension(D, k=0):
@@ -103,6 +104,30 @@ def hilbert_polynomial_factors(D, k):
     return [1 + t * l.dot_product(a) / M.rho().dot_product(a) for a in M.positive_roots() if l.dot_product(a) != 0]
 
 
+def pizero(D, k):
+    T = D[0]
+    n = int(D[1:])
+
+    if T == "A":
+        if n == 2*k - 1 and n >= 2: return "\\mathbb{Z}/2\\mathbb{Z}"
+        else: return "1"
+    elif T == "B":
+        return "1"
+    elif T == "C":
+        return "1"
+    elif T == "D":
+        if n == 4 and k in [1, 3, 4]: return "\\mathbb{Z}/3\\mathbb{Z}"
+        elif k in [n - 1, n]: return "1"
+        else: return "\\mathbb{Z}/2\\mathbb{Z}"
+    elif T == "E":
+        if n == 6 and k in [2, 4]: return "\\mathbb{Z}/2\\mathbb{Z}"
+        else: return "1"
+    elif T == "F":
+        return "1"
+    elif T == "G":
+        return "1"
+
+
 
 grassmannians = []
 
@@ -126,7 +151,8 @@ def grassmannian(D, k):
                 "evaluation" : [int(hilbert_polynomial(D, k)(i)) for i in range(20)]
             },
 
-            "Aut" : Aut(D, k),
+            "Aut^0" : canonical(D, k)[0],
+            "pizero" : pizero(canonical(D, k)[0], canonical(D, k)[1]),
             "dim Aut" : int(dimension(Aut(D, k))),
         }
 
