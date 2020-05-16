@@ -16,7 +16,6 @@ def latex(T, n, k):
     elif T == "B":
         if k == 1: return "\\mathrm{{Q}}^{{{}}}".format(2*n - 1)
         elif n == 2 and k == 2: return latex("A", 3, 1)
-        elif k == n: return latex("D", n + 1, n + 1) # not 100% sure this is a good idea
         else: return "\\OGr({},{})".format(k, 2*n + 1)
 
     elif T == "C":
@@ -51,7 +50,6 @@ def plaintext(T, n, k):
     elif T == "B":
         if k == 1: return "Q{}".format(2*n - 1)
         elif n == 2 and k == 2: return plaintext("A", 3, 1)
-        elif k == n: return plaintext("D", n + 1, n + 1) # not 100% sure this is a good idea
         else: return "OGr({},{})".format(k, 2*n + 1)
 
     elif T == "C":
@@ -86,7 +84,6 @@ def name(T, n, k):
     elif T == "B":
         if k == 1: return "quadric"
         elif n == 2 and k == 2: return name("A", 3, 1)
-        elif k == n: return name("D", n + 1, n + 1) # not 100% sure this is a good idea
         else: return "orthogonal Grassmannian"
 
     elif T == "C":
@@ -181,6 +178,7 @@ def show_explained():
     return render_template("explained.html")
 
 
+@app.route("/<string:T><int:n>-<int:k>") # TODO make these redirects?
 @app.route("/<string:T><int:n>/<int:k>")
 def show_grassmannian(T, n, k):
     G = grassmannians[T][n][k]

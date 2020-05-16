@@ -63,7 +63,7 @@
 {% macro projective(grassmannian) %}
 <dl class="row">
   <dt class="col-3 text-right">minimal embedding
-  <dd class="col-9">${{ grassmannian["latex"] }}\hookrightarrow\mathbb{P}^{ {{ grassmannian["embedding"] - 1 }} }$
+  <dd class="col-9">${{ grassmannian["latex"] }}\hookrightarrow\mathbb{P}^{ {{ grassmannian["embedding"] }} }$
 
   <dt class="col-3 text-right">degree
   <dd class="col-9">{{ grassmannian["degree"] }}
@@ -112,4 +112,12 @@
     {{ component("Homological projective duality", hpd(grassmannian)) }}
   </div>
 </div>
+
+
+<script type="text/javascript">
+  // TODO figure out why this doesn't work...
+  $("circle").wrap(function() {
+    //return "<a href='/" + $(this).data("label") + "'></a>";
+  });
+</script>
 {% endblock %}
