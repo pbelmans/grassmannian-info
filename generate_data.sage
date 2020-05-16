@@ -34,18 +34,38 @@ def rank(D, k):
     return WG.cardinality() / WL.cardinality()
 
 
-def dimension(D, k):
-    if D == "A1": return 1
+def Aut(D, k):
+    T = D[0]
+    n = int(D[1:])
 
+    # the exceptional identifications
+    if T == "B" and k == n: return "D" + str(n + 1)
+    if T == "C" and k == 1: return "A" + str(2*n)
+    if T == "G" and k == 1: return "B3"
+
+    return D
+
+
+def dimension(D, k=0):
     def dimGB(D):
+        if D == "A1": return (3, 2)
+
         dimG = len(D.root_system().root_poset()) * 2 + D.rank()
         dimB = len(D.root_system().root_poset()) + D.rank()
         return (dimG, dimB)
 
     D = DynkinDiagram(D)
-    I = [i for i in D.vertices() if i != k]
 
-    return dimGB(D)[0] - dimGB(D)[1] - (dimGB(D.subtype(I))[0] - dimGB(D.subtype(I))[1])
+    # we care about the algebraic group only
+    if k == 0:
+        return dimGB(D)[0]
+    # we care about the quotient
+    else:
+        if D == DynkinDiagram("A1"): return 1
+
+        I = [i for i in D.vertices() if i != k]
+
+        return dimGB(D)[0] - dimGB(D)[1] - (dimGB(D.subtype(I))[0] - dimGB(D.subtype(I))[1])
 
 
 def betti(D, k):
@@ -83,6 +103,7 @@ def hilbert_polynomial_factors(D, k):
     return [1 + t * l.dot_product(a) / M.rho().dot_product(a) for a in M.positive_roots() if l.dot_product(a) != 0]
 
 
+
 grassmannians = []
 
 def grassmannian(D, k):
@@ -103,10 +124,14 @@ def grassmannian(D, k):
                 "factors" : [str(f.leading_coefficient()) for f in hilbert_polynomial_factors(D, k)],
                 "factors_latex" : [latex(f.leading_coefficient()) for f in hilbert_polynomial_factors(D, k)],
                 "evaluation" : [int(hilbert_polynomial(D, k)(i)) for i in range(20)]
-            }
+            },
+
+            "Aut" : Aut(D, k),
+            "dim Aut" : int(dimension(Aut(D, k))),
         }
 
 
+# determining which G/P to consider
 types = [("A1", 1)]
 for prefix in ["A", "B", "C", "D"]:
     for n in range(2, 11):

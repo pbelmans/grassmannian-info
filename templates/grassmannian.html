@@ -24,12 +24,17 @@
   <dt class="col-3 text-right">index
   <dd class="col-9">{{ grassmannian["index"] }}
 
-  <dt class="col-3 text-right">topological Euler characteristic
+  <dt class="col-3 text-right">Euler characteristic
   <dd class="col-9">{{ grassmannian["rank"] }}
 
   <dt class="d-lg-none col-3 text-right">Betti numbers
   <dd class="d-lg-none col-9">{{ betti_horizontal(grassmannian) }}
 
+  <dt class="col-3 text-right">$\mathrm{Aut}^0$
+  <dd class="col-9">{{ macros.adjoint_group(grassmannian["Aut"]) }}
+
+  <dt class="col-3 text-right">$\dim\mathrm{Aut}^0$
+  <dd class="col-9">{{ grassmannian["dim Aut"] }}
 </dl>
 {% endmacro %}
 
