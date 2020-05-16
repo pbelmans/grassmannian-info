@@ -12,7 +12,7 @@ data-dimension="{{ G["dimension"] }}" data-index="{{ G["index"] }}" data-euler="
 {% macro entry(G) %}
 <td class="entry" data-type="{{ type(G) }}" {{ data(G) }} data-label="{{ G["type"] }}-{{ G["parabolic"] }}">
   <div class="alpha">
-    <a href="/{{ G["plaintext"] }}">${{ G["latex"] | safe }}$</a>
+    <a href="/{{ G["type"] }}/{{ G["parabolic"] }}">${{ G["latex"] | safe }}$</a>
 
     <div class="information">
       \begin{align*}
