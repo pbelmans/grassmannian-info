@@ -208,7 +208,7 @@ def show_explained():
 def show_grassmannian(T, n, k):
     G = grassmannians[T][n][k]
 
-    return render_template("grassmannian.html", grassmannian=G)
+    return render_template("grassmannian.html", G=G)
 
 
 @app.route("/<path:plaintext>")
@@ -220,7 +220,7 @@ def show_grassmannian_from_plaintext(plaintext):
                 G = grassmannians[T][n][k]
 
                 if G["plaintext"] == plaintext:
-                    return render_template("grassmannian.html", grassmannian=G)
+                    return render_template("grassmannian.html", G=G)
 
     # at this point: we should look for alternative interpretations (e.g. OGr(3,7) is Q^6 etc.)
     # TODO
