@@ -42,10 +42,9 @@
 {% endmacro %}
 
 
-{% macro partition(lefschetz) %}
-{% set total = lefschetz["support"] | length %}
-<svg class="lefschetz" viewBow="0 0 {{ lefschetz["support"][0] * 20 }} {{ total * 20 }}">
-  {% for i in range(total) %}
+{% macro partition(lefschetz, embedding) %}
+<svg class="lefschetz" style="max-width: {{ [embedding * 40, 800] | min }}" viewBox="0 0 {{ embedding * 20 }} {{ lefschetz["support"][0] * 20 }} ">
+  {% for i in range(embedding) %}
     {% for j in range(lefschetz["support"][0]) %}
     <rect x="{{ i * 20 }}" y="{{ j * 20 }}" width="20" height="20" class="block{% if i < lefschetz["support"] | length and j < lefschetz["support"][i] %} original{% endif %} " />
     {% endfor %}
@@ -56,7 +55,7 @@
 
 {% macro hpd(G) %}
 {% for lefschetz in G["lefschetz"] %}
-  {{ partition(lefschetz) }}
+  {{ partition(lefschetz, G["embedding"] + 1) }}
 {% endfor %}
 {% endmacro %}
 

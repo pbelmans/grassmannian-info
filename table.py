@@ -174,13 +174,16 @@ with open("grassmannians.json") as f:
 
         G["isomorphisms"] = list(set(G["isomorphisms"]))
 
-        # hardcoding HPD data for now
-        G["hpd"] = {}
-        G["hpd"]["dual"] = "good description comes here"
-        # for now this is the Gr(2,6) example as on page 17 of http://www.mi-ras.ru/~akuznet/publications/1404.3143.pdf
-        G["hpd"]["support"] = [3, 3, 3, 2, 2, 2]
-        G["hpd"]["total"] = 15 # TODO better name for this? is another invariant maybe a better choice?
+        """
+        Idea: maybe it would be better to move this to a template?
 
+        + easier to add descriptions
+        + every Lefschetz collection is a macro that can be called?
+
+        - less convenient for MathSciNet / arXiv integration?
+        - even further separation of content
+
+        """
         G["lefschetz"] = []
         if T == "A":
             # Beilinson
@@ -194,16 +197,24 @@ with open("grassmannians.json") as f:
                 else:
                     G["lefschetz"].append({"support" : [m]*m + [m-1]*m})
 
-            # Beilinson
+            # Kapranov, non-minimal
+
+        if T == "B":
+            if k == 1:
+                G["lefschetz"].append({"support" : [2] + [1]*(2*n-2)})
+
+        if T == "D":
+            if k == 1 or (n == 4 and k in [3, 4]):
+                G["lefschetz"].append({"support" : [2, 2] + [1]*(2*n-4)})
 
         if T == "E":
             # Faenzi--Manivel
             if n == 6 and k in [1, 6]:
-                G["lefschetz"].append({"support" : [3]*3 + [2]*11})
+                G["lefschetz"].append({"support" : [3]*3 + [2]*9})
         if T == "F":
             # Belmans--Kuznetsov--Smirnov
             if n == 4:
-                G["lefschetz"].append({"support" : [3]*2 + [2]*11})
+                G["lefschetz"].append({"support" : [3]*2 + [2]*8})
 
 
         # assigning the Grassmannian to the dictionary
