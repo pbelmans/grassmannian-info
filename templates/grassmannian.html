@@ -6,7 +6,7 @@
 {# TODO nice human-readable name #}
 
 {% macro component(title, content, id="") %}
-<div id="{{ id }}" class="card" style="min-width: 1px">
+<div id="{{ id }}" class="card mb-4">
   <div class="card-header">{{- title }}</div>
 
   <div class="card-body">
@@ -42,14 +42,22 @@
 {% endmacro %}
 
 
-{% macro hpd(G) %}
-<svg class="lefschetz" viewBow="0 0 {{ G["hpd"]["support"][0] * 20 }} {{ G["hpd"]["total"] * 20 }}">
-  {% for i in range(G["hpd"]["total"]) %}
-    {% for j in range(G["hpd"]["support"][0]) %}
-    <rect x="{{ i * 20 }}" y="{{ j * 20 }}" width="20" height="20" class="block{% if i < G["hpd"]["support"] | length and j < G["hpd"]["support"][i] %} original{% endif %} " />
+{% macro partition(lefschetz) %}
+{% set total = lefschetz["support"] | length %}
+<svg class="lefschetz" viewBow="0 0 {{ lefschetz["support"][0] * 20 }} {{ total * 20 }}">
+  {% for i in range(total) %}
+    {% for j in range(lefschetz["support"][0]) %}
+    <rect x="{{ i * 20 }}" y="{{ j * 20 }}" width="20" height="20" class="block{% if i < lefschetz["support"] | length and j < lefschetz["support"][i] %} original{% endif %} " />
     {% endfor %}
   {% endfor %}
 </svg>
+{% endmacro %}
+
+
+{% macro hpd(G) %}
+{% for lefschetz in G["lefschetz"] %}
+  {{ partition(lefschetz) }}
+{% endfor %}
 {% endmacro %}
 
 
@@ -128,7 +136,7 @@
 
     {{ component("Projective geometry", projective(G)) }}
 
-    {# {{ component("Homological projective duality", hpd(G)) }} #}
+    {{ component("Homological projective duality", hpd(G)) }}
   </div>
 </div>
 

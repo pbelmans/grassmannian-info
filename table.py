@@ -111,6 +111,7 @@ def name(T, n, k):
     return "generalised Grassmannian of type ($\\mathrm{{{}}}_{{{}}}/\mathrm{{P}}_{{{}}}$)".format(T, n, k)
 
 
+
 # load the Sage-generated JSON file
 with open("grassmannians.json") as f:
     data = json.load(f)
@@ -179,6 +180,30 @@ with open("grassmannians.json") as f:
         # for now this is the Gr(2,6) example as on page 17 of http://www.mi-ras.ru/~akuznet/publications/1404.3143.pdf
         G["hpd"]["support"] = [3, 3, 3, 2, 2, 2]
         G["hpd"]["total"] = 15 # TODO better name for this? is another invariant maybe a better choice?
+
+        G["lefschetz"] = []
+        if T == "A":
+            # Beilinson
+            if k in [1, n]:
+                G["lefschetz"].append({"support" : [1]*(n + 1)})
+            # Kuznetsov (cfr. example 1.7 of http://www.mi-ras.ru/~akuznet/publications/1802.08097%5BOn%20residual%20categories%20for%20Grassmannians%5D.pdf)
+            if k == 2:
+                m = (n + 1) // 2
+                if n % 2 == 0:
+                    G["lefschetz"].append({"support" : [m]*(2*m+1)})
+                else:
+                    G["lefschetz"].append({"support" : [m]*m + [m-1]*m})
+
+            # Beilinson
+
+        if T == "E":
+            # Faenzi--Manivel
+            if n == 6 and k in [1, 6]:
+                G["lefschetz"].append({"support" : [3]*3 + [2]*11})
+        if T == "F":
+            # Belmans--Kuznetsov--Smirnov
+            if n == 4:
+                G["lefschetz"].append({"support" : [3]*2 + [2]*11})
 
 
         # assigning the Grassmannian to the dictionary
