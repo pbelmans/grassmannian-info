@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template
+from flask import render_template, redirect
 
 import json
 
@@ -239,7 +239,11 @@ def show_explained():
     return render_template("explained.html")
 
 
-@app.route("/<string:T><int:n>-<int:k>") # TODO make these redirects?
+@app.route("/<string:T><int:n>-<int:k>")
+def redirect_grassmannian(T, n, k):
+    return redirect("/{}{}/{}".format(T, n, k))
+
+# TODO make these redirects?
 @app.route("/<string:T><int:n>/<int:k>")
 def show_grassmannian(T, n, k):
     G = grassmannians[T][n][k]

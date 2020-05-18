@@ -146,9 +146,19 @@ table.atlas.expanded {
 }
 
 circle.active {
-  fill: black;
+  fill: black !important;
 }
 
+// to deal with weird default
+a:visited circle {
+  fill: white;
+}
+
+header {
+  a:hover circle {
+    fill: #ccc;
+  }
+}
 
 table.information {
   font-size: 14px;
