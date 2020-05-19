@@ -3,7 +3,7 @@ from flask import render_template, redirect
 
 import json
 import math
-import re
+import numpy as np
 
 app = Flask(__name__)
 
@@ -111,6 +111,13 @@ class Dynkin:
                 if self.n == 7: return Dynkin("E", 6)
                 return [Dynkin("E", 6), Dynkin("A", 1)]
             return Dynkin("E", 7)
+        if self.T == "F":
+            if k == 1: return Dynkin("C", 3)
+            if k == 4: return Dynkin("B", 3)
+            return [Dynkin("A", 2), Dynkin("A", 1)]
+        if self.T == "G":
+            return [Dynkin("A", 1)]
+
 
 
 class Grassmannian:
@@ -125,6 +132,11 @@ class Grassmannian:
             self.L = [self.L]
 
 
+    def dimension(self):
+        # TODO implement standalone computation which should be more robust
+        return len(self.betti())
+
+
     def rank(self):
         result = self.D.weyl_group_cardinality()
         for D in self.L:
@@ -132,7 +144,51 @@ class Grassmannian:
         return result
 
 
+    def betti(self):
+        #if self.D.T == "A" and self.D.n == 1: return [1, 1]
+
+        P = np.poly1d([1])
+        for e in self.D.exponents():
+            factor = np.poly1d([0])
+            for i in range(e + 1): factor = np.polyadd(factor, np.poly1d([1] + [0]*i))
+            P = np.polymul(P, factor)
+
+        Q = np.poly1d([1])
+        for D in self.L:
+            for e in D.exponents():
+                factor = np.poly1d([0])
+                for i in range(e + 1): factor = np.polyadd(factor, np.poly1d([1] + [0]*i))
+                Q = np.polymul(Q, factor)
+
+        return list(map(int, np.polydiv(P, Q)[0]))
+
+
+    def index(self):
+        # taken from Akhiezer, Lie group actions in complex geometry, pages 124--125
+        if self.D.T == "A":
+            return self.D.n + 1
+        if self.D.T == "B":
+            if self.k == self.D.n: return 2*self.D.n
+            return 2*self.D.n - self.k
+        if self.D.T == "C":
+            return 2*self.D.n - self.k + 1
+        if self.D.T == "D":
+            if self.k in [self.D.n - 1, self.D.n]: return 2*self.D.n - 2
+            return 2*self.D.n - self.k - 1
+        if self.D.T == "E" and self.D.n == 6: return [12, 11, 9, 7, 9, 12][self.k - 1]
+        if self.D.T == "E" and self.D.n == 7: return [17, 14, 11, 8, 10, 13, 18][self.k - 1]
+        if self.D.T == "E" and self.D.n == 8: return [23, 17, 13, 9, 11, 14, 19, 29][self.k - 1]
+        if self.D.T == "F": return [8, 5, 7, 11][self.k - 1]
+        if self.D.T == "G": return [5, 3][self.k - 1]
+
+
+
 grassmannians = {letter : {} for letter in "ABCDEFG"}
+
+G = Grassmannian("A", 18, 10)
+print(G.betti())
+print(G.rank(), sum(G.betti()), len(G.betti()))
+# TODO if G.rank() != sum(G.betti()) there is a computational error
 
 def latex(T, n, k):
     if T == "A":
@@ -343,6 +399,9 @@ with open("grassmannians.json") as f:
             if n == 4:
                 G["lefschetz"].append({"support" : [3]*2 + [2]*8})
 
+        # TODO check for now
+        assert G["betti"] == Grassmannian(T, n, k).betti()
+        assert G["index"] == Grassmannian(T, n, k).index()
 
         # assigning the Grassmannian to the dictionary
         if n not in grassmannians[T]:
