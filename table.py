@@ -79,6 +79,59 @@ class Dynkin:
         if self.T == "G": return 12
 
 
+    def subtype(self, k):
+        assert k in range(1, self.n + 1)
+
+        if self.T == "A":
+            if k == 1 or k == self.n: return Dynkin("A", self.n - 1)
+            return [Dynkin("A", k - 1), Dynkin("A", self.n - k)]
+        if self.T == "B":
+            if k == 1: return Dynkin("B", self.n - 1)
+            if k == self.n: return Dynkin("A", self.n - 1)
+            return [Dynkin("A", k - 1), Dynkin("B", self.n - k)]
+        if self.T == "C":
+            if k == 1: return Dynkin("C", self.n - 1)
+            if k == self.n: return Dynkin("A", self.n - 1)
+            return [Dynkin("A", k - 1), Dynkin("C", self.n - k)]
+        if self.T == "D":
+            if k == 1: return Dynkin("D", self.n - 1)
+            if k == self.n - 2: return [Dynkin("A", self.n - 3), Dynkin("A", 1), Dynkin("A", 1)]
+            if k in [n - 1, self.n]: return Dynkin("A", self.n - 1)
+            return [Dynkin("A", k - 1), Dynkin("D", self.n - k)]
+        if self.T == "E":
+            if k == 1: return Dynkin("D", self.n - 1)
+            if k == 2: return Dynkin("A", self.n - 1)
+            if k == 3: return [Dynkin("A", 1), Dynkin("A", self.n - 2)]
+            if k == 4: return [Dynkin("A", 2), Dynkin("A", 1), Dynkin("A", self.n - 4)]
+            if k == 5: return [Dynkin("A", 4), Dynkin("A", self.n - 5)]
+            if k == 6:
+                if self.n == 6: return Dynkin("D", 5)
+                return [Dynkin("D", 5), Dynkin("A", self.n - 6)]
+            if k == 7:
+                if self.n == 7: return Dynkin("E", 6)
+                return [Dynkin("E", 6), Dynkin("A", 1)]
+            return Dynkin("E", 7)
+
+
+class Grassmannian:
+    def __init__(self, T, n, k):
+        assert k in range(1, n + 1)
+
+        self.D = Dynkin(T, n)
+        self.k = k
+
+        self.L = self.D.subtype(k)
+        if isinstance(self.L, Dynkin):
+            self.L = [self.L]
+
+
+    def rank(self):
+        result = self.D.weyl_group_cardinality()
+        for D in self.L:
+            result = result // D.weyl_group_cardinality()
+        return result
+
+
 grassmannians = {letter : {} for letter in "ABCDEFG"}
 
 def latex(T, n, k):
