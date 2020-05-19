@@ -44,15 +44,15 @@ class Dynkin:
 
 
     def coxeter_number(self):
-        if T == "A": return self.n + 1
-        if T == "B": return 2 * self.n
-        if T == "C": return 2 * self.n
-        if T == "D": return 2 * self.n - 2
-        if T == "E" and n == 6: return 12
-        if T == "E" and n == 7: return 18
-        if T == "E" and n == 8: return 30
-        if T == "F": return 12
-        if T == "G": return 6
+        if self.T == "A": return self.n + 1
+        if self.T == "B": return 2 * self.n
+        if self.T == "C": return 2 * self.n
+        if self.T == "D": return 2 * self.n - 2
+        if self.T == "E" and n == 6: return 12
+        if self.T == "E" and n == 7: return 18
+        if self.T == "E" and n == 8: return 30
+        if self.T == "F": return 12
+        if self.T == "G": return 6
 
 
     def exponents(self):
@@ -425,11 +425,19 @@ def show_explained():
     return render_template("explained.html")
 
 
-# TODO this doesn't go to 10, so make a catch all route and then decide what to do with it using regexes
-@app.route("/<string:T><int:n>")
-def show_type(T, n):
-    print(T, n)
-    return render_template("type.html", D=Dynkin(T, n), grassmannians=grassmannians)
+@app.route("/<string:route>")
+def show_type(route):
+    # try for Dynkin type
+    try:
+        if route[0] not in ["A", "B", "C", "D", "E", "F", "G"]:
+            raise ValueError
+
+        T = route[0]
+        n = int(route[1:])
+
+        return render_template("type.html", D=Dynkin(T, n))
+    except ValueError:
+        pass
 
 
 # TODO get rid of this one
