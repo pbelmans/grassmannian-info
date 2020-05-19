@@ -1,0 +1,121 @@
+{% extends "page.html" %}
+
+{% import "macros.html" as macros %}
+
+{% block title %}Dynkin type {{ D.T }}{{ D.n }}{% endblock %}
+
+
+{% block content %}
+<header class="text-center">
+  <h2 class="mt-3">Dynkin type $\mathrm{ {{ D.T }} }_{ {{ D.n }} }$</h2>
+
+  <div class="row">
+    <div class="col-2">
+      {% if (D.T == "A" and D.n >= 2) or (D.T in ["B", "C"] and D.n >= 3) or (D.T == "D" and D.n >= 5) or (D.T == "E" and D.n in [7, 8]) %}
+        <a href="/{{ D.T }}{{ D.n - 1 }}">&laquo;$\mathrm{ {{ D.T }} }_{ {{ D.n - 1 }} }$</a>
+      {% endif %}
+    </div>
+
+    <div class="col-8">
+      {{ macros.dynkin(D.T, D.n, height=100) }}
+    </div>
+
+    <div class="col-2">
+      {% if D.T in ["A", "B", "C", "D"] or (D.T == "E" and D.n in [6, 7]) %}
+        <a href="/{{ D.T }}{{ D.n + 1 }}">$\mathrm{ {{ D.T }} }_{ {{ D.n + 1 }} }$&raquo;</a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+<div class="row">
+  <div class="col-12">
+    <div id="{{ id }}" class="card mb-4">
+      <div class="card-header">Basic information</div>
+
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-3 text-right">Coxeter number
+          <dd class="col-9">
+            {% if D.T == "A" %}$n+1={{ D.coxeter_number() }}${% endif %}
+            {% if D.T == "B" %}$2n={{ D.coxeter_number() }}${% endif %}
+            {% if D.T == "C" %}$2n={{ D.coxeter_number() }}${% endif %}
+            {% if D.T == "D" %}$2n-2={{ D.coxeter_number() }}${% endif %}
+            {% if D.T in ["E", "F", "G"] %}${{ D.coxeter_number() }}${% endif %}
+
+          <dt class="col-3 text-right">exponents
+          <dd class="col-9">
+            {% if D.T == "A" %}$1,2,\ldots,n={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
+            {% if D.T == "B" %}$1,3,5,\ldots,2n-1={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
+            {% if D.T == "C" %}$1,3,5,\ldots,2n-1={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
+            {% if D.T == "D" %}$1,3,5,\ldots,2n-3,n-1={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
+            {% if D.T in ["E", "F", "G"] %}${% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
+
+            {# TODO use https://en.wikipedia.org/wiki/Coxeter_group#Properties for nice descriptions? #}
+          <dt class="col-3 text-right">Weyl group
+          <dd class="col-9"><p>
+            {% if D.T == "A" %}
+              $\mathrm{S}_{ {{ D.n }}}$, the symmetric group on $n+1={{ D.n }}$ elements
+              <p>permuting the $\epsilon_i$
+            {% endif %}
+            {% if T == "B" %}
+              $\mathrm{S}_{ {{ D.n }} }\rtimes(\mathbb{Z}/2\mathbb{Z})^{\oplus {{ D.n }} }$
+              <p>$\mathrm{S}_n$ permutes the $\epsilon_i$, $(\mathbb{Z}/2\mathbb{Z})^{\oplus n}$ sends $\epsilon_i$ to $(\pm1)_i\epsilon_i$
+            {% endif %}
+            {% if T == "C" %}
+              $\mathrm{S}_{ {{ D.n }} }\rtimes(\mathbb{Z}/2\mathbb{Z})^{\oplus {{ D.n }} }$
+              <p>$\mathrm{S}_n$ permutes the $\epsilon_i$, $(\mathbb{Z}/2\mathbb{Z})^{\oplus n}$ sends $\epsilon_i$ to $(\pm1)_i\epsilon_i$
+            {% endif %}
+            {% if T == "D" %}
+              $\mathrm{S}_{ {{ D.n }}\rtimes(\mathbb{Z}/2\mathbb{Z})^{\oplus {{ D.n - 1 }} }$
+              <p>$\mathrm{S}_n$ permutes the $\epsilon_i$, $(\mathbb{Z}/2\mathbb{Z})^{\oplus n-1}$ sends $\epsilon_i$ to $(\pm1)_i\epsilon_i$ and $\prod_{i=1}^n(\pm1)_i=1$
+            {% endif %}
+            {% if D.T == "E" and D.n == 6 %}{% endif %}
+            {% if D.T == "E" and D.n == 7 %}{% endif %}
+            {% if D.T == "E" and D.n == 8 %}{% endif %}
+            {% if D.T == "F" %}$\mathrm{S}_3\rtimes(\mathrm{S}_4\rtimes(\mathbb{Z}/2\mathbb{Z}^{\oplus3})${% endif %}
+            {% if D.T == "G" %}dihedral group of order 12{% endif %}
+
+          <dt class="col-3 text-right">order of the Weyl group
+          <dd class="col-9">
+            {% if D.T == "A" %}$(n+1)!={{ D.weyl_group_cardinality() }}${% endif %}
+            {% if D.T == "B" %}$n!2^n={{ D.weyl_group_cardinality() }}${% endif %}
+            {% if D.T == "C" %}$n!2^n={{ D.weyl_group_cardinality() }}${% endif %}
+            {% if D.T == "D" %}$n!2^{n-1}={{ D.weyl_group_cardinality() }}${% endif %}
+            {% if D.T == "E" and D.n == 6 %}${{ D.weyl_group_cardinality() }}=2^7\cdot 3^4\cdot 5${% endif %}
+            {% if D.T == "E" and D.n == 7 %}${{ D.weyl_group_cardinality() }}=2^{10}\cdot 3^4\cdot 5\cdot 7${% endif %}
+            {% if D.T == "E" and D.n == 8 %}${{ D.weyl_group_cardinality() }}=2^{14}\cdot 3^5\cdot 5^2\cdot 7${% endif %}
+            {% if D.T == "F" %}${{ D.weyl_group_cardinality() }}=2^7\cdot 3^2${% endif %}
+            {% if D.T == "G" %}${{ D.weyl_group_cardinality() }}${% endif %}
+        </dl>
+      </div>
+    </div>
+
+    <div id="{{ id }}" class="card mb-4">
+      <div class="card-header">Cartan matrix</div>
+
+      <div class="card-body">
+        \begin{pmatrix}
+        {% for i in range(D.n) %}
+          {% for j in range(D.n) %}
+            {{ D.cartan_matrix()[i][j] }} {% if not loop.last %}&{% endif %}
+          {% endfor %}
+          \\
+        {% endfor %}
+        \end{pmatrix}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $("header circle").each(function() {
+    // needs to be done in plain JS, not jQuery
+    var a = document.createElementNS(this.namespaceURI, "a");
+
+    this.parentNode.insertBefore(a, this);
+    a.appendChild(this);
+    a.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "/" + $(this).data("label").replace("-", "/"));
+  });
+</script>
+{% endblock %}

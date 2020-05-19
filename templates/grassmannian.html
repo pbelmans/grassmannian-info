@@ -5,16 +5,6 @@
 {% block title %}{{ G["name"] }} {{ G["plaintext"] }}{% endblock %}
 {# TODO nice human-readable name #}
 
-{% macro component(title, content, id="") %}
-<div id="{{ id }}" class="card mb-4">
-  <div class="card-header">{{- title }}</div>
-
-  <div class="card-body">
-    {{ content }}
-  </div>
-</div>
-{% endmacro %}
-
 
 {% macro basic(G) %}
 <dl class="row">
@@ -127,15 +117,15 @@
 
 <div class="row">
   <div class="col-2 d-none d-lg-block">
-    {{ component("Betti numbers", betti_vertical(G)) }}
+    {{ macros.component("Betti numbers", betti_vertical(G)) }}
   </div>
 
   <div class="col-12 col-lg-10">
-    {{ component("Basic information", basic(G)) }}
+    {{ macros.component("Basic information", basic(G)) }}
 
-    {{ component("Projective geometry", projective(G)) }}
+    {{ macros.component("Projective geometry", projective(G)) }}
 
-    {{ component("Homological projective duality", hpd(G)) }}
+    {{ macros.component("Homological projective duality", hpd(G)) }}
   </div>
 </div>
 
@@ -147,7 +137,7 @@
 
     this.parentNode.insertBefore(a, this);
     a.appendChild(this);
-    a.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "/" + $(this).data("label"));
+    a.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "/" + $(this).data("label").replace("-", "/"));
   });
 </script>
 {% endblock %}

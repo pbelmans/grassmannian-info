@@ -2,8 +2,82 @@ from flask import Flask
 from flask import render_template, redirect
 
 import json
+import math
+import re
 
 app = Flask(__name__)
+
+
+class Dynkin:
+    def __init__(self, T, n):
+        assert T in ["A", "B", "C", "D", "E", "F", "G"]
+        # and more consistency checks if you like
+
+        self.T = T
+        self.n = n
+
+    def cartan_matrix(self):
+        M = [[2 if i == j else 0 for i in range(self.n)] for j in range(self.n)]
+
+        if self.T == "A":
+            for i in range(self.n - 1): M[i][i + 1] = M[i + 1][i] = -1
+        if self.T == "B":
+            for i in range(self.n - 1): M[i][i + 1] = M[i + 1][i] = -1
+            M[self.n - 2][self.n - 1] = -2
+        if self.T == "C":
+            for i in range(self.n - 1): M[i][i + 1] = M[i + 1][i] = -1
+            M[self.n - 1][self.n - 2] = -2
+        if self.T == "D":
+            for i in range(self.n - 2): M[i][i + 1] = M[i + 1][i] = -1
+            M[self.n - 3][self.n - 1] = M[self.n - 1][self.n - 3] = -1
+        if self.T == "E":
+            for i in [0, 1]: M[i][i + 2] = M[i + 2][i] = -1
+            for i in range(2, self.n - 1): M[i][i + 1] = M[i + 1][i] = -1
+        if self.T == "F":
+            for i in range(3): M[i][i + 1] = M[i + 1][i] = -1
+            M[1][2] = -2
+        if self.T == "G":
+            M[0][1] = -1
+            M[1][0] = -3
+
+        return M
+
+
+    def coxeter_number(self):
+        if T == "A": return self.n + 1
+        if T == "B": return 2 * self.n
+        if T == "C": return 2 * self.n
+        if T == "D": return 2 * self.n - 2
+        if T == "E" and n == 6: return 12
+        if T == "E" and n == 7: return 18
+        if T == "E" and n == 8: return 30
+        if T == "F": return 12
+        if T == "G": return 6
+
+
+    def exponents(self):
+        if self.T == "A": return list(range(1, self.n + 1))
+        if self.T == "B": return list(range(1, 2*self.n, 2))
+        if self.T == "C": return list(range(1, 2*self.n, 2))
+        if self.T == "D": return sorted(list(range(1, 2*self.n - 2, 2)) + [self.n - 1])
+        if self.T == "E" and self.n == 6: return [1, 4, 5, 7, 8, 11]
+        if self.T == "E" and self.n == 7: return [1, 5, 7, 9, 11, 13, 17]
+        if self.T == "E" and self.n == 8: return [1, 7, 11, 13, 17, 19, 23, 29]
+        if self.T == "F": return [1, 5, 7, 11]
+        if self.T == "G": return [1, 5]
+
+
+    def weyl_group_cardinality(self):
+        if self.T == "A": return math.factorial(self.n + 1)
+        if self.T == "B": return 2**self.n * math.factorial(self.n)
+        if self.T == "C": return 2**self.n * math.factorial(self.n)
+        if self.T == "D": return 2**(self.n-1) * math.factorial(self.n)
+        if self.T == "E" and self.n == 6: return 51840
+        if self.T == "E" and self.n == 7: return 2903040
+        if self.T == "E" and self.n == 8: return 696729600
+        if self.T == "F": return 1152
+        if self.T == "G": return 12
+
 
 grassmannians = {letter : {} for letter in "ABCDEFG"}
 
@@ -239,9 +313,18 @@ def show_explained():
     return render_template("explained.html")
 
 
+# TODO this doesn't go to 10, so make a catch all route and then decide what to do with it using regexes
+@app.route("/<string:T><int:n>")
+def show_type(T, n):
+    print(T, n)
+    return render_template("type.html", D=Dynkin(T, n), grassmannians=grassmannians)
+
+
+# TODO get rid of this one
 @app.route("/<string:T><int:n>-<int:k>")
 def redirect_grassmannian(T, n, k):
     return redirect("/{}{}/{}".format(T, n, k))
+
 
 # TODO make these redirects?
 @app.route("/<string:T><int:n>/<int:k>")
