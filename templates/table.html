@@ -5,6 +5,15 @@
 {% import "entry.html" as entry %}
 {% import "macros.html" as macros %}
 
+{% macro th(T, n) %}
+<th>
+  <a href="/{{ T }}{{ n }}">
+    {{ macros.dynkin(T, n) }}
+    {{ T }}<sub>{{ n }}</sub>
+  </a>
+</th>
+{% endmacro %}
+
 {% block content %}
 <form id="controls" class="form-group row">
   <div class="col-6">
@@ -42,9 +51,7 @@
     <table class="atlas">
       {% for n in grassmannians["A"] %}
         <tr>
-          <th>
-            {{ macros.dynkin("A", n) }}
-          </th>
+          {{ th("A", n) }}
 
           {% for k in grassmannians["A"][n] %}
             {{ entry.entry(grassmannians["A"][n][k]) }}
@@ -59,9 +66,7 @@
       <tr class="d-none d-xl-block"></tr>
       {% for n in grassmannians["B"] %}
         <tr>
-          <th>
-            {{ macros.dynkin("B", n) }}
-          </th>
+          {{ th("B", n) }}
 
           {% for k in grassmannians["B"][n] %}
             {{ entry.entry(grassmannians["B"][n][k]) }}
@@ -75,9 +80,7 @@
     <table class="atlas">
       {% for n in grassmannians["C"] %}
         <tr>
-          <th>
-            {{ macros.dynkin("C", n) }}
-          </th>
+          {{ th("C", n) }}
 
           {% for k in grassmannians["C"][n] %}
             {{ entry.entry(grassmannians["C"][n][k]) }}
@@ -93,9 +96,7 @@
       <tr class="d-none d-xl-block"></tr>
       {% for n in grassmannians["D"] %}
         <tr>
-          <th>
-            {{ macros.dynkin("D", n) }}
-          </th>
+          {{ th("D", n) }}
 
           {% for k in grassmannians["D"][n] %}
             {{ entry.entry(grassmannians["D"][n][k]) }}
@@ -110,9 +111,7 @@
     <table class="atlas">
       {% for n in grassmannians[T] %}
         <tr>
-          <th>
-            {{ macros.dynkin(T, n) }}
-          </th>
+          {{ th(T, n) }}
 
           {% for k in grassmannians[T][n] %}
             {{ entry.entry(grassmannians[T][n][k]) }}
