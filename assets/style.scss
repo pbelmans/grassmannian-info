@@ -98,6 +98,7 @@ table.atlas {
     }
 
     a {
+      display: block;
       color: black;
     }
   }
@@ -132,6 +133,10 @@ table.atlas {
 
   td.active > div.alpha {
     background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  td.active:hover > div.alpha {
+    background-color: rgb(255,255,224);
   }
 }
 
