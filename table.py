@@ -79,6 +79,27 @@ class Dynkin:
         if self.T == "G": return 12
 
 
+    def number_of_roots(self):
+        if self.T == "A": return self.n * (self.n + 1)
+        if self.T == "B": return 2 * self.n**2
+        if self.T == "C": return 2 * self.n**2
+        if self.T == "D": return 2 * self.n * (self.n - 1)
+        if self.T == "E" and self.n == 6: return 72
+        if self.T == "E" and self.n == 7: return 126
+        if self.T == "E" and self.n == 8: return 240
+        if self.T == "F": return 48
+        if self.T == "G": return 12
+
+
+    def number_of_positive_roots(self):
+        return self.number_of_roots() // 2
+
+
+    def dimension(self):
+        # dimension of the associated simple Lie algebra (and algebraic group)
+        return self.number_of_roots() + self.n
+
+
     def subtype(self, k):
         assert k in range(1, self.n + 1)
 
@@ -128,13 +149,16 @@ class Grassmannian:
         self.k = k
 
         self.L = self.D.subtype(k)
+        # always treat the Levi as a list of simples
         if isinstance(self.L, Dynkin):
             self.L = [self.L]
 
 
     def dimension(self):
-        # TODO implement standalone computation which should be more robust
-        return len(self.betti())
+        result = self.D.number_of_positive_roots()
+        for D in self.L:
+            result = result - D.number_of_positive_roots()
+        return result
 
 
     def rank(self):
@@ -142,6 +166,27 @@ class Grassmannian:
         for D in self.L:
             result = result // D.weyl_group_cardinality()
         return result
+
+
+    def canonical(self):
+        # the "canonical" quotient, such that G is Aut^0 (need a better name for this)
+        if self.D.T == "B" and self.k == self.D.n and self.D.n >= 3: return Grassmannian("D", self.D.n + 1, self.D.n + 1)
+        if self.D.T == "C" and self.k == 1: return Grassmannian("A", 2 * self.D.n - 1, 1)
+        if self.D.T == "G" and self.k == 1: return Grassmannian("B", 3, 1)
+
+        return self
+
+
+    def pizero(self):
+        # the \pi_0 of the Aut
+        if self.D.T == "A":
+            if self.D.n == 2*self.k - 1 and self.D.n >= 2: return "\\mathbb{Z}/2\\mathbb{Z}"
+        if self.D.T == "D":
+            if self.D.n == 4 and self.k in [1, 3, 4]: return "\\mathbb{Z}/3\\mathbb{Z}"
+            if self.k in [self.D.n - 1, self.D.n]: return "1"
+            return "\\mathbb{Z}/2\\mathbb{Z}"
+        if self.D.T == "E" and self.D.n == 6 and self.k in [2, 4]: return "\\mathbb{Z}/2\\mathbb{Z}"
+        return "1"
 
 
     def betti(self):
@@ -402,6 +447,7 @@ with open("grassmannians.json") as f:
         # TODO check for now
         assert G["betti"] == Grassmannian(T, n, k).betti()
         assert G["index"] == Grassmannian(T, n, k).index()
+        assert G["dimension"] == Grassmannian(T, n, k).dimension()
 
         # assigning the Grassmannian to the dictionary
         if n not in grassmannians[T]:
