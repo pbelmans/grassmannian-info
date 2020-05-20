@@ -72,7 +72,7 @@ div#content::-webkit-scrollbar {
 }
 
 table.atlas {
-  font-size: 10px;
+  font-size: 11px;
   table-layout: fixed;
   margin: 10px 0;
 
@@ -132,11 +132,11 @@ table.atlas {
   }
 
   td.active > div.alpha {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.1);
   }
 
   td.active:hover > div.alpha {
-    background-color: rgb(255,255,224);
+    background-color: rgba(0, 0, 0, 0.2);
   }
 }
 

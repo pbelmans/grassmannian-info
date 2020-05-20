@@ -269,6 +269,40 @@ def latex(T, n, k):
     return "\\mathrm{{{}}}_{{{}}}/\\mathrm{{P}}_{{{}}}".format(T, n, k)
 
 
+def html(T, n, k):
+    if T == "A":
+        if k == 1: return "&#x2119;<sup>{}</sup>".format(n)
+        elif k == n: return "&#x2119;<sup>{},&#x2228;</sup>".format(n)
+        else: return "Gr({},{})".format(k, n + 1)
+
+    elif T == "B":
+        if k == 1: return "Q<sup>{}</sup>".format(2*n - 1)
+        elif n == 2 and k == 2: return html("A", 3, 1)
+        else: return "OGr({},{})".format(k, 2*n + 1)
+
+    elif T == "C":
+        if k == 1: return html("A", 2*n - 1, 1)
+        elif k == n:
+            if n == 2: return "Q<sup>3</sup>"
+            else: return "LGr({},{})".format(k, 2*n)
+        else: return "SGr({},{})".format(k, 2*n)
+
+    elif T == "D":
+        if k == 1: return "Q<sup>{}</sup>".format(2*n - 2)
+        elif n == 4 and k in [3, 4]: return html("D", 4, 1)
+        elif k <= n - 2: return "OGr({},{})".format(k, 2*n)
+        else: return "OGr<sub>+</sub>({},{})".format(n, 2*n)
+
+    elif T == "E":
+        if n == 6 and k == 1: return "&#x1D546;&#x2119;<sup>2</sup>"
+        if n == 6 and k == 6: return "&#x1D546;&#x2119;<sup>2&#x2228;</sup>"
+
+    elif T == "G":
+        if k == 1: return html("B", 3, 1)
+
+    return "{}<sub>{}</sub>/P<sub>{}</sub>".format(T, n, k)
+
+
 def plaintext(T, n, k):
     if T == "A":
         if k == 1: return "P{}".format(n)
@@ -353,6 +387,7 @@ with open("grassmannians.json") as f:
         if T in "ABCD" and n > 7: continue
 
         G["latex"] = latex(T, n, k)
+        G["html"] = html(T, n, k)
         G["plaintext"] = plaintext(T, n, k)
         G["name"] = name(T, n, k)
 
