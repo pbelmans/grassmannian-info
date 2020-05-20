@@ -4,6 +4,88 @@
 
 {% block title %}Dynkin type {{ D.T }}{{ D.n }}{% endblock %}
 
+{% macro basic(D) %}
+<dl class="row">
+  <dt class="col-3 text-right">Coxeter number
+  <dd class="col-9">
+    {% if D.T == "A" %}$n+1={{ D.coxeter_number() }}${% endif %}
+    {% if D.T == "B" %}$2n={{ D.coxeter_number() }}${% endif %}
+    {% if D.T == "C" %}$2n={{ D.coxeter_number() }}${% endif %}
+    {% if D.T == "D" %}$2n-2={{ D.coxeter_number() }}${% endif %}
+    {% if D.T in ["E", "F", "G"] %}${{ D.coxeter_number() }}${% endif %}
+
+  <dt class="col-3 text-right">exponents
+  <dd class="col-9">
+    {% if D.T == "A" %}$1,2,\ldots,n={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
+    {% if D.T == "B" %}$1,3,5,\ldots,2n-1={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
+    {% if D.T == "C" %}$1,3,5,\ldots,2n-1={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
+    {% if D.T == "D" %}$1,3,5,\ldots,2n-3,n-1={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
+    {% if D.T in ["E", "F", "G"] %}${% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
+
+    {# TODO use https://en.wikipedia.org/wiki/Coxeter_group#Properties for nice descriptions? #}
+  <dt class="col-3 text-right">Weyl group
+  <dd class="col-9"><p>
+    {% if D.T == "A" %}
+      $\mathrm{S}_{ {{ D.n + 1 }}}$, the symmetric group on $n+1={{ D.n + 1 }}$ elements
+      <p>permuting the $\epsilon_i$
+    {% endif %}
+    {% if D.T == "B" %}
+      $\mathrm{S}_{ {{ D.n }} }\rtimes(\mathbb{Z}/2\mathbb{Z})^{\oplus {{ D.n }} }$
+      <p>$\mathrm{S}_n$ permutes the $\epsilon_i$, $(\mathbb{Z}/2\mathbb{Z})^{\oplus n}$ sends $\epsilon_i$ to $(\pm1)_i\epsilon_i$
+    {% endif %}
+    {% if D.T == "C" %}
+      $\mathrm{S}_{ {{ D.n }} }\rtimes(\mathbb{Z}/2\mathbb{Z})^{\oplus {{ D.n }} }$
+      <p>$\mathrm{S}_n$ permutes the $\epsilon_i$, $(\mathbb{Z}/2\mathbb{Z})^{\oplus n}$ sends $\epsilon_i$ to $(\pm1)_i\epsilon_i$
+    {% endif %}
+    {% if D.T == "D" %}
+      $\mathrm{S}_{ {{ D.n }} }\rtimes(\mathbb{Z}/2\mathbb{Z})^{\oplus {{ D.n - 1 }} }$
+      <p>$\mathrm{S}_n$ permutes the $\epsilon_i$, $(\mathbb{Z}/2\mathbb{Z})^{\oplus n-1}$ sends $\epsilon_i$ to $(\pm1)_i\epsilon_i$ and $\prod_{i=1}^n(\pm1)_i=1$
+    {% endif %}
+    {% if D.T == "E" and D.n == 6 %}{% endif %}
+    {% if D.T == "E" and D.n == 7 %}{% endif %}
+    {% if D.T == "E" and D.n == 8 %}{% endif %}
+    {% if D.T == "F" %}$\mathrm{S}_3\rtimes(\mathrm{S}_4\rtimes(\mathbb{Z}/2\mathbb{Z}^{\oplus3})${% endif %}
+    {% if D.T == "G" %}dihedral group of order 12{% endif %}
+
+  <dt class="col-3 text-right">order of the Weyl group
+  <dd class="col-9">
+    {% if D.T == "A" %}$(n+1)!={{ D.n + 1 }}!={{ D.weyl_group_cardinality() }}${% endif %}
+    {% if D.T == "B" %}$n!2^n={{ D.n }}!2^{ {{ D.n }} }={{ D.weyl_group_cardinality() }}${% endif %}
+    {% if D.T == "C" %}$n!2^n={{ D.n }}!2^{ {{ D.n }} }={{ D.weyl_group_cardinality() }}${% endif %}
+    {% if D.T == "D" %}$n!2^{n-1}={{ D.n }}!2^{ {{ D.n - 1 }} }={{ D.weyl_group_cardinality() }}${% endif %}
+    {% if D.T == "E" and D.n == 6 %}${{ D.weyl_group_cardinality() }}=2^7\cdot 3^4\cdot 5${% endif %}
+    {% if D.T == "E" and D.n == 7 %}${{ D.weyl_group_cardinality() }}=2^{10}\cdot 3^4\cdot 5\cdot 7${% endif %}
+    {% if D.T == "E" and D.n == 8 %}${{ D.weyl_group_cardinality() }}=2^{14}\cdot 3^5\cdot 5^2\cdot 7${% endif %}
+    {% if D.T == "F" %}${{ D.weyl_group_cardinality() }}=2^7\cdot 3^2${% endif %}
+    {% if D.T == "G" %}${{ D.weyl_group_cardinality() }}${% endif %}
+</dl>
+{% endmacro %}
+
+
+{% macro roots(D) %}
+<dl class="row">
+  <dt class="col-3 text-right">number of roots
+  <dd class="col-9">
+    {% if D.T == "A" %}$n(n+1)={{ D.n }}\cdot{{ D.n + 1 }}!={{ D.number_of_roots() }}${% endif %}
+    {% if D.T == "B" %}$2n^2=2\cdot{{ D.n }}^2={{ D.number_of_roots() }}${% endif %}
+    {% if D.T == "C" %}$2n^2=2\cdot{{ D.n }}^2={{ D.number_of_roots() }}${% endif %}
+    {% if D.T == "D" %}$2n(n-1)=2\cdot{{ D.n }}\cdot{{ D.n - 1 }}={{ D.number_of_roots() }}${% endif %}
+    {% if D.T in ["E", "F", "G"] %}${{ D.number_of_roots() }}${% endif %}
+</dl>
+{% endmacro %}
+
+
+{% macro cartan(D) %}
+\begin{pmatrix}
+{% for i in range(D.n) %}
+  {% for j in range(D.n) %}
+    {{ D.cartan_matrix()[i][j] }} {% if not loop.last %}&{% endif %}
+  {% endfor %}
+  \\
+{% endfor %}
+\end{pmatrix}
+{% endmacro %}
+
 
 {% block content %}
 <header class="text-center">
@@ -30,81 +112,11 @@
 
 <div class="row">
   <div class="col-12">
-    <div id="{{ id }}" class="card mb-4">
-      <div class="card-header">Basic information</div>
+    {{ macros.component("Basic information", basic(D)) }}
 
-      <div class="card-body">
-        <dl class="row">
-          <dt class="col-3 text-right">Coxeter number
-          <dd class="col-9">
-            {% if D.T == "A" %}$n+1={{ D.coxeter_number() }}${% endif %}
-            {% if D.T == "B" %}$2n={{ D.coxeter_number() }}${% endif %}
-            {% if D.T == "C" %}$2n={{ D.coxeter_number() }}${% endif %}
-            {% if D.T == "D" %}$2n-2={{ D.coxeter_number() }}${% endif %}
-            {% if D.T in ["E", "F", "G"] %}${{ D.coxeter_number() }}${% endif %}
+    {{ macros.component("Roots", roots(D)) }}
 
-          <dt class="col-3 text-right">exponents
-          <dd class="col-9">
-            {% if D.T == "A" %}$1,2,\ldots,n={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
-            {% if D.T == "B" %}$1,3,5,\ldots,2n-1={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
-            {% if D.T == "C" %}$1,3,5,\ldots,2n-1={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
-            {% if D.T == "D" %}$1,3,5,\ldots,2n-3,n-1={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
-            {% if D.T in ["E", "F", "G"] %}${% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
-
-            {# TODO use https://en.wikipedia.org/wiki/Coxeter_group#Properties for nice descriptions? #}
-          <dt class="col-3 text-right">Weyl group
-          <dd class="col-9"><p>
-            {% if D.T == "A" %}
-              $\mathrm{S}_{ {{ D.n }}}$, the symmetric group on $n+1={{ D.n + 1 }}$ elements
-              <p>permuting the $\epsilon_i$
-            {% endif %}
-            {% if T == "B" %}
-              $\mathrm{S}_{ {{ D.n }} }\rtimes(\mathbb{Z}/2\mathbb{Z})^{\oplus {{ D.n }} }$
-              <p>$\mathrm{S}_n$ permutes the $\epsilon_i$, $(\mathbb{Z}/2\mathbb{Z})^{\oplus n}$ sends $\epsilon_i$ to $(\pm1)_i\epsilon_i$
-            {% endif %}
-            {% if T == "C" %}
-              $\mathrm{S}_{ {{ D.n }} }\rtimes(\mathbb{Z}/2\mathbb{Z})^{\oplus {{ D.n }} }$
-              <p>$\mathrm{S}_n$ permutes the $\epsilon_i$, $(\mathbb{Z}/2\mathbb{Z})^{\oplus n}$ sends $\epsilon_i$ to $(\pm1)_i\epsilon_i$
-            {% endif %}
-            {% if T == "D" %}
-              $\mathrm{S}_{ {{ D.n }}\rtimes(\mathbb{Z}/2\mathbb{Z})^{\oplus {{ D.n - 1 }} }$
-              <p>$\mathrm{S}_n$ permutes the $\epsilon_i$, $(\mathbb{Z}/2\mathbb{Z})^{\oplus n-1}$ sends $\epsilon_i$ to $(\pm1)_i\epsilon_i$ and $\prod_{i=1}^n(\pm1)_i=1$
-            {% endif %}
-            {% if D.T == "E" and D.n == 6 %}{% endif %}
-            {% if D.T == "E" and D.n == 7 %}{% endif %}
-            {% if D.T == "E" and D.n == 8 %}{% endif %}
-            {% if D.T == "F" %}$\mathrm{S}_3\rtimes(\mathrm{S}_4\rtimes(\mathbb{Z}/2\mathbb{Z}^{\oplus3})${% endif %}
-            {% if D.T == "G" %}dihedral group of order 12{% endif %}
-
-          <dt class="col-3 text-right">order of the Weyl group
-          <dd class="col-9">
-            {% if D.T == "A" %}$(n+1)!={{ D.weyl_group_cardinality() }}${% endif %}
-            {% if D.T == "B" %}$n!2^n={{ D.weyl_group_cardinality() }}${% endif %}
-            {% if D.T == "C" %}$n!2^n={{ D.weyl_group_cardinality() }}${% endif %}
-            {% if D.T == "D" %}$n!2^{n-1}={{ D.weyl_group_cardinality() }}${% endif %}
-            {% if D.T == "E" and D.n == 6 %}${{ D.weyl_group_cardinality() }}=2^7\cdot 3^4\cdot 5${% endif %}
-            {% if D.T == "E" and D.n == 7 %}${{ D.weyl_group_cardinality() }}=2^{10}\cdot 3^4\cdot 5\cdot 7${% endif %}
-            {% if D.T == "E" and D.n == 8 %}${{ D.weyl_group_cardinality() }}=2^{14}\cdot 3^5\cdot 5^2\cdot 7${% endif %}
-            {% if D.T == "F" %}${{ D.weyl_group_cardinality() }}=2^7\cdot 3^2${% endif %}
-            {% if D.T == "G" %}${{ D.weyl_group_cardinality() }}${% endif %}
-        </dl>
-      </div>
-    </div>
-
-    <div id="{{ id }}" class="card mb-4">
-      <div class="card-header">Cartan matrix</div>
-
-      <div class="card-body">
-        \begin{pmatrix}
-        {% for i in range(D.n) %}
-          {% for j in range(D.n) %}
-            {{ D.cartan_matrix()[i][j] }} {% if not loop.last %}&{% endif %}
-          {% endfor %}
-          \\
-        {% endfor %}
-        \end{pmatrix}
-      </div>
-    </div>
+    {{ macros.component("Cartan matrix", cartan(D)) }}
   </div>
 </div>
 
