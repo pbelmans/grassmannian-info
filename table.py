@@ -48,9 +48,9 @@ class Dynkin:
         if self.T == "B": return 2 * self.n
         if self.T == "C": return 2 * self.n
         if self.T == "D": return 2 * self.n - 2
-        if self.T == "E" and n == 6: return 12
-        if self.T == "E" and n == 7: return 18
-        if self.T == "E" and n == 8: return 30
+        if self.T == "E" and self.n == 6: return 12
+        if self.T == "E" and self.n == 7: return 18
+        if self.T == "E" and self.n == 8: return 30
         if self.T == "F": return 12
         if self.T == "G": return 6
 
