@@ -19,25 +19,34 @@
 
 {% block content %}
 <form id="controls" class="form-group row">
-  <div class="col-6">
-    <div class="form-check">
+  <div class="col-lg-6 row">
+    <div class="form-check col-6 ml-3 mb-2">
       <input class="form-check-input" type="radio" id="no-colors" name="color" value="no-colors" checked>
       <label class="form-check-label" for="no-colors">no colors</label>
     </div>
 
-    <div class="form-check">
-      <input class="form-check-input" type="radio" id="mincomin" name="color" value="mincomin">
-      <label class="form-check-label" for="mincomin">(co)minuscule</label>
-    </div>
-
-    <div class="form-check">
-      <input class="form-check-input" type="radio" id="adjcoadj" name="color" value="adjcoadj">
-      <label class="form-check-label" for="adjcoadj">(co)adjoint</label>
+    <div class="col-lg-6" id="typing">
+      <div class="form-check minuscule">
+        <input class="form-check-input" type="radio" id="minuscule" name="color" value="minuscule">
+        <label class="form-check-label" for="minuscule">minuscule</label>
+      </div>
+      <div class="form-check cominuscule">
+        <input class="form-check-input" type="radio" id="cominuscule" name="color" value="cominuscule">
+        <label class="form-check-label" for="cominuscule">cominuscule</label>
+      </div>
+      <div class="form-check adjoint">
+        <input class="form-check-input" type="radio" id="adjoint" name="color" value="adjoint">
+        <label class="form-check-label" for="adjoint">adjoint</label>
+      </div>
+      <div class="form-check coadjoint">
+        <input class="form-check-input" type="radio" id="coadjoint" name="color" value="coadjoint">
+        <label class="form-check-label" for="coadjoint">coadjoint</label>
+      </div>
     </div>
   </div>
 
-  <div class="col-6">
-    <div class="form-check">
+  <div class="col-lg-6">
+    <div class="form-check pl-0">
       <input id="information" type="checkbox" data-toggle="toggle" data-on="more" data-off="less" data-onstyle="secondary" data-size="xs">
       <label for="information">information to display
     </div>
@@ -246,7 +255,7 @@ $("td.entry").mouseenter(function(e) {
 
 $("td.entry").mouseleave(function() {
   // clear the color
-  $("td.entry, circle").removeClass("active");
+  $("td.entry, circle").removeClass("active alternative");
 
   // clear the fields
   fields.forEach(function (field) {
@@ -260,15 +269,10 @@ $("td.entry").mouseleave(function() {
 // change the color by activating a class which triggers the styling
 // TODO make a legend
 $("input[type=radio][name=color]").change(function() {
-  $("td.entry").removeClass("adjcoadj mincomin");
-  switch (this.value) {
-    case "mincomin":
-      $("td.entry").addClass("mincomin");
-      break;
-    case "adjcoadj":
-      $("td.entry").addClass("adjcoadj");
-      break;
-  }
+  $("td.entry").removeClass("minuscule cominuscule adjoint coadjoint");
+  $("div#typing div.form-check").removeClass("active");
+
+  $("td.entry[data-type~=" + this.value + "]").addClass(this.value);
 });
 
 $(function() {

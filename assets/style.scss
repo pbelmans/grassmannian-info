@@ -114,30 +114,6 @@ table.atlas {
     }
   }
 
-  td.mincomin[data-type~=cominuscule] {
-    background-color: rgba(0, 123, 255, 0.3);
-  }
-
-  td.mincomin[data-type~=minuscule] {
-    background-color: rgba(255, 53, 69, 0.3);
-  }
-
-  td.mincomin[data-type~=cominuscule][data-type~=minuscule] {
-    background-color: rgba(40, 167, 69, 0.3);
-  }
-
-  td.adjcoadj[data-type~=coadjoint] {
-    background-color: rgba(0, 123, 255, 0.3);
-  }
-
-  td.adjcoadj[data-type~=adjoint] {
-    background-color: rgba(255, 53, 69, 0.3);
-  }
-
-  td.adjcoadj[data-type~=adjoint][data-type~=coadjoint] {
-    background-color: rgba(40, 167, 69, 0.3);
-  }
-
   div.information {
     display: none;
   }
@@ -203,6 +179,35 @@ table.information {
     height: 50px;
   }
 }
+
+div#typing {
+  div.form-check {
+    background-radius: 10px;
+    height: 30px;
+    padding: 0 2rem;
+    width: 160px;
+  }
+  div.form-check label {
+    display: inline-block;
+  }
+}
+
+td.cominuscule, .cominuscule {
+  background-color: rgba(53, 121, 246, 0.3);
+}
+
+td.minuscule, .minuscule {
+  background-color: rgba(246, 195, 68, 0.3);
+}
+
+td.coadjoint, .coadjoint {
+  background-color: rgba(83, 165, 81, 0.3);
+}
+
+td.adjoint, .adjoint {
+  background-color: rgba(255, 53, 69, 0.3);
+}
+
 
 svg.lefschetz {
   rect.block {
