@@ -38,13 +38,8 @@
 
   <div class="col-6">
     <div class="form-check">
-      <input class="form-check-input" type="radio" id="minimum" name="information" value="minimum" checked>
-      <label class="form-check-label" for="minimum">minimum</label>
-    </div>
-
-    <div class="form-check">
-      <input class="form-check-input" type="radio" id="more-info" name="information" value="more-info">
-      <label class="form-check-label" for="more-info">more information</label>
+      <input id="information" type="checkbox" data-toggle="toggle" data-on="more" data-off="less" data-onstyle="secondary" data-size="xs">
+      <label for="information">information to display
     </div>
   </div>
 </form>
@@ -276,16 +271,14 @@ $("input[type=radio][name=color]").change(function() {
   }
 });
 
-// toggle between no or lots of information by activating a class which triggers the styling
-$("input[type=radio][name=information]").change(function() {
-  switch (this.value) {
-    case "minimum":
-      $("table").removeClass("expanded");
-      break;
-    case "more-info":
+$(function() {
+  // toggle between no or lots of information by activating a class which triggers the styling
+  $("input#information").change(function() {
+    if ($(this).prop("checked"))
       $("table").addClass("expanded");
-      break;
-  }
+    else
+      $("table").removeClass("expanded");
+  });
 });
 
 </script>
