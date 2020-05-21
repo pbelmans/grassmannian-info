@@ -140,6 +140,24 @@ class Dynkin:
             return [Dynkin("A", 1)]
 
 
+    def lie(self, unicode=True):
+        # textual representation of associated simple Lie algebra (Unicode or TeX)
+        if self.T == "A":
+            return "𝖘𝖑<sub>{}</sub>".format(self.n + 1) if unicode else "\\mathfrak{sl}_{{ {} }}".format(self.n + 1)
+        if self.T == "B":
+            return "𝖘𝖔<sub>{}</sub>".format(2*self.n + 1) if unicode else "\\mathfrak{so}_{{ {} }}".format(2*self.n + 1)
+        if self.T == "C":
+            return "𝖘𝖕<sub>{}</sub>".format(2*self.n) if unicode else "\\mathfrak{sp}_{{ {} }}".format(2*self.n)
+        if self.T == "D":
+            return "𝖘𝖔<sub>{}</sub>".format(2*self.n) if unicode else "\\mathfrak{so}_{{ {} }}".format(2*self.n)
+        if self.T == "E":
+            return "𝖊<sub>{}</sub>".format(self.n) if unicode else "\\mathfrak{e}_{{ {} }}".format(self.n)
+        if self.T == "F":
+            return "𝖋<sub>{}</sub>".format(self.n) if unicode else "\\mathfrak{f}_{{ {} }}".format(self.n)
+        if self.T == "G":
+            return "𝖌<sub>{}</sub>".format(self.n) if unicode else "\\mathfrak{g}_{{ {} }}".format(self.n)
+
+
 
 class Grassmannian:
     def __init__(self, T, n, k):
@@ -227,6 +245,68 @@ class Grassmannian:
         if self.D.T == "G": return [5, 3][self.k - 1]
 
 
+    def is_cominuscule(self):
+        if self.D.T == "A": return True
+        if self.D.T == "B" and self.k == 1: return True
+        if self.D.T == "C" and self.k == self.D.n: return True
+        if self.D.T == "D" and self.k in [1, self.D.n - 1, self.D.n]: return True
+        if self.D.T == "E" and self.D.n == 6 and self.k in [1, 6]: return True
+        if self.D.T == "E" and self.D.n == 7 and self.k == 7: return True
+
+        return False
+
+    def is_minuscule(self):
+        if self.D.T == "A": return True
+        if self.D.T == "B" and self.k == self.D.n: return True
+        if self.D.T == "C" and self.k == 1: return True
+        if self.D.T == "D" and self.k in [1, self.D.n - 1, self.D.n]: return True
+        if self.D.T == "E" and self.D.n == 6 and self.k in [1, 6]: return True
+        if self.D.T == "E" and self.D.n == 7 and self.k == 7: return True
+
+        return False
+
+    def is_coadjoint(self):
+        if self.D.T == "B" and self.k == 1: return True
+        if self.D.T == "C" and self.k == 2: return True
+        if self.D.T == "D" and self.D.n >= 4 and self.k == 2: return True
+        if self.D.T == "E" and self.D.n == 6 and self.k == 2: return True
+        if self.D.T == "E" and self.D.n == 7 and self.k == 1: return True
+        if self.D.T == "E" and self.D.n == 8 and self.k == 8: return True
+        if self.D.T == "F" and self.k == 4: return True
+        if self.D.T == "G" and self.k == 1: return True
+
+        return False
+
+    def is_adjoint(self):
+        if self.D.T == "B" and self.k == 2: return True
+        if self.D.T == "C" and self.k == 1: return True
+        if self.D.T == "D" and self.D.n >= 4 and self.k == 2: return True
+        if self.D.T == "E" and self.D.n == 6 and self.k == 2: return True
+        if self.D.T == "E" and self.D.n == 7 and self.k == 1: return True
+        if self.D.T == "E" and self.D.n == 8 and self.k == 8: return True
+        if self.D.T == "F" and self.k == 1: return True
+        if self.D.T == "G" and self.k == 2: return True
+
+        return False
+
+
+    def latex(self):
+        # TODO eventually the latex function just come here?
+        return latex(self.D.T, self.D.n, self.k)
+
+    def html(self):
+        # TODO eventually the html function just come here?
+        return html(self.D.T, self.D.n, self.k)
+
+    def name(self):
+        # TODO eventually the name function just come here?
+        return name(self.D.T, self.D.n, self.k)
+
+
+# registering the Dynkin and Grassmannian class so that Jinja2 can use it directly
+app.add_template_global(Dynkin, "Dynkin")
+app.add_template_global(Grassmannian, "Grassmannian")
+
 
 grassmannians = {letter : {} for letter in "ABCDEFG"}
 
@@ -255,6 +335,7 @@ def latex(T, n, k):
 
     elif T == "D":
         if k == 1: return "\\mathrm{{Q}}^{{{}}}".format(2*n - 2)
+        elif n == 3 and k in [2, 3]: return latex("A", 3, 1)
         elif n == 4 and k in [3, 4]: return latex("D", 4, 1)
         elif k <= n - 2: return "\\OGr({},{})".format(k, 2*n)
         else: return "\\OGr_+({},{})".format(n, 2*n)
@@ -289,6 +370,7 @@ def html(T, n, k):
 
     elif T == "D":
         if k == 1: return "Q<sup>{}</sup>".format(2*n - 2)
+        elif n == 3 and k in [2, 3]: return html("A", 3, 1)
         elif n == 4 and k in [3, 4]: return html("D", 4, 1)
         elif k <= n - 2: return "OGr({},{})".format(k, 2*n)
         else: return "OGr<sub>+</sub>({},{})".format(n, 2*n)
@@ -357,6 +439,7 @@ def name(T, n, k):
 
     elif T == "D":
         if k == 1: return "quadric"
+        elif n == 3 and k in [2, 3]: name("A", 3, 1)
         elif n == 4 and k in [3, 4]: name("D", 4, 1)
         elif k <= n - 2: return "orthogonal Grassmannian"
         else: return "orthogonal Grassmannian, spinor variety"
@@ -506,6 +589,11 @@ def show_explained():
     return render_template("explained.html")
 
 
+@app.route("/freudenthal")
+def show_freudenthal():
+    return render_template("freudenthal.html")
+
+
 @app.route("/<string:route>")
 def show_type(route):
     # try for Dynkin type
@@ -551,5 +639,3 @@ def show_grassmannian_from_plaintext(plaintext):
 
     # if that also fails: error
     # TODO
-
-

@@ -1,24 +1,24 @@
 {% macro type(G) -%}
-  {%- if G["cominuscule"] -%}cominuscule {% endif %}
-  {%- if G["minuscule"] -%}minuscule {% endif %}
-  {%- if G["adjoint"] -%}adjoint {% endif %}
-  {%- if G["coadjoint"] -%}coadjoint{% endif %}
+  {%- if G.is_cominuscule() -%}cominuscule {% endif %}
+  {%- if G.is_minuscule() -%}minuscule {% endif %}
+  {%- if G.is_adjoint() -%}adjoint {% endif %}
+  {%- if G.is_coadjoint() -%}coadjoint{% endif %}
 {%- endmacro %}
 
 {% macro data(G) -%}
-data-dimension="{{ G["dimension"] }}" data-index="{{ G["index"] }}" data-euler="{{ G["rank"] }}" data-name="{{ G["name"] }}"
+data-dimension="{{ G.dimension() }}" data-index="{{ G.index() }}" data-euler="{{ G.rank() }}" data-name="{{ G.name() | safe }}"
 {%- endmacro %}
 
 {% macro entry(G) %}
-<td class="entry" data-type="{{ type(G) }}" {{ data(G) }} data-label="{{ G["type"] }}-{{ G["parabolic"] }}">
+<td class="entry" data-type="{{ type(G) }}" {{ data(G) }} data-label="{{ G.D.T }}{{ G.D.n }}-{{ G.k }}">
   <div class="alpha">
-    <a href="/{{ G["type"] }}/{{ G["parabolic"] }}">{{ G["html"] | safe }}</a>
+    <a href="/{{ G.D.T }}{{ G.D.n }}/{{ G.k }}">{{ G.html() | safe }}</a>
 
     <div class="information">
       \begin{align*}
-        d&={{ G["dimension"] }} \\
-        i&={{ G["index"] }} \\
-        \chi&={{ G["rank"] }}
+        d&={{ G.dimension() }} \\
+        i&={{ G.index() }} \\
+        \chi&={{ G.rank() }}
       \end{align*}
     </div>
   </div>

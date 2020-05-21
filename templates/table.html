@@ -14,6 +14,9 @@
 </th>
 {% endmacro %}
 
+{% macro table(T, ns) %}
+{% endmacro %}
+
 {% block content %}
 <form id="controls" class="form-group row">
   <div class="col-6">
@@ -49,12 +52,12 @@
 <div class="row">
   <div class="col-12 col-xl-6">
     <table class="atlas">
-      {% for n in grassmannians["A"] %}
+      {% for n in range(1, 8) %}
         <tr>
           {{ th("A", n) }}
 
-          {% for k in grassmannians["A"][n] %}
-            {{ entry.entry(grassmannians["A"][n][k]) }}
+          {% for k in range(1, n + 1) %}
+            {{ entry.entry(Grassmannian("A", n, k)) }}
           {% endfor %}
         </tr>
       {% endfor %}
@@ -64,12 +67,12 @@
   <div class="col-12 col-xl-6">
     <table class="atlas">
       <tr class="d-none d-xl-block"></tr>
-      {% for n in grassmannians["B"] %}
+      {% for n in range(2, 8) %}
         <tr>
           {{ th("B", n) }}
 
-          {% for k in grassmannians["B"][n] %}
-            {{ entry.entry(grassmannians["B"][n][k]) }}
+          {% for k in range(1, n + 1) %}
+            {{ entry.entry(Grassmannian("B", n, k)) }}
           {% endfor %}
         </tr>
       {% endfor %}
@@ -78,12 +81,12 @@
 
   <div class="col-12 col-xl-6">
     <table class="atlas">
-      {% for n in grassmannians["C"] %}
+      {% for n in range(2, 8) %}
         <tr>
           {{ th("C", n) }}
 
-          {% for k in grassmannians["C"][n] %}
-            {{ entry.entry(grassmannians["C"][n][k]) }}
+          {% for k in range(1, n + 1) %}
+            {{ entry.entry(Grassmannian("C", n, k)) }}
           {% endfor %}
         </tr>
       {% endfor %}
@@ -93,13 +96,12 @@
   <div class="col-12 col-xl-6">
     <table class="atlas">
       <tr class="d-none d-xl-block"></tr>
-      <tr class="d-none d-xl-block"></tr>
-      {% for n in grassmannians["D"] %}
+      {% for n in range(3, 8) %}
         <tr>
           {{ th("D", n) }}
 
-          {% for k in grassmannians["D"][n] %}
-            {{ entry.entry(grassmannians["D"][n][k]) }}
+          {% for k in range(1, n + 1) %}
+            {{ entry.entry(Grassmannian("D", n, k)) }}
           {% endfor %}
         </tr>
       {% endfor %}
@@ -107,19 +109,37 @@
   </div>
 
   <div class="col-12 col-xl-7">
-  {% for T in "EFG" %}
     <table class="atlas">
-      {% for n in grassmannians[T] %}
+      {% for n in [6, 7, 8] %}
         <tr>
-          {{ th(T, n) }}
+          {{ th("E", n) }}
 
-          {% for k in grassmannians[T][n] %}
-            {{ entry.entry(grassmannians[T][n][k]) }}
+          {% for k in range(1, n + 1) %}
+            {{ entry.entry(Grassmannian("E", n, k)) }}
           {% endfor %}
         </tr>
       {% endfor %}
     </table>
-  {% endfor %}
+
+    <table class="atlas">
+      <tr>
+        {{ th("F", 4) }}
+
+        {% for k in range(1, 5) %}
+          {{ entry.entry(Grassmannian("F", 4, k)) }}
+        {% endfor %}
+      </tr>
+    </table>
+
+    <table class="atlas">
+      <tr>
+        {{ th("G", 2) }}
+
+        {% for k in range(1, 3) %}
+          {{ entry.entry(Grassmannian("G", 2, k)) }}
+        {% endfor %}
+      </tr>
+    </table>
   </div>
 
   <div class="col-xl-5">
@@ -162,23 +182,29 @@ function isomorphisms(label) {
   var k = parseInt(label.split("-")[1]);
 
   var result = [label];
+  console.log(n / 2);
 
   switch (T) {
     case "A":
       result.push([T, n, "-", n - k + 1].join(""))
+      if (n == 3 && (k == 1 || k == 3)) result.push("B2-2", "C2-1", "D3-2", "D3-3");
+      if (n == 3 && k == 2) result.push("D3-1");
+      if (n % 2 == 1 && (k == 1 || k == n)) result.push(["C", Math.floor((n + 1) / 2), "-", 1].join(""));
       break;
     case "B":
       if (n == 2 && k == 1) result.push("C2-2");
-      if (n == 2 && k == 2) result.push("A3-1", "A3-3", "C2-1");
+      if (n == 2 && k == 2) result.push("A3-1", "A3-3", "C2-1", "D3-2", "D3-3");
       if (n == 3 && k == 1) result.push("G2-1");
       if (n == 3 && k == 3) result.push("D4-1");
       if (n == k) result.push(["D", n + 1, "-", n].join(""), ["D", n + 1, "-", n + 1].join(""));
       break;
     case "C":
-      if (k == 1) result.push(["A", 2*n - 1, "-", 1].join(""), ["A", 2*n - 1, "-", 2*n].join(""));
+      if (k == 1) result.push(["A", 2*n - 1, "-", 1].join(""), ["A", 2*n - 1, "-", 2*n - 1].join(""));
       if (n == 2 && k == 2) result.push("B2-1");
       break;
     case "D":
+      if (n == 3 && k == 1) result.push("A3-2");
+      if (n == 3 && (k == 2 || k == 3)) result.push("A3-1", "A3-3", "C2-1", "B2-2");
       if (n == 4 && (k == 1 || k == 3 || k == 4)) result.push("D4-1", "D4-3", "D4-4", "B3-3");
       if (k == n - 1 || k == n) result.push(["B", n - 1, "-", Math.min(n - 1, n - (k - n + 1))].join(""), ["D", n, "-", n - (k - n + 1)].join(""));
       break;
