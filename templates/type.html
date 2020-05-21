@@ -14,6 +14,14 @@
     {% if D.T == "D" %}$2n-2={{ D.coxeter_number() }}${% endif %}
     {% if D.T in ["E", "F", "G"] %}${{ D.coxeter_number() }}${% endif %}
 
+  <dt class="col-3 text-right">dimension of group
+  <dd class="col-9">
+    {% if D.T == "A" %}$n^2+2n={{ D.dimension() }}${% endif %}
+    {% if D.T == "B" %}$2n^2+n={{ D.dimension() }}${% endif %}
+    {% if D.T == "C" %}$2n^2+n={{ D.dimension() }}${% endif %}
+    {% if D.T == "D" %}$2n^2-n={{ D.dimension() }}${% endif %}
+    {% if D.T in ["E", "F", "G"] %}${{ D.dimension() }}${% endif %}
+
   <dt class="col-3 text-right">exponents
   <dd class="col-9">
     {% if D.T == "A" %}$1,2,\ldots,n={% for e in D.exponents() %}{{ e }}{% if not loop.last %},{% endif %}{% endfor %}${% endif %}
@@ -64,6 +72,18 @@
 
 {% macro roots(D) %}
 <dl class="row">
+  <dt class="col-3 text-right">roots
+  <dd class="col-9">
+    {% if D.T == "A" %}$\epsilon_i-\epsilon_j$, for $i\neq j$ and $i,j=1,\ldots,n+1${% endif %}
+    {% if D.T == "B" %}$\pm\epsilon_i\pm\epsilon_j,\pm\epsilon_i${% endif %}
+    {% if D.T == "C" %}$\pm\epsilon_i\pm\epsilon_j,\pm2\epsilon_i${% endif %}
+    {% if D.T == "D" %}$\pm\epsilon_i\pm\epsilon_j${% endif %}
+    {% if D.T == "E" and D.n == 6 %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 7 %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 8 %}TODO{% endif %}
+    {% if D.T == "F" %}TODO{% endif %}
+    {% if D.T == "G" %}TODO{% endif %}
+
   <dt class="col-3 text-right">number of roots
   <dd class="col-9">
     {% if D.T == "A" %}$n(n+1)={{ D.n }}\cdot{{ D.n + 1 }}!={{ D.number_of_roots() }}${% endif %}
@@ -71,8 +91,68 @@
     {% if D.T == "C" %}$2n^2=2\cdot{{ D.n }}^2={{ D.number_of_roots() }}${% endif %}
     {% if D.T == "D" %}$2n(n-1)=2\cdot{{ D.n }}\cdot{{ D.n - 1 }}={{ D.number_of_roots() }}${% endif %}
     {% if D.T in ["E", "F", "G"] %}${{ D.number_of_roots() }}${% endif %}
+
+
+  <dt class="col-3 text-right">simple roots
+  <dd class="col-9">
+    {% if D.T == "A" %}$\alpha_i=\epsilon_i-\epsilon_{i+1}${% endif %}
+    {% if D.T == "B" %}$\alpha_i=\begin{cases}\epsilon_i-\epsilon_{i+1} & i&lt;n \\ \epsilon_n & i=n\end{cases}${% endif %}
+    {% if D.T == "C" %}$\alpha_i=\begin{cases}\epsilon_i-\epsilon_{i+1} & i&lt;n \\ 2\epsilon_n & i=n\end{cases}${% endif %}
+    {% if D.T == "D" %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 6 %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 7 %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 8 %}TODO{% endif %}
+    {% if D.T == "F" %}TODO{% endif %}
+    {% if D.T == "G" %}TODO{% endif %}
+
+  <dt class="col-3 text-right">highest root
+  <dd class="col-9">
+    {% if D.T == "A" %}$\epsilon_1-\epsilon_{n+1}=\alpha_1+\ldots+\alpha_n=\omega_1+\omega_n${% endif %}
+    {% if D.T == "B" %}TODO{% endif %}
+    {% if D.T == "C" %}TODD{% endif %}
+    {% if D.T == "D" %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 6 %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 7 %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 8 %}TODO{% endif %}
+    {% if D.T == "F" %}TODO{% endif %}
+    {% if D.T == "G" %}TODO{% endif %}
+
+  <dt class="col-3 text-right">fundamental weights
+  <dd class="col-9">
+    {% if D.T == "A" %}TODO{% endif %}
+    {% if D.T == "B" %}TODO{% endif %}
+    {% if D.T == "C" %}TODD{% endif %}
+    {% if D.T == "D" %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 6 %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 7 %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 8 %}TODO{% endif %}
+    {% if D.T == "F" %}TODO{% endif %}
+    {% if D.T == "G" %}TODO{% endif %}
+
+  <dt class="col-3 text-right">half-sum of positive roots
+  <dd class="col-9">
+    {% if D.T == "A" %}TODO{% endif %}
+    {% if D.T == "B" %}TODO{% endif %}
+    {% if D.T == "C" %}TODD{% endif %}
+    {% if D.T == "D" %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 6 %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 7 %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 8 %}TODO{% endif %}
+    {% if D.T == "F" %}TODO{% endif %}
+    {% if D.T == "G" %}TODO{% endif %}
+
 </dl>
 {% endmacro %}
+
+{% if D.T == "A" %}{% endif %}
+{% if D.T == "B" %}{% endif %}
+{% if D.T == "C" %}{% endif %}
+{% if D.T == "D" %}{% endif %}
+{% if D.T == "E" and D.n == 6 %}{% endif %}
+{% if D.T == "E" and D.n == 7 %}{% endif %}
+{% if D.T == "E" and D.n == 8 %}{% endif %}
+{% if D.T == "F" %}{% endif %}
+{% if D.T == "G" %}{% endif %}
 
 
 {% macro cartan(D) %}
@@ -114,7 +194,7 @@
   <div class="col-12">
     {{ macros.component("Basic information", basic(D)) }}
 
-    {{ macros.component("Roots", roots(D)) }}
+    {{ macros.component("Roots and fundamental weights", roots(D)) }}
 
     {{ macros.component("Cartan matrix", cartan(D)) }}
   </div>
