@@ -1,0 +1,132 @@
+{% extends "page.html" %}
+
+{% block title %}The Freudenthal magic square{% endblock %}
+
+{% import "macros.html" as macros %}
+
+{% macro variety(G) %}
+{{ variety_template(G.latex(), "n", link=G.url()) }}
+{% endmacro %}
+
+{% macro variety_template(latex, embedding, link="") %}
+<td class="text-center">
+  {% if link != "" %}<a href="/{{ link }}">{% endif %}
+  ${{ latex | safe }}\hookrightarrow\mathbb{P}^{ {{ embedding }} }$
+  {% if link != "" %}</a>{% endif %}
+</td>
+{% endmacro %}
+
+{% block content %}
+<header class="text-center">
+  <h2 class="mt-3">The Freudenthal magic square</h2>
+</header>
+
+<table class="table freudenthal">
+  <tbody>
+    <tr>
+      <th colspan="4" class="text-center">varieties</th>
+      <th>projective geometric description</th>
+    </tr>
+
+    <tr>
+      {{ variety_template("\mathrm{Q}^1", "4", link="B1/1") }}
+      {{ variety_template("\mathbb{P}(\mathrm{T}_{\mathbb{P}^2})", "7") }}
+      {{ variety(Grassmannian("C", 3, 2)) }}
+      {{ variety(Grassmannian("F", 4, 4)) }}
+      <td>hyperplane section of Severi varieties</td>
+    </tr>
+
+    <tr>
+      {{ variety(Grassmannian("A", 2, 1)) }}
+      {{ variety_template("\mathbb{P}^2\\times\mathbb{P}^2", "8") }}
+      {{ variety(Grassmannian("A", 5, 2)) }}
+      {{ variety(Grassmannian("E", 6, 1)) }}
+      <td>Severi varieties</td>
+    </tr>
+
+    <tr>
+      {{ variety(Grassmannian("C", 3, 3)) }}
+      {{ variety(Grassmannian("A", 5, 3)) }}
+      {{ variety(Grassmannian("D", 6, 6)) }}
+      {{ variety(Grassmannian("E", 7, 7)) }}
+      <td>lines through a point of the exceptional adjoints</td>
+    </tr>
+
+    <tr>
+      {{ variety(Grassmannian("F", 4, 1)) }}
+      {{ variety(Grassmannian("E", 6, 2)) }}
+      {{ variety(Grassmannian("E", 7, 1)) }}
+      {{ variety(Grassmannian("E", 8, 8)) }}
+      <td>exceptional adjoints</td>
+    </tr>
+  </tbody>
+
+  <tbody>
+    <tr>
+      <th colspan="4" class="text-center">marked Dynkin diagrams</th>
+    </tr>
+    <tr>
+      <td class="text-center">{{ macros.dynkin("B", 1, height=40, k=[1]) }}</td>
+      <td class="text-center">{{ macros.dynkin("A", 2, height=40, k=[1,2]) }}</td>
+      <td class="text-center">{{ macros.dynkin("C", 3, height=40, k=[2]) }}</td>
+      <td class="text-center">{{ macros.dynkin("F", 4, height=40, k=[4]) }}</td>
+    </tr>
+
+    <tr>
+      <td class="text-center">{{ macros.dynkin("A", 2, height=40, k=[1]) }}</td>
+      <td class="text-center">{{ macros.dynkin("A", 2, height=40, k=[1]) }}{{ macros.dynkin("A", 2, height=40, k=[1]) }}</td>
+      <td class="text-center">{{ macros.dynkin("A", 5, height=40, k=[2]) }}</td>
+      <td class="text-center">{{ macros.dynkin("E", 6, height=40, k=[1]) }}</td>
+    </tr>
+
+    <tr>
+      <td class="text-center">{{ macros.dynkin("C", 3, height=40, k=[3]) }}</td>
+      <td class="text-center">{{ macros.dynkin("A", 5, height=40, k=[3]) }}</td>
+      <td class="text-center">{{ macros.dynkin("D", 6, height=40, k=[5]) }}</td>
+      <td class="text-center">{{ macros.dynkin("E", 7, height=40, k=[7]) }}</td>
+    </tr>
+
+    <tr>
+      <td class="text-center">{{ macros.dynkin("F", 4, height=40, k=[1]) }}</td>
+      <td class="text-center">{{ macros.dynkin("E", 6, height=40, k=[2]) }}</td>
+      <td class="text-center">{{ macros.dynkin("E", 7, height=40, k=[1]) }}</td>
+      <td class="text-center">{{ macros.dynkin("E", 8, height=40, k=[8]) }}</td>
+    </tr>
+  </tbody>
+
+  <tbody>
+    <tr>
+      <th colspan="4" class="text-center">Lie algebras</th>
+    </tr>
+    <tr>
+      <td class="text-center">{{ Dynkin("B", 1).lie() | safe }}</td>
+      <td class="text-center">{{ Dynkin("A", 2).lie() | safe }}</td>
+      <td class="text-center">{{ Dynkin("C", 3).lie() | safe }}</td>
+      <td class="text-center">{{ Dynkin("F", 4).lie() | safe }}</td>
+    </tr>
+
+    <tr>
+      <td class="text-center">{{ Dynkin("A", 2).lie() | safe }}</td>
+      <td class="text-center">{{ Dynkin("A", 2).lie() | safe }}x{{ Dynkin("A", 2).lie() | safe }}</td>
+      <td class="text-center">{{ Dynkin("A", 5).lie() | safe }}</td>
+      <td class="text-center">{{ Dynkin("E", 6).lie() | safe }}</td>
+    </tr>
+
+    <tr>
+      <td class="text-center">{{ Dynkin("C", 3).lie() | safe }}</td>
+      <td class="text-center">{{ Dynkin("A", 5).lie() | safe }}</td>
+      <td class="text-center">{{ Dynkin("D", 6).lie() | safe }}</td>
+      <td class="text-center">{{ Dynkin("E", 7).lie() | safe }}</td>
+    </tr>
+
+    <tr>
+      <td class="text-center">{{ Dynkin("F", 4).lie() | safe }}</td>
+      <td class="text-center">{{ Dynkin("E", 6).lie() | safe }}</td>
+      <td class="text-center">{{ Dynkin("E", 7).lie() | safe }}</td>
+      <td class="text-center">{{ Dynkin("E", 8).lie() | safe }}</td>
+    </tr>
+  </tbody>
+<table>
+
+{% endblock %}
+

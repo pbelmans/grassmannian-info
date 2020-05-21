@@ -1,13 +1,15 @@
 {% macro dynkin(T, n, height=20, k=[]) %}
+{% if T in ["B", "C"] and n == 1 %}{{ dynkin("A", 1, height=height, k=k) }}
+{% else %}
 <svg height="{{ height }}" id="dynkin-{{ T }}{{ n}}" viewBox="-10 -10 {% if T == "D" %}{{ n * 20 - 20 }}{% elif T in ["D", "E"] %}{{ n * 20 - 10 }}{% else %}{{ n * 20 }}{% endif %} 40">
-  <g style="stroke-width:0.8; stroke-linejoin:bevel; stroke-linecap:butt; stroke:black; fill:white">
+  <g style="stroke-width:1; stroke-linejoin:bevel; stroke-linecap:butt; stroke:black; fill:white">
     {% if T == "A" %}
       <polyline points="0,10 {{ (n - 1) * 20 }},10" />
       {% for i in range(n) %}
         <circle cx="{{ i * 20 }}" cy="10" r="5" data-label="A{{ n }}-{{ i + 1 }}" {% if i + 1 in k %}class="active"{% endif %} />
         <!--<text x="{{ i * 20 - 5 }}" y="10">{{ i + 1 }}</text>-->
       {% endfor %}
-    {% elif T == "B" %}
+    {% elif T == "B" and n >= 2%}
       <polyline points="{{ (n - 2) * 20 + 7 }},17 {{ (n - 2) * 20 + 13 }},10 {{ (n - 2) * 20 + 7 }},3" />
       <polyline points="0,10 {{ (n - 2) * 20 }},10" />
       <polyline points="{{ (n - 2) * 20 }},8 {{ (n - 1) * 20 }},8" />
@@ -49,6 +51,7 @@
     {% endif %}
   </g>
 </svg>
+{% endif %}
 {% endmacro %}
 
 

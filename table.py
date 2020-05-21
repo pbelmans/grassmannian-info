@@ -172,6 +172,10 @@ class Grassmannian:
             self.L = [self.L]
 
 
+    def url(self):
+        return "{}{}/{}".format(self.D.T, self.D.n, self.k)
+
+
     def dimension(self):
         result = self.D.number_of_positive_roots()
         for D in self.L:
