@@ -319,6 +319,8 @@ class Grassmannian:
     def isomorphisms(self):
         result = [(self.D.T + str(self.D.n), self.k)]
 
+        if self.D.n == 1: return result
+
         if self.D.T == "A":
             result.append(("A" + str(self.D.n), self.D.n - self.k + 1),)
             if self.D.n == 3 and self.k in [1, 3]: result.extend([("B2", 2), ("C2", 1), ("D3", 2), ("D3", 3)])
@@ -608,6 +610,9 @@ def show_type(route):
         T = route[0]
         n = int(route[1:])
 
+        if T in ["B", "C"] and n == 1:
+            (T, n) == ("A", 1)
+
         return render_template("type.html", D=Dynkin(T, n))
     except ValueError:
         pass
@@ -615,6 +620,9 @@ def show_type(route):
 
 @app.route("/<string:T><int:n>/<int:k>")
 def show_grassmannian(T, n, k):
+    if T in ["B", "C"] and n == 1:
+        return redirect("/A1/1")
+
     return render_template("grassmannian.html", G=Grassmannian(T, n, k))
 
 
