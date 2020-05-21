@@ -3,7 +3,6 @@
 {% import "macros.html" as macros %}
 
 {% block title %}{{ G.name() }} {{ G.plaintext() }}{% endblock %}
-{# TODO nice human-readable name #}
 
 
 {% macro basic(G) %}
@@ -85,7 +84,11 @@
 
 {% block content %}
 <header class="text-center">
-  <h2 class="mt-3">{{ G.name()[0] | upper  }}{{ G.name()[1:] }} ${{ G.latex() }}$</h2>
+  <h2 class="mt-3">{{ G.name()[0] | upper  }}{{ G.name()[1:] }}
+    {% if G.D.T in ["A", "B", "C", "D"] or (G.D.D, G.k) in [("E6", 1), ("E6", 6)] or (G.D.D, G.k) == ("G2", 1) %}
+      ${{ G.latex() }}$
+    {% endif %}
+  </h2>
 
   {{ macros.dynkin(G.D.T, G.D.n, height=100, k=[G.k]) }}
 </header>
