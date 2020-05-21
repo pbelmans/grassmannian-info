@@ -15,6 +15,7 @@ class Dynkin:
 
         self.T = T
         self.n = n
+        self.D = T + str(n)
 
     def cartan_matrix(self):
         M = [[2 if i == j else 0 for i in range(self.n)] for j in range(self.n)]
@@ -117,7 +118,7 @@ class Dynkin:
         if self.T == "D":
             if k == 1: return Dynkin("D", self.n - 1)
             if k == self.n - 2: return [Dynkin("A", self.n - 3), Dynkin("A", 1), Dynkin("A", 1)]
-            if k in [n - 1, self.n]: return Dynkin("A", self.n - 1)
+            if k in [self.n - 1, self.n]: return Dynkin("A", self.n - 1)
             return [Dynkin("A", k - 1), Dynkin("D", self.n - k)]
         if self.T == "E":
             if k == 1: return Dynkin("D", self.n - 1)
@@ -197,6 +198,10 @@ class Grassmannian:
         if self.D.T == "G" and self.k == 1: return Grassmannian("B", 3, 1)
 
         return self
+
+
+    def Aut(self):
+        return self.canonical().D
 
 
     def pizero(self):
@@ -306,18 +311,66 @@ class Grassmannian:
         # TODO eventually the name function just come here?
         return name(self.D.T, self.D.n, self.k)
 
+    def plaintext(self):
+        # TODO eventually the plaintext function just come here?
+        return name(self.D.T, self.D.n, self.k)
+
+
+    def isomorphisms(self):
+        result = [(self.D.T + str(self.D.n), self.k)]
+        if self.D.T == "A":
+            result.append(("A" + str(self.D.n), self.D.n - self.k + 1),)
+        if self.D.T == "B":
+          if self.D.n == 2 and self.k == 1: result.append(("C2", 2),)
+          if self.D.n == 2 and self.k == 2: result.extend([("C2", 1), ("A3", 1), ("A3", 3)])
+          if self.D.n == 3 and self.k == 1: result.append(("G2", 1),)
+          if self.D.n == 3 and self.k == 3: result.extend([("D4", 1), ("D4", 3), ("D4", 4)])
+          if self.D.n == self.k: result.extend([("D" + str(self.D.n + 1), self.D.n), ("D" + str(self.D.n + 1), self.D.n + 1)])
+        if self.D.T == "C":
+          if self.k == 1: result.extend([("A" + str(2*self.D.n - 1), 1), ("A" + str(2*self.D.n - 1), 2*self.D.n - 1)])
+          if self.D.n == 2 and self.k == 1: result.append(("B2", 1),)
+        if self.D.T == "D":
+          if self.D.n == 4 and self.k in [1, 3, 4]: result.extend([("D4", 1), ("D4", 3), ("D4", 4), ("B3", 3)])
+          if self.k in [self.D.n - 1, self.D.n]: result.extend([("B" + str(self.D.n - 1), min(self.D.n - 1, self.D.n - (self.k - self.D.n + 1))), ("D" + str(self.D.n), self.D.n - (self.k - self.D.n + 1))])
+        if self.D.T == "E":
+          if self.D.n == 6 and self.k in [1, 6]: result.extend([("E6", 1), ("E6", 6)])
+          if self.D.n == 6 and self.k in [3, 5]: result.extend([("E6", 3), ("E6", 5)])
+        if self.D.T == "G":
+            if self.k == 1: result.append(("B3", 1),)
+
+        return list(set(result))
+
+    def embedding(self):
+        global grassmannians
+
+        print(grassmannians)
+        try:
+            return grassmannians[self.D.T][self.D.n][self.k]["embedding"]
+        except:
+            return False
+
+    def degree(self):
+        global grassmannians
+
+        try:
+            return grassmannians[self.D.T][self.D.n][self.k]["degree"]
+        except:
+            return False
+
+    def hilbert_series(self):
+        global grassmannians
+
+        try:
+            return grassmannians[self.D.T][self.D.n][self.k]["hilbert_series"]
+        except:
+            return False
+
+
 
 # registering the Dynkin and Grassmannian class so that Jinja2 can use it directly
 app.add_template_global(Dynkin, "Dynkin")
 app.add_template_global(Grassmannian, "Grassmannian")
 
-
-grassmannians = {letter : {} for letter in "ABCDEFG"}
-
-G = Grassmannian("A", 18, 10)
-print(G.betti())
-print(G.rank(), sum(G.betti()), len(G.betti()))
-# TODO if G.rank() != sum(G.betti()) there is a computational error
 
 def latex(T, n, k):
     if T == "A":
@@ -460,6 +513,7 @@ def name(T, n, k):
     return "generalised Grassmannian of type ($\\mathrm{{{}}}_{{{}}}/\mathrm{{P}}_{{{}}}$)".format(T, n, k)
 
 
+grassmannians = {letter : {} for letter in "ABCDEFG"}
 
 # load the Sage-generated JSON file
 with open("grassmannians.json") as f:
@@ -470,112 +524,54 @@ with open("grassmannians.json") as f:
         n = int(G["type"][1:])
         k = G["parabolic"]
 
-        # cutoff for now
-        if T in "ABCD" and n > 7: continue
-
-        G["latex"] = latex(T, n, k)
-        G["html"] = html(T, n, k)
-        G["plaintext"] = plaintext(T, n, k)
-        G["name"] = name(T, n, k)
-
-        # indicate type of Grassmannian
-        G["cominuscule"] = G["minuscule"] = G["adjoint"] = G["coadjoint"] = False
-
-        if T == "A": G["cominuscule"] = G["minuscule"] = True
-        if T == "B" and k == 1: G["cominuscule"] = G["coadjoint"] = True
-        if T == "B" and k == 2: G["adjoint"] = True
-        if T == "B" and k == n: G["minuscule"] = True
-        if T == "C" and k == 1: G["minuscule"] = G["adjoint"] = True
-        if T == "C" and k == 2: G["coadjoint"] = True
-        if T == "C" and k == n: G["cominuscule"] = True
-        if T == "D" and k in [1, n - 1, n]: G["cominuscule"] = G["minuscule"] = True
-        if T == "D" and k == 2: G["adjoint"] = G["coadjoint"] = True
-        if T == "E" and n == 6 and k in [1, 6]: G["cominuscule"] = G["minuscule"] = True
-        if T == "E" and n == 6 and k == 2: G["adjoint"] = G["coadjoint"] = True
-        if T == "E" and n == 7 and k == 1: G["adjoint"] = G["coadjoint"] = True
-        if T == "E" and n == 7 and k == 7: G["cominuscule"] = G["minuscule"] = True
-        if T == "E" and n == 8 and k == 8: G["adjoint"] = G["coadjoint"] = True
-        if T == "F" and k == 1: G["adjoint"] = True
-        if T == "F" and k == 4: G["coadjoint"] = True
-        if T == "G" and k == 1: G["coadjoint"] = True
-        if T == "G" and k == 2: G["adjoint"] = True
-
-
-        G["isomorphisms"] = [(T + str(n), k)]
-        if T == "A":
-            G["isomorphisms"].append(("A" + str(n), n - k + 1),)
-        elif T == "B":
-            if n == 2 and k == 1: G["isomorphisms"].append(("C2", 2),)
-            if n == 2 and k == 2: G["isomorphisms"].extend([("C2", 1), ("A3", 1), ("A3", 3)])
-            if n == 3 and k == 1: G["isomorphisms"].append(("G2", 1),)
-            if n == 3 and k == 3: G["isomorphisms"].extend([("D4", 1), ("D4", 3), ("D4", 4)])
-            if n == k: G["isomorphisms"].extend([("D" + str(n + 1), n), ("D" + str(n + 1), n + 1)])
-        elif T == "C":
-            if k == 1: G["isomorphisms"].extend([("A" + str(2*n - 1), 1), ("A" + str(2*n - 1), 2*n - 1)])
-            if n == 2 and k == 1: G["isomorphisms"].append(("B2", 1),)
-        elif T == "D":
-            if n == 4 and k in [1, 3, 4]: G["isomorphisms"].extend([("D4", 1), ("D4", 3), ("D4", 4), ("B3", 3)])
-            if k in [n - 1, n]: G["isomorphisms"].extend([("B" + str(n - 1), min(n - 1, n - (k - n + 1))), ("D" + str(n), n - (k - n + 1))])
-        elif T == "E":
-            if n == 6 and k in [1, 6]: G["isomorphisms"].extend([("E6", 1), ("E6", 6)])
-            if n == 6 and k in [3, 5]: G["isomorphisms"].extend([("E6", 3), ("E6", 5)])
-        elif T == "G":
-            if k == 1: G["isomorphisms"].append(("B3", 1),)
-
-        G["isomorphisms"] = list(set(G["isomorphisms"]))
-
-        """
-        Idea: maybe it would be better to move this to a template?
-
-        + easier to add descriptions
-        + every Lefschetz collection is a macro that can be called?
-
-        - less convenient for MathSciNet / arXiv integration?
-        - even further separation of content
-
-        """
-        G["lefschetz"] = []
-        if T == "A":
-            # Beilinson
-            if k in [1, n]:
-                G["lefschetz"].append({"support" : [1]*(n + 1)})
-            # Kuznetsov (cfr. example 1.7 of http://www.mi-ras.ru/~akuznet/publications/1802.08097%5BOn%20residual%20categories%20for%20Grassmannians%5D.pdf)
-            if k == 2:
-                m = (n + 1) // 2
-                if n % 2 == 0:
-                    G["lefschetz"].append({"support" : [m]*(2*m+1)})
-                else:
-                    G["lefschetz"].append({"support" : [m]*m + [m-1]*m})
-
-            # Kapranov, non-minimal
-
-        if T == "B":
-            if k == 1:
-                G["lefschetz"].append({"support" : [2] + [1]*(2*n-2)})
-
-        if T == "D":
-            if k == 1 or (n == 4 and k in [3, 4]):
-                G["lefschetz"].append({"support" : [2, 2] + [1]*(2*n-4)})
-
-        if T == "E":
-            # Faenzi--Manivel
-            if n == 6 and k in [1, 6]:
-                G["lefschetz"].append({"support" : [3]*3 + [2]*9})
-        if T == "F":
-            # Belmans--Kuznetsov--Smirnov
-            if n == 4:
-                G["lefschetz"].append({"support" : [3]*2 + [2]*8})
-
-        # TODO check for now
-        assert G["betti"] == Grassmannian(T, n, k).betti()
-        assert G["index"] == Grassmannian(T, n, k).index()
-        assert G["dimension"] == Grassmannian(T, n, k).dimension()
-
         # assigning the Grassmannian to the dictionary
         if n not in grassmannians[T]:
             grassmannians[T][n] = {}
         grassmannians[T][n][k] = G
 
+
+"""
+Idea: maybe it would be better to move this to a template?
+
++ easier to add descriptions
++ every Lefschetz collection is a macro that can be called?
+
+- less convenient for MathSciNet / arXiv integration?
+- even further separation of content
+
+G["lefschetz"] = []
+if T == "A":
+    # Beilinson
+    if k in [1, n]:
+        G["lefschetz"].append({"support" : [1]*(n + 1)})
+    # Kuznetsov (cfr. example 1.7 of http://www.mi-ras.ru/~akuznet/publications/1802.08097%5BOn%20residual%20categories%20for%20Grassmannians%5D.pdf)
+    if k == 2:
+        m = (n + 1) // 2
+        if n % 2 == 0:
+            G["lefschetz"].append({"support" : [m]*(2*m+1)})
+        else:
+            G["lefschetz"].append({"support" : [m]*m + [m-1]*m})
+
+    # Kapranov, non-minimal
+
+if T == "B":
+    if k == 1:
+        G["lefschetz"].append({"support" : [2] + [1]*(2*n-2)})
+
+if T == "D":
+    if k == 1 or (n == 4 and k in [3, 4]):
+        G["lefschetz"].append({"support" : [2, 2] + [1]*(2*n-4)})
+
+if T == "E":
+    # Faenzi--Manivel
+    if n == 6 and k in [1, 6]:
+        G["lefschetz"].append({"support" : [3]*3 + [2]*9})
+if T == "F":
+    # Belmans--Kuznetsov--Smirnov
+    if n == 4:
+        G["lefschetz"].append({"support" : [3]*2 + [2]*8})
+
+"""
 
 
 @app.route("/")
@@ -613,20 +609,12 @@ def show_type(route):
         pass
 
 
-# TODO get rid of this one
-@app.route("/<string:T><int:n>-<int:k>")
-def redirect_grassmannian(T, n, k):
-    return redirect("/{}{}/{}".format(T, n, k))
-
-
-# TODO make these redirects?
 @app.route("/<string:T><int:n>/<int:k>")
 def show_grassmannian(T, n, k):
-    G = grassmannians[T][n][k]
-
-    return render_template("grassmannian.html", G=G)
+    return render_template("grassmannian.html", G=Grassmannian(T, n, k))
 
 
+"""
 @app.route("/<path:plaintext>")
 def show_grassmannian_from_plaintext(plaintext):
     # look for exact plaintext match
@@ -643,3 +631,4 @@ def show_grassmannian_from_plaintext(plaintext):
 
     # if that also fails: error
     # TODO
+"""

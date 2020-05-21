@@ -2,32 +2,32 @@
 
 {% import "macros.html" as macros %}
 
-{% block title %}{{ G["name"] }} {{ G["plaintext"] }}{% endblock %}
+{% block title %}{{ G.name() }} {{ G.plaintext() }}{% endblock %}
 {# TODO nice human-readable name #}
 
 
 {% macro basic(G) %}
 <dl class="row">
   <dt class="col-3 text-right">dimension
-  <dd class="col-9">{{ G["dimension"] }}
+  <dd class="col-9">{{ G.dimension() }}
 
   <dt class="col-3 text-right">index
-  <dd class="col-9">{{ G["index"] }}
+  <dd class="col-9">{{ G.index() }}
 
   <dt class="col-3 text-right">Euler characteristic
-  <dd class="col-9">{{ G["rank"] }}
+  <dd class="col-9">{{ G.rank() }}
 
   <dt class="d-lg-none col-3 text-right">Betti numbers
   <dd class="d-lg-none col-9">{{ betti_horizontal(G) }}
 
-  <dt class="col-3 text-right">$\mathrm{Aut}^0({{ G["latex"] }})$
-  <dd class="col-9">{{ macros.adjoint_group(G["Aut^0"]) }}
+  <dt class="col-3 text-right">$\mathrm{Aut}^0({{ G.latex() }})$
+  <dd class="col-9">{{ macros.adjoint_group(G.Aut().D) }}
 
-  <dt class="col-3 text-right">$\pi_0\mathrm{Aut}({{ G["latex"] }})$
-  <dd class="col-9">${{ G["pizero"] }}$
+  <dt class="col-3 text-right">$\pi_0\mathrm{Aut}({{ G.latex() }})$
+  <dd class="col-9">${{ G.pizero() }}$
 
-  <dt class="col-3 text-right">$\dim\mathrm{Aut}^0({{ G["latex"] }})$
-  <dd class="col-9">{{ G["dim Aut"] }}
+  <dt class="col-3 text-right">$\dim\mathrm{Aut}^0({{ G.latex() }})$
+  <dd class="col-9">{{ G.Aut().dimension() }}
 </dl>
 {% endmacro %}
 
@@ -44,22 +44,22 @@
 
 
 {% macro hpd(G) %}
-{% for lefschetz in G["lefschetz"] %}
-  {{ partition(lefschetz, G["embedding"] + 1) }}
+{% for lefschetz in G.lefschetz() %}
+  {{ partition(lefschetz, G.embedding() + 1) }}
 {% endfor %}
 {% endmacro %}
 
 
 {% macro betti_vertical(G) %}
 \begin{align*}
-{%- for betti in G["betti"] %}
+{%- for betti in G.betti() %}
   \mathrm{b}_{ {{ loop.index }} } &= {{ betti }} {% if not loop.last %}\\{% endif %}
 {%- endfor %}
 \end{align*}
 {% endmacro %}
 
 {% macro betti_horizontal(G) %}
-{%- for betti in G["betti"] -%}
+{%- for betti in G.betti() -%}
   $\mathrm{b}_{ {{ loop.index }} } = {{ betti }}${% if not loop.last %}, {% endif %}
 {%- endfor %}
 {% endmacro %}
@@ -68,47 +68,33 @@
 {% macro projective(G) %}
 <dl class="row">
   <dt class="col-3 text-right">minimal embedding
-  <dd class="col-9"><p>${{ G["latex"] }}\hookrightarrow\mathbb{P}^{ {{ G["embedding"] }} }$</p>
-  {% if G["type"][0] == "C" and G["parabolic"] == 1 %}<p>More appropriately in this particular presentation as a quotient of the symplectic group is to consider the Grassmannian as the <em>adjoint</em> variety of type $\mathrm{C}_{ {{ G["type"][1:] }} }$, where the embedding is the second Veronese embedding into $\mathbb{P}(\mathrm{V}_{2\omega_1})=\mathbb{P}^{ {{ (G["embedding"] * (G["embedding"] + 3) / 2) | int }} }$.{% endif %}
+  <dd class="col-9"><p>${{ G.latex() }}\hookrightarrow\mathbb{P}^{ {{ G.embedding() }} }$</p>
+  {% if G.D.T == "C" and G.k == 1 %}<p>More appropriately in this particular presentation as a quotient of the symplectic group is to consider the Grassmannian as the <em>adjoint</em> variety of type $\mathrm{C}_{ {{ G.D.n }} }$, where the embedding is the second Veronese embedding into $\mathbb{P}(\mathrm{V}_{2\omega_1})=\mathbb{P}^{ {{ (G.embedding() * (G.embedding() + 3) / 2) | int }} }$.{% endif %}
   <dt class="col-3 text-right">degree
-  <dd class="col-9">{{ G["degree"] }}
-
-  <!--
-  <dt class="col-3 text-right">Hilbert polynomial
-  <dd class="col-9">\begin{equation}{{ G["hilbert_polynomial"]["latex"] }}\end{equation}
-
-    \begin{equation}
-    {% for factor in G["hilbert_polynomial"]["factors"] %}
-      {% if factor == "1" %}(t+1)
-      {% else %}\left( \frac{ {{ factor.split("/")[0] }} }{ {{ factor.split("/")[1] }} }t+1 \right)
-      {% endif %}
-    {% endfor %}
-    \end{equation}
-  -->
+  <dd class="col-9">{{ G.degree() }}
 
   <dt class="col-3 text-right">Hilbert series
   <dd class="col-9">
-    {% for dimension in G["hilbert_polynomial"]["evaluation"] -%}
+    {% for dimension in G.hilbert_series() -%}
       {{- dimension -}}
       {%- if not loop.last %}, {% endif %}
     {%- endfor -%}, ...
-    <!-- TODO implement JS evaluation of Hilbert polynomial for more and more -->
 </dl>
 {% endmacro %}
 
 
 {% block content %}
 <header class="text-center">
-  <h2 class="mt-3">{{ G["name"][0] | upper  }}{{ G["name"][1:] }} ${{ G["latex"] }}$</h2>
+  <h2 class="mt-3">{{ G.name()[0] | upper  }}{{ G.name()[1:] }} ${{ G.latex() }}$</h2>
 
-  {{ macros.dynkin(G["type"][0], G["type"][1:] | int, height=100, k=[G["parabolic"]]) }}
+  {{ macros.dynkin(G.D.T, G.D.n, height=100, k=[G.k]) }}
 </header>
 
-{% if G["isomorphisms"] | length >= 2 %}
+{% if G.isomorphisms() | length >= 2 %}
   <div class="col mb-5">
     There exist other realisations of this Grassmannian:
     <ul>
-      {% for (D, k) in G["isomorphisms"] if (D, k) != (G["type"], G["parabolic"]) %}
+      {% for (D, k) in G.isomorphisms() if (D, k) != (G.D.D, G.k) %}
       <li><a href="/{{ D }}/{{ k }}">{{ macros.dynkin(D[0], D[1:] | int, height=40, k=[k]) }}</a>
       {% endfor %}
     </ul>
@@ -125,7 +111,7 @@
 
     {{ macros.component("Projective geometry", projective(G)) }}
 
-    {{ macros.component("Homological projective duality", hpd(G)) }}
+    {#{{ macros.component("Homological projective duality", hpd(G)) }}#}
   </div>
 </div>
 
