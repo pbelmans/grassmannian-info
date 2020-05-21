@@ -295,7 +295,7 @@ def html(T, n, k):
 
     elif T == "E":
         if n == 6 and k == 1: return "&#x1D546;&#x2119;<sup>2</sup>"
-        if n == 6 and k == 6: return "&#x1D546;&#x2119;<sup>2&#x2228;</sup>"
+        if n == 6 and k == 6: return "&#x1D546;&#x2119;<sup>2,&#x2228;</sup>"
 
     elif T == "G":
         if k == 1: return html("B", 3, 1)

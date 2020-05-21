@@ -202,13 +202,17 @@ var fields = ["name", "dimension", "index", "euler", "type"];
 // interact with the table
 $("td.entry").mouseenter(function(e) {
   // clear the color on other cells
-  $("td.entry, circle").removeClass("active");
+  $("td.entry, circle").removeClass("active alternative");
 
   var label = $(e.currentTarget).data("label");
 
-  // make the isomorphic ones look active
+  // make the isomorphic ones look semi-active
   var isomorphic = $("*[data-label='" + isomorphisms(label).join("'], *[data-label='") + "']");
-  isomorphic.addClass("active");
+  isomorphic.addClass("alternative");
+
+  // make the current one look active
+  $("*[data-label='" + label + "']").removeClass("alternative");
+  $("*[data-label='" + label + "']").addClass("active");
 
   // display the specific data
   fields.forEach(function (field) {
