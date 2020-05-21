@@ -5,7 +5,7 @@
 {% import "macros.html" as macros %}
 
 {% macro variety(G) %}
-{{ variety_template(G.latex(), "n", link=G.url()) }}
+{{ variety_template(G.latex(), G.embedding(), link=G.url()) }}
 {% endmacro %}
 
 {% macro variety_template(latex, embedding, link="") %}
@@ -29,16 +29,16 @@
     </tr>
 
     <tr>
-      {{ variety_template("\mathrm{Q}^1", "4", link="B1/1") }}
-      {{ variety_template("\mathbb{P}(\mathrm{T}_{\mathbb{P}^2})", "7") }}
+      {{ variety_template("\mathrm{Q}^1", 4, link="B1/1") }}
+      {{ variety_template("\mathbb{P}(\mathrm{T}_{\mathbb{P}^2})", 7) }}
       {{ variety(Grassmannian("C", 3, 2)) }}
       {{ variety(Grassmannian("F", 4, 4)) }}
       <td>hyperplane section of Severi varieties</td>
     </tr>
 
     <tr>
-      {{ variety(Grassmannian("A", 2, 1)) }}
-      {{ variety_template("\mathbb{P}^2\\times\mathbb{P}^2", "8") }}
+      {{ variety_template("\mathbb{P}^2", 5, link="A2/1") }}
+      {{ variety_template("\mathbb{P}^2\\times\mathbb{P}^2", 8) }}
       {{ variety(Grassmannian("A", 5, 2)) }}
       {{ variety(Grassmannian("E", 6, 1)) }}
       <td>Severi varieties</td>
