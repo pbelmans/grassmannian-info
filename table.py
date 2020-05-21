@@ -318,23 +318,28 @@ class Grassmannian:
 
     def isomorphisms(self):
         result = [(self.D.T + str(self.D.n), self.k)]
+
         if self.D.T == "A":
             result.append(("A" + str(self.D.n), self.D.n - self.k + 1),)
+            if self.D.n == 3 and self.k in [1, 3]: result.extend([("B2", 2), ("C2", 1), ("D3", 2), ("D3", 3)])
+            if self.D.n == 3 and self.k == 2: result.append(("D3", 1),)
+            if self.D.n % 2 == 1 and self.k in [1, self.D.n]: result.append(("C" + str((self.D.n + 1) / 2), 1),)
         if self.D.T == "B":
-          if self.D.n == 2 and self.k == 1: result.append(("C2", 2),)
-          if self.D.n == 2 and self.k == 2: result.extend([("C2", 1), ("A3", 1), ("A3", 3)])
-          if self.D.n == 3 and self.k == 1: result.append(("G2", 1),)
-          if self.D.n == 3 and self.k == 3: result.extend([("D4", 1), ("D4", 3), ("D4", 4)])
-          if self.D.n == self.k: result.extend([("D" + str(self.D.n + 1), self.D.n), ("D" + str(self.D.n + 1), self.D.n + 1)])
+            if self.D.n == 2 and self.k == 1: result.append(("C2", 2),)
+            if self.D.n == 2 and self.k == 2: result.extend([("D3", 2), ("D3", 3), ("C2", 1), ("A3", 1), ("A3", 3)])
+            if self.D.n == 3 and self.k == 1: result.append(("G2", 1),)
+            if self.D.n == 3 and self.k == 3: result.extend([("D4", 1), ("D4", 3), ("D4", 4)])
+            if self.D.n == self.k: result.extend([("D" + str(self.D.n + 1), self.D.n), ("D" + str(self.D.n + 1), self.D.n + 1)])
         if self.D.T == "C":
-          if self.k == 1: result.extend([("A" + str(2*self.D.n - 1), 1), ("A" + str(2*self.D.n - 1), 2*self.D.n - 1)])
-          if self.D.n == 2 and self.k == 1: result.append(("B2", 1),)
+            if self.k == 1: result.extend([("A" + str(2*self.D.n - 1), 1), ("A" + str(2*self.D.n - 1), 2*self.D.n - 1)])
+            if self.D.n == 2 and self.k == 1: result.append(("B2", 1),)
         if self.D.T == "D":
-          if self.D.n == 4 and self.k in [1, 3, 4]: result.extend([("D4", 1), ("D4", 3), ("D4", 4), ("B3", 3)])
-          if self.k in [self.D.n - 1, self.D.n]: result.extend([("B" + str(self.D.n - 1), min(self.D.n - 1, self.D.n - (self.k - self.D.n + 1))), ("D" + str(self.D.n), self.D.n - (self.k - self.D.n + 1))])
+            if self.D.n == 3 and self.k == 1: result.append(("A3", 2),)
+            if self.D.n == 4 and self.k in [1, 3, 4]: result.extend([("D4", 1), ("D4", 3), ("D4", 4), ("B3", 3)])
+            if self.k in [self.D.n - 1, self.D.n]: result.extend([("B" + str(self.D.n - 1), min(self.D.n - 1, self.D.n - (self.k - self.D.n + 1))), ("D" + str(self.D.n), self.D.n - (self.k - self.D.n + 1))])
         if self.D.T == "E":
-          if self.D.n == 6 and self.k in [1, 6]: result.extend([("E6", 1), ("E6", 6)])
-          if self.D.n == 6 and self.k in [3, 5]: result.extend([("E6", 3), ("E6", 5)])
+            if self.D.n == 6 and self.k in [1, 6]: result.extend([("E6", 1), ("E6", 6)])
+            if self.D.n == 6 and self.k in [3, 5]: result.extend([("E6", 3), ("E6", 5)])
         if self.D.T == "G":
             if self.k == 1: result.append(("B3", 1),)
 
@@ -343,7 +348,6 @@ class Grassmannian:
     def embedding(self):
         global grassmannians
 
-        print(grassmannians)
         try:
             return grassmannians[self.D.T][self.D.n][self.k]["embedding"]
         except:

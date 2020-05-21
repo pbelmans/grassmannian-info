@@ -14,8 +14,13 @@
 </th>
 {% endmacro %}
 
-{% macro table(T, ns) %}
-{% endmacro %}
+
+{% macro pretty_print_labels(tuples) -%}
+[{% for tuple in tuples -%}
+"{{ tuple[0] }}-{{ tuple[1] }}"{% if not loop.last %}, {% endif %}
+{%- endfor %}]
+{%- endmacro %}
+
 
 {% block content %}
 <form id="controls" class="form-group row">
@@ -178,53 +183,29 @@
 
 <script type="text/javascript">
 
-// say which Grassmannians are isomorphic
-// TODO use the data from the Python dict
-function isomorphisms(label) {
-  var T = label[0];
-  var n = parseInt(label.split("-")[0].slice(1));
-  var k = parseInt(label.split("-")[1]);
+// dictionary with isomorphisms as determined by Grassmannian.isomorphisms() for all types present on this page
+var isomorphisms = new Object();
+{% for T in ["A", "B", "C", "D"] -%}
+  {% for n in range(1, 8) -%}
+    {% for k in range(1, n + 1) %}
+isomorphisms["{{ T }}{{ n }}-{{ k }}"] = {{ pretty_print_labels(Grassmannian(T, n, k).isomorphisms()) }};
+    {%- endfor %}
+  {%- endfor %}
+{% endfor %}
 
-  var result = [label];
-  console.log(n / 2);
+{% for n in range(6, 9) %}
+    {% for k in range(1, n + 1) %}
+isomorphisms["E{{ n }}-{{ k }}"] = {{ pretty_print_labels(Grassmannian("E", n, k).isomorphisms()) }};
+    {%- endfor %}
+{% endfor %}
 
-  switch (T) {
-    case "A":
-      result.push([T, n, "-", n - k + 1].join(""))
-      if (n == 3 && (k == 1 || k == 3)) result.push("B2-2", "C2-1", "D3-2", "D3-3");
-      if (n == 3 && k == 2) result.push("D3-1");
-      if (n % 2 == 1 && (k == 1 || k == n)) result.push(["C", Math.floor((n + 1) / 2), "-", 1].join(""));
-      break;
-    case "B":
-      if (n == 2 && k == 1) result.push("C2-2");
-      if (n == 2 && k == 2) result.push("A3-1", "A3-3", "C2-1", "D3-2", "D3-3");
-      if (n == 3 && k == 1) result.push("G2-1");
-      if (n == 3 && k == 3) result.push("D4-1");
-      if (n == k) result.push(["D", n + 1, "-", n].join(""), ["D", n + 1, "-", n + 1].join(""));
-      break;
-    case "C":
-      if (k == 1) result.push(["A", 2*n - 1, "-", 1].join(""), ["A", 2*n - 1, "-", 2*n - 1].join(""));
-      if (n == 2 && k == 2) result.push("B2-1");
-      break;
-    case "D":
-      if (n == 3 && k == 1) result.push("A3-2");
-      if (n == 3 && (k == 2 || k == 3)) result.push("A3-1", "A3-3", "C2-1", "B2-2");
-      if (n == 4 && (k == 1 || k == 3 || k == 4)) result.push("D4-1", "D4-3", "D4-4", "B3-3");
-      if (k == n - 1 || k == n) result.push(["B", n - 1, "-", Math.min(n - 1, n - (k - n + 1))].join(""), ["D", n, "-", n - (k - n + 1)].join(""));
-      break;
-    case "E":
-      if (n == 6 && k == 1) result.push("E6-6");
-      if (n == 6 && k == 6) result.push("E6-1");
-      if (n == 6 && k == 3) result.push("E6-5");
-      if (n == 6 && k == 5) result.push("E6-3");
-      break;
-    case "G":
-      if (k == 1) result.push("B3-1");
-      break;
-  }
+{% for k in range(1, 5) %}
+isomorphisms["F4-{{ k }}"] = {{ pretty_print_labels(Grassmannian("F", 4, k).isomorphisms()) }};
+{%- endfor %}
 
-  return [...new Set(result)];
-}
+{% for k in range(1, 3) %}
+isomorphisms["G2-{{ k }}"] = {{ pretty_print_labels(Grassmannian("G", 2, k).isomorphisms()) }};
+{%- endfor %}
 
 // the data fields
 var fields = ["name", "dimension", "index", "euler", "type"];
@@ -237,7 +218,7 @@ $("td.entry").mouseenter(function(e) {
   var label = $(e.currentTarget).data("label");
 
   // make the isomorphic ones look semi-active
-  var isomorphic = $("*[data-label='" + isomorphisms(label).join("'], *[data-label='") + "']");
+  var isomorphic = $("*[data-label='" + isomorphisms[label].join("'], *[data-label='") + "']");
   isomorphic.addClass("alternative");
 
   // make the current one look active
@@ -267,7 +248,6 @@ $("td.entry").mouseleave(function() {
 });
 
 // change the color by activating a class which triggers the styling
-// TODO make a legend
 $("input[type=radio][name=color]").change(function() {
   $("td.entry").removeClass("minuscule cominuscule adjoint coadjoint");
   $("div#typing div.form-check").removeClass("active");
