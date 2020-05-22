@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
 
 div#menu {
   background-color: black;
@@ -223,4 +223,14 @@ svg.lefschetz {
 
 table.freudenthal {
   font-size: 14px;
+
+  div.information {
+    display: none;
+  }
+}
+
+table.freudenthal.expanded {
+  div.information {
+    display: block;
+  }
 }

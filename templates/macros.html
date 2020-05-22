@@ -23,9 +23,11 @@
       <polyline points="{{ (n - 2) * 20 }},12 {{ (n - 1) * 20 }},12" />
       {% for i in range(n) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="C{{ n }}-{{ i + 1 }}" {% if i + 1 in k %}class="active"{% endif %} />{% endfor %}
     {% elif T == "D" %}
-      <polyline points="0,10 {{ (n - 3) * 20 }},10" />
-      <polyline points="{{ (n - 3) * 20 }},10 {{ (n - 2) * 20 }},0" />
-      <polyline points="{{ (n - 3) * 20 }},10 {{ (n - 2) * 20 }},20" />
+      {% if n >= 3 %}
+        <polyline points="0,10 {{ (n - 3) * 20 }},10" />
+        <polyline points="{{ (n - 3) * 20 }},10 {{ (n - 2) * 20 }},0" />
+        <polyline points="{{ (n - 3) * 20 }},10 {{ (n - 2) * 20 }},20" />
+      {% endif %}
       {% for i in range(n - 2) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="D{{ n }}-{{ i + 1 }}" {% if i + 1 in k %}class="active"{% endif %} />{% endfor %}
       <circle cx="{{ (n - 2) * 20 }}" cy="0" r="5" data-label="D{{ n }}-{{ n - 1 }}"  {% if n - 1 in k %}class="active"%{% endif %}/>
       <circle cx="{{ (n - 2) * 20 }}" cy="20" r="5" data-label="D{{ n }}-{{ n }}" {% if n in k %}class="active"%{% endif %}/>
@@ -82,3 +84,31 @@
 {% endmacro %}
 
 
+{% macro type(G) -%}
+  {%- if G.is_cominuscule() -%}cominuscule {% endif %}
+  {%- if G.is_minuscule() -%}minuscule {% endif %}
+  {%- if G.is_adjoint() -%}adjoint {% endif %}
+  {%- if G.is_coadjoint() -%}coadjoint{% endif %}
+{%- endmacro %}
+
+
+{% macro data(G) -%}
+data-dimension="{{ G.dimension() }}" data-index="{{ G.index() }}" data-euler="{{ G.rank() }}" data-name="{{ G.name() | safe }}"
+{%- endmacro %}
+
+
+{% macro entry(G) %}
+<td class="entry" data-type="{{ type(G) }}" {{ data(G) }} data-label="{{ G.D.T }}{{ G.D.n }}-{{ G.k }}">
+  <div class="alpha">
+    <a href="/{{ G.D.T }}{{ G.D.n }}/{{ G.k }}">{{ G.html() | safe }}</a>
+
+    <div class="information">
+      \begin{align*}
+        d&={{ G.dimension() }} \\
+        i&={{ G.index() }} \\
+        \chi&={{ G.rank() }}
+      \end{align*}
+    </div>
+  </div>
+</td>
+{% endmacro %}

@@ -5,14 +5,22 @@
 {% import "macros.html" as macros %}
 
 {% macro variety(G) %}
-{{ variety_template(G.latex(), G.embedding(), link=G.url()) }}
+{{ variety_template(G.latex(), G.embedding(), dimension=G.dimension(), index=G.index(), rank=G.rank(), link=G.url()) }}
 {% endmacro %}
 
-{% macro variety_template(latex, embedding, link="") %}
+{% macro variety_template(latex, embedding, dimension=0, index=0, rank=0, link="") %}
 <td class="text-center">
   {% if link != "" %}<a href="/{{ link }}">{% endif %}
   ${{ latex | safe }}\hookrightarrow\mathbb{P}^{ {{ embedding }} }$
   {% if link != "" %}</a>{% endif %}
+
+  <div class="information">
+    \begin{align*}
+      d&={{ dimension }} \\
+      i&={{ index }} \\
+      \chi&={{ rank }}
+    \end{align*}
+  </div>
 </td>
 {% endmacro %}
 
@@ -20,6 +28,15 @@
 <header class="text-center">
   <h2 class="mt-3">The Freudenthal magic square</h2>
 </header>
+
+<form id="controls" class="form-group row">
+  <div class="col-lg-6">
+    <div class="form-check pl-0 pt-3">
+      <input id="information" type="checkbox" data-toggle="toggle" data-on="more" data-off="less" data-onstyle="secondary" data-size="xs">
+      <label for="information">information to display
+    </div>
+  </div>
+</form>
 
 <table class="table freudenthal">
   <tbody>
@@ -74,7 +91,7 @@
 
     <tr>
       <td class="text-center">{{ macros.dynkin("A", 2, height=40, k=[1]) }}</td>
-      <td class="text-center">{{ macros.dynkin("A", 2, height=40, k=[1]) }}{{ macros.dynkin("A", 2, height=40, k=[1]) }}</td>
+      <td class="text-center">{{ macros.dynkin("A", 2, height=40, k=[2]) }}{{ macros.dynkin("A", 2, height=40, k=[1]) }}</td>
       <td class="text-center">{{ macros.dynkin("A", 5, height=40, k=[2]) }}</td>
       <td class="text-center">{{ macros.dynkin("E", 6, height=40, k=[1]) }}</td>
     </tr>
@@ -126,7 +143,134 @@
       <td class="text-center">{{ Dynkin("E", 8).lie() | safe }}</td>
     </tr>
   </tbody>
-<table>
+</table>
+
+
+<h2>Freudenthal's $3\times 3$ square</h2>
+<p>There also exists a $3\times 3$ version of Freudenthal's magic square for all $n\geq 3$, where the $n=3$ corresponds to the upper left subsquare of Freudenthal's magic square.
+
+{% set freudenthal_3x3_range = 8 %}
+
+<ul class="nav nav-tabs" id="freudenthal-3x3" role="tablist">
+  <!--
+  <li class="nav-item">
+    <a class="nav-link active" id="freudenthal-3x3-n" data-toggle="tab" href="#freudenthal-3x3-n" role="tab" aria-controls="home" aria-selected="true">$n\geq 3$</a>
+  </li>
+  -->
+  {% for n in range(3, freudenthal_3x3_range) %}
+    <li class="nav-item">
+      <a class="nav-link{% if n == 3 %} active{% endif %}" id="freudenthal-3x3-{{ n }}-tab" data-toggle="tab" href="#freudenthal-3x3-{{ n }}" role="tab" aria-controls="freudenthal-3x3-{{ n }}" aria-selected="{% if n == 3%}true{% else %}false{% endif %}">$n={{ n }}$</a>
+    </li>
+  {% endfor %}
+</ul>
+
+<div class="tab-content" id="freudenthal-3x3-content">
+{% for n in range(3, freudenthal_3x3_range) %}
+  <div class="tab-pane fade{% if n == 3%} show active{% endif %}" id="freudenthal-3x3-{{ n }}" role="tabpanel" aria-labelledby="freudenthal-3x3-{{ n }}-tab">
+    <table class="table freudenthal">
+      <tbody>
+        <tr>
+          <th colspan="3" class="text-center">varieties</th>
+          <th>projective geometric description</th>
+        </tr>
+
+        <tr>
+          {% if n % 2 == 1 %}
+            {% set G = Grassmannian("B", n // 2, 1) %}
+            {{ variety_template(G.latex(), (n + 1) * n // 2 - 2, dimension=G.dimension(), index=G.index(), rank=G.rank(), link=["B", n // 2, "/1"] | join) }}
+          {% else %}
+            {% set G = Grassmannian("D", n // 2, 1) %}
+            {{ variety_template(G.latex(), (n + 1) * n // 2 - 2, dimension=G.dimension(), index=G.index(), rank=G.rank(), link=["D", n // 2, "/1"] | join) }}
+          {% endif %}
+          {{ variety_template(["\mathbb{P}(\mathrm{T}_{\mathbb{P}^{", n - 1, "}})"] | join, n*n - 2, dimension=2*n-3, index=n-1, rank=n*(n-1)) }}
+          {{ variety(Grassmannian("C", n, 2)) }}
+          <td>hyperplane section</td>
+        </tr>
+
+        <tr>
+          {{ variety_template(["\mathbb{P}^{", n - 1, "}"] | join, (n + 1) * n // 2 - 1, dimension=n-1, index=n-1, rank=n, link=["A", n - 1, "/1"] | join) }}
+          {{ variety_template(["\mathbb{P}^{", n - 1, "}\\times\mathbb{P}^{", n - 1, "}"] | join, n*n - 1, dimension=(n-1)*(n-1), index=n, rank=n*n) }}
+          {{ variety(Grassmannian("A", 2*n-1, 2)) }}
+          <td></td>
+        </tr>
+
+        <tr>
+          {{ variety(Grassmannian("C", n, n)) }}
+          {{ variety(Grassmannian("A", 2*n-1, n)) }}
+          {{ variety(Grassmannian("D", 2*n, 2*n)) }}
+          <td></td>
+        </tr>
+      </tbody>
+
+      <tbody>
+        <tr>
+          <th colspan="3" class="text-center">marked Dynkin diagrams</th>
+        </tr>
+        <tr>
+          {% if n % 2 == 1 %}
+            <td class="text-center">{{ macros.dynkin("B", n // 2, height=40, k=[1]) }}</td>
+          {% else %}
+            <td class="text-center">{{ macros.dynkin("D", n // 2, height=40, k=[1]) }}</td>
+          {% endif %}
+          <td class="text-center">{{ macros.dynkin("A", n-1, height=40, k=[1,n-1]) }}</td>
+          <td class="text-center">{{ macros.dynkin("C", n, height=40, k=[2]) }}</td>
+        </tr>
+
+        <tr>
+          <td class="text-center">{{ macros.dynkin("A", n-1, height=40, k=[1]) }}</td>
+          <td class="text-center">{{ macros.dynkin("A", n-1, height=40, k=[n-1]) }}{{ macros.dynkin("A", n-1, height=40, k=[1]) }}</td>
+          <td class="text-center">{{ macros.dynkin("A", 2*n-1, height=40, k=[2]) }}</td>
+        </tr>
+
+        <tr>
+          <td class="text-center">{{ macros.dynkin("C", n, height=40, k=[n]) }}</td>
+          <td class="text-center">{{ macros.dynkin("A", 2*n-1, height=40, k=[n]) }}</td>
+          <td class="text-center">{{ macros.dynkin("D", 2*n, height=40, k=[2*n-1]) }}</td>
+        </tr>
+      </tbody>
+
+      <tbody>
+        <tr>
+          <th colspan="3" class="text-center">Lie algebras</th>
+        </tr>
+        <tr>
+          {% if n % 2 == 1 %}
+            <td class="text-center">{{ Dynkin("B", n // 2).lie() | safe }}</td>
+          {% else %}
+            <td class="text-center">{{ Dynkin("D", n // 2).lie() | safe }}</td>
+          {% endif %}
+          <td class="text-center">{{ Dynkin("A", n-1).lie() | safe }}</td>
+          <td class="text-center">{{ Dynkin("C", n).lie() | safe }}</td>
+        </tr>
+
+        <tr>
+          <td class="text-center">{{ Dynkin("A", n-1).lie() | safe }}</td>
+          <td class="text-center">{{ Dynkin("A", n-1).lie() | safe }}x{{ Dynkin("A", n-1).lie() | safe }}</td>
+          <td class="text-center">{{ Dynkin("A", 2*n-1).lie() | safe }}</td>
+        </tr>
+
+        <tr>
+          <td class="text-center">{{ Dynkin("C", n).lie() | safe }}</td>
+          <td class="text-center">{{ Dynkin("A", 2*n-1).lie() | safe }}</td>
+          <td class="text-center">{{ Dynkin("D", 2*n).lie() | safe }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{% endfor %}
+</div>
+
+<script type="text/javascript">
+$(function() {
+  // toggle between no or lots of information by activating a class which triggers the styling
+  $("input#information").change(function() {
+    if ($(this).prop("checked"))
+      $("table").addClass("expanded");
+    else
+      $("table").removeClass("expanded");
+  });
+});
+</script>
 
 {% endblock %}
 
