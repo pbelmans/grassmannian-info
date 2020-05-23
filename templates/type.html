@@ -72,6 +72,18 @@
 
 {% macro roots(D) %}
 <dl class="row">
+  <dt class="col-3 text-right">root space
+  <dd class="col-9">
+    {% if D.T == "A" %}$V\subseteq\mathbb{R}^{n+1}$ given by $\displaystyle\sum_{i=1}^{n+1}v_i=0$ for $\displaystyle \sum_{i=1}^{n+1}v_i\epsilon_i\in V${% endif %}
+    {% if D.T == "B" %}$V=\mathbb{R}^n${% endif %}
+    {% if D.T == "C" %}$V=\mathbb{R}^n${% endif %}
+    {% if D.T == "D" %}{% endif %}
+    {% if D.T == "E" and D.n == 6 %}{% endif %}
+    {% if D.T == "E" and D.n == 7 %}{% endif %}
+    {% if D.T == "E" and D.n == 8 %}{% endif %}
+    {% if D.T == "F" %}{% endif %}
+    {% if D.T == "G" %}$V\subseteq\mathbb{R}^{3}$ given by $v_1+v_2+v_3=0$ for $v_1\epsilon_1+v_2\epsilon_2+v_3\epsilon_3\in V${% endif %}
+
   <dt class="col-3 text-right">roots
   <dd class="col-9">
     {% if D.T == "A" %}$\epsilon_i-\epsilon_j$, for $i\neq j$ and $i,j=1,\ldots,n+1${% endif %}
@@ -82,14 +94,14 @@
     {% if D.T == "E" and D.n == 7 %}TODO{% endif %}
     {% if D.T == "E" and D.n == 8 %}TODO{% endif %}
     {% if D.T == "F" %}TODO{% endif %}
-    {% if D.T == "G" %}TODO{% endif %}
+    {% if D.T == "G" %}$\pm(\epsilon_1-\epsilon_2),\pm(\epsilon_1-\epsilon_3),\pm(\epsilon_2-\epsilon_3),\pm(2\epsilon_1-\epsilon_2-\epsilon_3),\pm(2\epsilon_2-\epsilon_1-\epsilon_3),\pm(2\epsilon_3-\epsilon_1-\epsilon_2)${% endif %}
 
   <dt class="col-3 text-right">number of roots
   <dd class="col-9">
-    {% if D.T == "A" %}$n(n+1)={{ D.n }}\cdot{{ D.n + 1 }}!={{ D.number_of_roots() }}${% endif %}
-    {% if D.T == "B" %}$2n^2=2\cdot{{ D.n }}^2={{ D.number_of_roots() }}${% endif %}
-    {% if D.T == "C" %}$2n^2=2\cdot{{ D.n }}^2={{ D.number_of_roots() }}${% endif %}
-    {% if D.T == "D" %}$2n(n-1)=2\cdot{{ D.n }}\cdot{{ D.n - 1 }}={{ D.number_of_roots() }}${% endif %}
+    {% if D.T == "A" %}$n(n+1)={{ D.number_of_roots() }}${% endif %}
+    {% if D.T == "B" %}$2n^2={{ D.number_of_roots() }}${% endif %}
+    {% if D.T == "C" %}$2n^2={{ D.number_of_roots() }}${% endif %}
+    {% if D.T == "D" %}$2n(n-1)={{ D.number_of_roots() }}${% endif %}
     {% if D.T in ["E", "F", "G"] %}${{ D.number_of_roots() }}${% endif %}
 
 
@@ -103,43 +115,104 @@
     {% if D.T == "E" and D.n == 7 %}TODO{% endif %}
     {% if D.T == "E" and D.n == 8 %}TODO{% endif %}
     {% if D.T == "F" %}TODO{% endif %}
-    {% if D.T == "G" %}TODO{% endif %}
+    {% if D.T == "G" %}$\alpha_1=\epsilon_1-\epsilon_2, \alpha_2=-2\epsilon_1+\epsilon_2+\epsilon_3${% endif %}
+
+  <dt class="col-3 text-right">positive roots
+  <dd class="col-9">
+    {% if D.T == "A" %}$\displaystyle\epsilon_i-\epsilon_j=\sum_{i\leq k&lt;j}\alpha_k$ for $1\leq i&lt;j\leq n+1${% endif %}
+    {% if D.T == "B" %}
+      \begin{cases}
+        \displaystyle\epsilon_i=\sum_{i\leq k\leq n}\alpha_k & 1\leq i\leq n \\
+        \displaystyle\epsilon_i-\epsilon_j=\sum_{i\leq k&lt;j}\alpha_k & 1\leq i&lt;j\leq n \\
+        \displaystyle\epsilon_i+\epsilon_j=\sum_{i\leq k&lt;j}\alpha_k + 2\sum_{j\leq k\leq n}\alpha_k & 1\leq i&lt;j\leq n
+      \end{cases}
+    {% endif %}
+    {% if D.T == "C" %}
+      \begin{cases}
+        \displaystyle\epsilon_i-\epsilon_j=\sum_{i\leq k&lt;j}\alpha_k & 1\leq i&lt;j\leq n \\
+        \displaystyle\epsilon_i+\epsilon_j=\sum_{i\leq k&lt;j}\alpha_k & 2\sum_{j\leq k&lt;n}\alpha_k+\alpha_n & 1\leq i&lt;j\leq n \\
+        \displaystyle2\epsilon_i=2\sum_{i\leq k&lt;n}\alpha_k+\alpha_n & 1\leq i\leq n
+      \end{cases}
+    {% endif %}
+    {% if D.T == "D" %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 6 %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 7 %}TODO{% endif %}
+    {% if D.T == "E" and D.n == 8 %}TODO{% endif %}
+    {% if D.T == "F" %}TODO{% endif %}
+    {% if D.T == "G" %}$\alpha_1,\alpha_2,\alpha_1+\alpha_2,2\alpha_1+\alpha_2,3\alpha_1+\alpha_2,3\alpha_1+2\alpha_2${% endif %}
 
   <dt class="col-3 text-right">highest root
   <dd class="col-9">
-    {% if D.T == "A" %}$\epsilon_1-\epsilon_{n+1}=\alpha_1+\ldots+\alpha_n=\omega_1+\omega_n${% endif %}
-    {% if D.T == "B" %}TODO{% endif %}
-    {% if D.T == "C" %}TODD{% endif %}
+    {% if D.T == "A" %}$\widetilde{\alpha}=\epsilon_1-\epsilon_{n+1}=\alpha_1+\ldots+\alpha_n=\omega_1+\omega_n${% endif %}
+    {% if D.T == "B" %}
+      \begin{align}
+        \widetilde{\alpha}&=\epsilon_1+\epsilon_2=\alpha_1+2\alpha_2+\ldots+2\alpha_n \\
+        &=\begin{cases} 2\omega_2 & n=2 \\ \omega_2 & n\neq 3 \end{cases}
+      \end{align}
+    {% endif %}
+    {% if D.T == "C" %}
+      \begin{align}
+        \widetilde{\alpha}&=2\epsilon_1=2\alpha_1+2\alpha_2+\ldots+2\alpha_{n-1}+\alpha_n \\
+        &=2\omega_1
+      \end{align}
+    {% endif %}
     {% if D.T == "D" %}TODO{% endif %}
     {% if D.T == "E" and D.n == 6 %}TODO{% endif %}
     {% if D.T == "E" and D.n == 7 %}TODO{% endif %}
     {% if D.T == "E" and D.n == 8 %}TODO{% endif %}
     {% if D.T == "F" %}TODO{% endif %}
-    {% if D.T == "G" %}TODO{% endif %}
+    {% if D.T == "G" %}$\widetilde{\alpha}=-\epsilon_1-\epsilon_2+2\epsilon_3=3\alpha_1+2\alpha_2=\omega_2${% endif %}
 
   <dt class="col-3 text-right">fundamental weights
   <dd class="col-9">
-    {% if D.T == "A" %}TODO{% endif %}
-    {% if D.T == "B" %}TODO{% endif %}
-    {% if D.T == "C" %}TODD{% endif %}
+    {% if D.T == "A" %}$\displaystyle\omega_i=(\epsilon_1+\ldots+\epsilon_i)-\frac{i}{n+1}\sum_{j=1}^{n+1}\epsilon_j${% endif %}
+    {% if D.T == "B" %}
+      \begin{align}
+        \omega_i&=\epsilon_1+\epsilon_2+\ldots+\epsilon_i & 1\leq i&lt;n \\
+        &=\alpha_1+2\alpha_2+\ldots+(i-1)\alpha_{i-1}+i(\alpha_i+\ldots+\alpha_n) \\
+        \omega_n&=\frac{1}{2}(\epsilon_1+\ldots+\epsilon_n) \\
+        &=\frac{1}{2}(\alpha_1+2\alpha_2+\ldots+2\alpha_n)
+      \end{align}
+    {% endif %}
+    {% if D.T == "C" %}
+      \begin{align}
+        \omega_i&=\epsilon_1+\epsilon_2+\ldots+\epsilon_i & 1\leq i\leq n \\
+        &=\alpha_1+2\alpha_2+\ldots+(i-1)\alpha_{i-1}+i\left( \alpha_i+\alpha_{i+1}+\ldots+\alpha_{n-1}+\frac{1}{2}\alpha_n \right)
+      \end{align}
+    {% endif %}
     {% if D.T == "D" %}TODO{% endif %}
     {% if D.T == "E" and D.n == 6 %}TODO{% endif %}
     {% if D.T == "E" and D.n == 7 %}TODO{% endif %}
     {% if D.T == "E" and D.n == 8 %}TODO{% endif %}
     {% if D.T == "F" %}TODO{% endif %}
-    {% if D.T == "G" %}TODO{% endif %}
+    {% if D.T == "G" %}$\omega_1=2\alpha_1+\alpha_2,\omega_2=3\alpha_1+2\alpha_2${% endif %}
 
-  <dt class="col-3 text-right">half-sum of positive roots
+  <dt class="col-3 text-right">sum of positive roots
   <dd class="col-9">
-    {% if D.T == "A" %}TODO{% endif %}
-    {% if D.T == "B" %}TODO{% endif %}
-    {% if D.T == "C" %}TODD{% endif %}
+    {% if D.T == "A" %}
+      \begin{align}
+        2\rho&=n\epsilon_1+(n-2)\epsilon_2+(n-4)\epsilon_3-(n-2)\epsilon_n-n\epsilon_{n+1} \\
+        &=n\alpha_1+2(n-1)\alpha_2+\ldots+i(n-i+1)\alpha_i+\ldots+n\alpha_n
+      \end{align}
+    {% endif %}
+    {% if D.T == "B" %}
+      \begin{align}
+        2\rho&=(2n-1)\epsilon_1+(2n-3)\epsilon_2+\ldots+3\epsilon_{n-1}+\epsilon_n \\
+        &=(2n-1)\alpha_1+2(2n-2)\alpha_2+\ldots+i(2n-i)\alpha_i+\ldots+n^2\alpha_n
+      \end{align}
+    {% endif %}
+    {% if D.T == "C" %}
+      \begin{align}
+        2\rho&=2n\epsilon_1+(2n-2)\epsilon_2+\ldots+4\epsilon_{n-1}+2\epsilon_n \\
+        &=2n\alpha_1+2(2n-1)\alpha_2+\ldots+i(2n-i+1)\alpha_i+\ldots+(n-1)(n+2)\alpha_{n-1}+\frac{1}{2}n(n+1)\alpha_n
+      \end{align}
+    {% endif %}
     {% if D.T == "D" %}TODO{% endif %}
     {% if D.T == "E" and D.n == 6 %}TODO{% endif %}
     {% if D.T == "E" and D.n == 7 %}TODO{% endif %}
     {% if D.T == "E" and D.n == 8 %}TODO{% endif %}
     {% if D.T == "F" %}TODO{% endif %}
-    {% if D.T == "G" %}TODO{% endif %}
+    {% if D.T == "G" %}$2\rho=2(5\alpha_1+3\alpha_2)${% endif %}
 
 </dl>
 {% endmacro %}
@@ -156,6 +229,9 @@
 
 
 {% macro cartan(D) %}
+<dl class="row">
+  <dt class="col-3 text-right">Cartan matrix
+  <dd class="col-9">
 \begin{pmatrix}
 {% for i in range(D.n) %}
   {% for j in range(D.n) %}
@@ -164,10 +240,36 @@
   \\
 {% endfor %}
 \end{pmatrix}
+
+  <dt class="col-3 text-right">determinant
+  <dd class="col-9">
+    {% if D.T == "A" %}$n+1={{ D.n + 1 }}${% endif %}
+    {% if D.T == "B" %}$2${% endif %}
+    {% if D.T == "C" %}$2${% endif %}
+    {% if D.T == "D" %}$4${% endif %}
+    {% if D.T == "E" and D.n == 6 %}{% endif %}
+    {% if D.T == "E" and D.n == 7 %}{% endif %}
+    {% if D.T == "E" and D.n == 8 %}{% endif %}
+    {% if D.T == "F" %}$1${% endif %}
+    {% if D.T == "G" %}$1${% endif %}
+</dl>
 {% endmacro %}
 
 
 {% block content %}
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  },
+  svg: {
+    fontCache: 'global',
+    displayAlign: 'left',
+  },
+  noReflows: true,
+};
+</script>
+
 <header class="text-center">
   <h2 class="mt-3">Dynkin type $\mathrm{ {{ D.T }} }_{ {{ D.n }} }$</h2>
 
@@ -190,11 +292,11 @@
   </div>
 </header>
 
-<div class="row">
+<div class="row" id="type-information">
   <div class="col-12">
     {{ macros.component("Basic information", basic(D)) }}
 
-    {{ macros.component("Roots and fundamental weights", roots(D)) }}
+    {{ macros.component("Description of the root system", roots(D)) }}
 
     {{ macros.component("Cartan matrix", cartan(D)) }}
   </div>
