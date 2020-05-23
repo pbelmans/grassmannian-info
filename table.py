@@ -618,10 +618,14 @@ def show_type(route):
         pass
 
 
-@app.route("/<string:T><int:n>/<int:k>")
-def show_grassmannian(T, n, k):
+@app.route("/<string:D>/<int:k>")
+def show_grassmannian(D, k):
+    T = D[0]
+    n = int(D[1:])
+
     if T in ["B", "C"] and n == 1:
         return redirect("/A1/1")
+    print(T, n, k)
 
     return render_template("grassmannian.html", G=Grassmannian(T, n, k))
 
