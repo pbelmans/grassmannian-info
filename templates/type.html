@@ -483,7 +483,7 @@
   <div class="row">
     <div class="col-2">
       {% if (D.T == "A" and D.n >= 2) or (D.T in ["B", "C"] and D.n >= 3) or (D.T == "D" and D.n >= 5) or (D.T == "E" and D.n in [7, 8]) %}
-        <a href="/{{ D.T }}{{ D.n - 1 }}">&laquo;$\mathrm{ {{ D.T }} }_{ {{ D.n - 1 }} }$</a>
+        <a class="h4" href="/{{ D.T }}{{ D.n - 1 }}">&laquo;$\mathrm{ {{ D.T }} }_{ {{ D.n - 1 }} }$</a>
       {% endif %}
     </div>
 
@@ -493,7 +493,7 @@
 
     <div class="col-2">
       {% if D.T in ["A", "B", "C", "D"] or (D.T == "E" and D.n in [6, 7]) %}
-        <a href="/{{ D.T }}{{ D.n + 1 }}">$\mathrm{ {{ D.T }} }_{ {{ D.n + 1 }} }$&raquo;</a>
+        <a class="h4" href="/{{ D.T }}{{ D.n + 1 }}">$\mathrm{ {{ D.T }} }_{ {{ D.n + 1 }} }$&raquo;</a>
       {% endif %}
     </div>
   </div>

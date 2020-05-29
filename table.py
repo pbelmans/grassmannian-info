@@ -313,7 +313,7 @@ class Grassmannian:
 
     def plaintext(self):
         # TODO eventually the plaintext function just come here?
-        return name(self.D.T, self.D.n, self.k)
+        return plaintext(self.D.T, self.D.n, self.k)
 
 
     def isomorphisms(self):
@@ -460,7 +460,7 @@ def html(T, n, k):
 def plaintext(T, n, k):
     if T == "A":
         if k == 1: return "P{}".format(n)
-        elif k == n: return "P{}".format(n)
+        elif k == n: return "P{}&vee;".format(n)
         else: return "Gr({},{})".format(k, n + 1)
 
     elif T == "B":
@@ -511,8 +511,8 @@ def name(T, n, k):
 
     elif T == "D":
         if k == 1: return "quadric"
-        elif n == 3 and k in [2, 3]: name("A", 3, 1)
-        elif n == 4 and k in [3, 4]: name("D", 4, 1)
+        elif n == 3 and k in [2, 3]: return name("A", 3, 1)
+        elif n == 4 and k in [3, 4]: return name("D", 4, 1)
         elif k <= n - 2: return "orthogonal Grassmannian"
         else: return "orthogonal Grassmannian, spinor variety"
 
@@ -525,7 +525,7 @@ def name(T, n, k):
         if k == 1: return name("B", 3, 1)
         if k == 2: return "\\mathrm{G}_2$-Grassmannian"
 
-    return "generalised Grassmannian of type ($\\mathrm{{{}}}_{{{}}}/\mathrm{{P}}_{{{}}}$)".format(T, n, k)
+    return "generalised Grassmannian of type {}<sub>{}</sub>/P<sub>{}</sub>".format(T, n, k)
 
 
 def exceptional(D, k):

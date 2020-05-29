@@ -51,7 +51,7 @@
     <div class="col-lg-6 mt-3 mt-lg-0" id="derived">
       <div class="form-check exceptional">
         <input class="form-check-input" type="radio" id="exceptional" name="color" value="exceptional">
-        <label class="form-check-label" for="exceptional">has full exceptional collection</label>
+        <label class="form-check-label" for="exceptional">full exceptional collection?</label>
       </div>
     </div>
   </div>
@@ -165,6 +165,10 @@
         <td id="name"></td>
       </tr>
       <tr>
+        <th scope="row" style="vertical-align: middle">Dynkin diagram</th>
+        <td id="dynkin" style="vertical-align: middle">
+      </tr>
+      <tr>
         <th scope="row">dimension</th>
         <td id="dimension"></td>
       </tr>
@@ -181,8 +185,9 @@
         <td id="type"></td>
       </tr>
       <tr>
-        <th scope="row">Dynkin diagram</th>
-        <td id="dynkin">
+        <th scope="row">has full exceptional collection</th>
+        <td id="full"></td>
+      </tr>
     </table>
   </div>
 </div>
@@ -213,7 +218,7 @@ isomorphisms["G2-{{ k }}"] = {{ pretty_print_labels(Grassmannian("G", 2, k).isom
 {%- endfor %}
 
 // the data fields
-var fields = ["name", "dimension", "index", "euler", "type"];
+var fields = ["name", "dimension", "index", "euler", "type", "full"];
 
 // interact with the table
 $("td.entry").mouseenter(function(e) {
@@ -232,11 +237,21 @@ $("td.entry").mouseenter(function(e) {
 
   // display the specific data
   fields.forEach(function (field) {
-    $("td#" + field).text($(e.currentTarget).data(field));
+    $("td#" + field).html($(e.currentTarget).data(field));
   });
+
+  // indicate whether a full exceptional collection is known
+  if ($(e.currentTarget).data("derived").indexOf("exceptional") >= 0) {
+    $("td#full").text("a full exceptional collection is known");
+  }
+  else {
+    $("td#full").text("not known");
+  }
 
   // copy the Dynkin diagram
   $("svg#dynkin-" + label.split("-")[0]).clone().appendTo($("td#dynkin"));
+  // make it a bit bigger
+  $("td#dynkin svg")[0].setAttribute("height", 40);
 });
 
 $("td.entry").mouseleave(function() {

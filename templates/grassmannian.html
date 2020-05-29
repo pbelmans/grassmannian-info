@@ -2,7 +2,7 @@
 
 {% import "macros.html" as macros %}
 
-{% block title %}{{ G.name() }} {{ G.plaintext() }}{% endblock %}
+{% block title %}{{ G.name() }} {{ G.plaintext() | safe }}{% endblock %}
 
 
 {% macro basic(G) %}
@@ -107,7 +107,7 @@
 
 {% block content %}
 <header class="text-center">
-  <h2 class="mt-3">{{ G.name()[0] | upper  }}{{ G.name()[1:] }}
+  <h2 class="mt-3">{{ G.name()[0] | upper  }}{{ G.name()[1:] | safe }}
     {% if G.D.T in ["A", "B", "C", "D"] or (G.D.D, G.k) in [("E6", 1), ("E6", 6)] or (G.D.D, G.k) == ("G2", 1) %}
       ${{ G.latex() }}$
     {% endif %}
