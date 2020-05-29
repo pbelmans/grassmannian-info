@@ -268,15 +268,20 @@ $("td.entry").mouseleave(function() {
 });
 
 // change the color by activating a class which triggers the styling
-$("input[type=radio][name=color]").change(function() {
+function colors() {
   $("td.entry").removeClass("minuscule cominuscule adjoint coadjoint exceptional");
   $("div#typing div.form-check").removeClass("active");
 
-  if (["minuscule", "cominuscule", "adjoint", "coadjoint"].indexOf(this.value) >= 0)
-    $("td.entry[data-type~=" + this.value + "]").addClass(this.value);
-  if (["exceptional"].indexOf(this.value) >= 0)
-    $("td.entry[data-derived~=exceptional]").addClass(this.value);
-});
+  var value = $("input[name=color]:checked").val();
+
+  if (["minuscule", "cominuscule", "adjoint", "coadjoint"].indexOf(value) >= 0)
+    $("td.entry[data-type~=" + value + "]").addClass(value);
+  if (["exceptional"].indexOf(value) >= 0)
+    $("td.entry[data-derived~=exceptional]").addClass(value);
+};
+
+$("input[type=radio][name=color]").change(colors);
+$(document).ready(colors);
 
 $(function() {
   // toggle between no or lots of information by activating a class which triggers the styling
