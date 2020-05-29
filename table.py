@@ -334,8 +334,9 @@ class Grassmannian:
             if self.D.n == self.k: result.extend([("D" + str(self.D.n + 1), self.D.n), ("D" + str(self.D.n + 1), self.D.n + 1)])
         if self.D.T == "C":
             if self.k == 1: result.extend([("A" + str(2*self.D.n - 1), 1), ("A" + str(2*self.D.n - 1), 2*self.D.n - 1)])
-            if self.D.n == 2 and self.k == 1: result.append(("B2", 1),)
+            if self.D.n == 2 and self.k == 1: result.extend([("B2", 2), ("D3", 1), ("D3", 3)])
         if self.D.T == "D":
+            if self.D.n == 3 and self.k in [2, 3]: result.extend([("A3", 1), ("A3", 3), ("C2", 1)])
             if self.D.n == 3 and self.k == 1: result.append(("A3", 2),)
             if self.D.n == 4 and self.k in [1, 3, 4]: result.extend([("D4", 1), ("D4", 3), ("D4", 4), ("B3", 3)])
             if self.k in [self.D.n - 1, self.D.n]: result.extend([("B" + str(self.D.n - 1), min(self.D.n - 1, self.D.n - (self.k - self.D.n + 1))), ("D" + str(self.D.n), self.D.n - (self.k - self.D.n + 1))])
@@ -559,7 +560,7 @@ def exceptional(D, k):
         if k == 1 and n == 6: results.append(("Faenzi&ndash;Manivel", 2013, "MR3293722"),)
 
     if T == "F":
-        if k == 4 and n == 4: results.append(("Belmans&ndash;Kuznetsov&ndash;Smirnov", 2020, ""),)
+        if k == 4 and n == 4: results.append(("Belmans&ndash;Kuznetsov&ndash;Smirnov", 2020, "2005.01989"),)
 
     if T == "G":
         if k == 2: results.append(("Kuznetsov", 2008, "MR2238172"),)
