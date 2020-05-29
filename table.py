@@ -529,7 +529,6 @@ def name(T, n, k):
 
 
 def exceptional(D, k):
-    print(D, k)
     T = D[0]
     n = int(D[1:])
 
@@ -677,7 +676,6 @@ def show_grassmannian(D, k):
 
     if T in ["B", "C"] and n == 1:
         return redirect("/A1/1")
-    print(T, n, k)
 
     return render_template("grassmannian.html", G=Grassmannian(T, n, k))
 
