@@ -49,6 +49,11 @@
 {% endmacro %}
 
 
+{% macro QH(G) %}
+<em>to be done: at least discuss (generic) semisimplicity of small and big quantum cohomology</em>
+{% endmacro %}
+
+
 {% macro betti_vertical(G) %}
 \begin{align*}
 {%- for betti in G.betti() %}
@@ -79,6 +84,24 @@
       {%- if not loop.last %}, {% endif %}
     {%- endfor -%}, ...
 </dl>
+{% endmacro %}
+
+
+{% macro exceptional_sequence(G, sequence) %}
+<li>{{ sequence[0] | safe }} constructed a full exceptional sequence in {{ sequence[1] }}, see {{ macros.reference_link(sequence[2]) }}.
+{% endmacro %}
+
+
+{% macro exceptional_sequences(G) %}
+{% if G.exceptional_sequences() | length == 0 %}
+  <p>No full exceptional collection is known for $\mathbf{D}^{\mathrm{b}}({{ G.latex() }})$. Will you be the first to construct one? Let us know if you do!
+{% else %}
+  <ul>
+  {% for sequence in G.exceptional_sequences() %}
+    {{ exceptional_sequence(G, sequence) }}
+  {% endfor %}
+  </ul>
+{% endif %}
 {% endmacro %}
 
 
@@ -114,7 +137,15 @@
 
     {{ macros.component("Projective geometry", projective(G)) }}
 
-    {#{{ macros.component("Homological projective duality", hpd(G)) }}#}
+    {{ macros.component("Exceptional collections", exceptional_sequences(G)) }}
+
+    {#
+    {{ macros.component("Quantum cohomology", QH(G)) }}
+    #}
+
+    {#
+    {{ macros.component("Homological projective duality", hpd(G)) }}
+    #}
   </div>
 </div>
 

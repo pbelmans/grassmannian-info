@@ -23,7 +23,7 @@
 
 {% block content %}
 <form id="controls" class="form-group row">
-  <div class="col-lg-6 row">
+  <div class="col-lg-9 row">
     <div class="form-check col-6 ml-3 mb-2">
       <input class="form-check-input" type="radio" id="no-colors" name="color" value="no-colors" checked>
       <label class="form-check-label" for="no-colors">no colors</label>
@@ -47,9 +47,16 @@
         <label class="form-check-label" for="coadjoint">coadjoint</label>
       </div>
     </div>
+
+    <div class="col-lg-6 mt-3 mt-lg-0" id="derived">
+      <div class="form-check exceptional">
+        <input class="form-check-input" type="radio" id="exceptional" name="color" value="exceptional">
+        <label class="form-check-label" for="exceptional">has full exceptional collection</label>
+      </div>
+    </div>
   </div>
 
-  <div class="col-lg-6">
+  <div class="col-lg-3">
     <div class="form-check pl-0 pt-3">
       <input id="information" type="checkbox" data-toggle="toggle" data-on="more" data-off="less" data-onstyle="secondary" data-size="xs">
       <label for="information">information to display
@@ -247,10 +254,13 @@ $("td.entry").mouseleave(function() {
 
 // change the color by activating a class which triggers the styling
 $("input[type=radio][name=color]").change(function() {
-  $("td.entry").removeClass("minuscule cominuscule adjoint coadjoint");
+  $("td.entry").removeClass("minuscule cominuscule adjoint coadjoint exceptional");
   $("div#typing div.form-check").removeClass("active");
 
-  $("td.entry[data-type~=" + this.value + "]").addClass(this.value);
+  if (["minuscule", "cominuscule", "adjoint", "coadjoint"].indexOf(this.value) >= 0)
+    $("td.entry[data-type~=" + this.value + "]").addClass(this.value);
+  if (["exceptional"].indexOf(this.value) >= 0)
+    $("td.entry[data-derived~=exceptional]").addClass(this.value);
 });
 
 $(function() {

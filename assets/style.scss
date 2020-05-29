@@ -180,15 +180,28 @@ table.information {
   }
 }
 
-div#typing {
+div#typing,
+div#derived {
   div.form-check {
     background-radius: 10px;
     height: 30px;
     padding: 0 2rem;
-    width: 160px;
   }
+
   div.form-check label {
     display: inline-block;
+  }
+}
+
+div#typing {
+  div.form-check {
+    width: 160px;
+  }
+}
+
+div#derived {
+  div.form-check {
+    width: 300px;
   }
 }
 
@@ -206,6 +219,10 @@ td.coadjoint, .coadjoint {
 
 td.adjoint, .adjoint {
   background-color: rgba(255, 53, 69, 0.3);
+}
+
+td.exceptional, .exceptional {
+  background-color: rgba(150, 150, 150, 0.3);
 }
 
 

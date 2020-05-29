@@ -93,7 +93,7 @@
 
 
 {% macro data(G) -%}
-data-dimension="{{ G.dimension() }}" data-index="{{ G.index() }}" data-euler="{{ G.rank() }}" data-name="{{ G.name() | safe }}"
+data-dimension="{{ G.dimension() }}" data-index="{{ G.index() }}" data-euler="{{ G.rank() }}" data-name="{{ G.name() | safe }}" data-derived="{% if G.exceptional_sequences() %}exceptional{% endif %}"
 {%- endmacro %}
 
 
@@ -112,3 +112,9 @@ data-dimension="{{ G.dimension() }}" data-index="{{ G.index() }}" data-euler="{{
   </div>
 </td>
 {% endmacro %}
+
+
+{% macro reference_link(reference) -%}
+{% if reference[0:2] == "MR" -%}<a href="https://mathscinet.ams.org/mathscinet-getitem?mr={{ reference }}">{{ reference }}</a>
+{%- else %}<a href="https://arxiv.org/abs/{{ reference }}">arXiv:{{ reference }}</a>{% endif %}
+{%- endmacro %}

@@ -325,7 +325,7 @@ class Grassmannian:
             result.append(("A" + str(self.D.n), self.D.n - self.k + 1),)
             if self.D.n == 3 and self.k in [1, 3]: result.extend([("B2", 2), ("C2", 1), ("D3", 2), ("D3", 3)])
             if self.D.n == 3 and self.k == 2: result.append(("D3", 1),)
-            if self.D.n % 2 == 1 and self.k in [1, self.D.n]: result.append(("C" + str((self.D.n + 1) / 2), 1),)
+            if self.D.n % 2 == 1 and self.k in [1, self.D.n]: result.append(("C" + str(int((self.D.n + 1) / 2)), 1),)
         if self.D.T == "B":
             if self.D.n == 2 and self.k == 1: result.append(("C2", 2),)
             if self.D.n == 2 and self.k == 2: result.extend([("D3", 2), ("D3", 3), ("C2", 1), ("A3", 1), ("A3", 3)])
@@ -370,6 +370,14 @@ class Grassmannian:
             return grassmannians[self.D.T][self.D.n][self.k]["hilbert_series"]
         except:
             return False
+
+    def lefschetz(self):
+        global grassmannians
+
+        return grassmannians[self.D.T][self.D.n][self.k]["lefschetz"]
+
+    def exceptional_sequences(self):
+        return sorted(list(set([sequence for (T, k) in self.isomorphisms() for sequence in exceptional(T, k)])))#, key=lambda sequence: sequence[1])
 
 
 
@@ -519,6 +527,46 @@ def name(T, n, k):
     return "generalised Grassmannian of type ($\\mathrm{{{}}}_{{{}}}/\mathrm{{P}}_{{{}}}$)".format(T, n, k)
 
 
+def exceptional(D, k):
+    print(D, k)
+    T = D[0]
+    n = int(D[1:])
+
+    results = []
+    if T == "A":
+        if k in [1, n]: results.append(("Beilinson", 1978, "MR0509388"),)
+
+        results.append(("Kapranov", 1988, "MR0939472"),)
+
+    if T == "B":
+        if k == 1: results.append(("Kapranov", 1988, "MR0939472"),)
+        if k == 2: results.append(("Kuznetsov", 2008, "MR2434094"),)
+        if k == 4 and n == 4: results.append(("Kuznetsov", 2006, "MR2238172"),)
+
+    if T == "C":
+        if k == 2: results.append(("Kuznetsov", 2008, "MR2434094"),)
+        if k == 3 and n == 3: results.append(("Samokhin", 2001, "MR1859740"),)
+        if k == 3 and n == 4: results.append(("Guseva", 2018, "1810.07777"),)
+        if k == 4 and n == 4: results.append(("Polishchuk&ndash;Samokhin", 2011, "MR2822466"),)
+        if k == n: results.append(("Fonarev", 2019, "1911.08968"),)
+
+    if T == "D":
+        if k == 1: results.append(("Kapranov", 1988, "MR0939472"),)
+        if k == 2: results.append(("Kuznetsov&ndash;Smirnov", 2020, "2001.04148"),)
+        if k == 4 and n == 5: results.append(("Kuznetsov", 2008, "MR2238172"),)
+
+    if T == "E":
+        if k == 1 and n == 6: results.append(("Faenzi&ndash;Manivel", 2013, "MR3293722"),)
+
+    if T == "F":
+        if k == 4 and n == 4: results.append(("Belmans&ndash;Kuznetsov&ndash;Smirnov", 2020, ""),)
+
+    if T == "G":
+        if k == 2: results.append(("Kuznetsov", 2008, "MR2238172"),)
+
+    return results
+
+
 grassmannians = {letter : {} for letter in "ABCDEFG"}
 
 # load the Sage-generated JSON file
@@ -529,6 +577,40 @@ with open("grassmannians.json") as f:
         T = G["type"][0]
         n = int(G["type"][1:])
         k = G["parabolic"]
+
+
+        G["lefschetz"] = []
+        if T == "A":
+            # Beilinson
+            if k in [1, n]:
+                G["lefschetz"].append({"support" : [1]*(n + 1)})
+            # Kuznetsov (cfr. example 1.7 of http://www.mi-ras.ru/~akuznet/publications/1802.08097%5BOn%20residual%20categories%20for%20Grassmannians%5D.pdf)
+            if k == 2:
+                m = (n + 1) // 2
+                if n % 2 == 0:
+                    G["lefschetz"].append({"support" : [m]*(2*m+1)})
+                else:
+                    G["lefschetz"].append({"support" : [m]*m + [m-1]*m})
+
+            # Kapranov, non-minimal
+
+        if T == "B":
+            if k == 1:
+                G["lefschetz"].append({"support" : [2] + [1]*(2*n-2)})
+
+        if T == "D":
+            if k == 1 or (n == 4 and k in [3, 4]):
+                G["lefschetz"].append({"support" : [2, 2] + [1]*(2*n-4)})
+
+        if T == "E":
+            # Faenzi--Manivel
+            if n == 6 and k in [1, 6]:
+                G["lefschetz"].append({"support" : [3]*3 + [2]*9})
+        if T == "F":
+            # Belmans--Kuznetsov--Smirnov
+            if n == 4:
+                G["lefschetz"].append({"support" : [3]*2 + [2]*8})
+
 
         # assigning the Grassmannian to the dictionary
         if n not in grassmannians[T]:
@@ -545,37 +627,6 @@ Idea: maybe it would be better to move this to a template?
 - less convenient for MathSciNet / arXiv integration?
 - even further separation of content
 
-G["lefschetz"] = []
-if T == "A":
-    # Beilinson
-    if k in [1, n]:
-        G["lefschetz"].append({"support" : [1]*(n + 1)})
-    # Kuznetsov (cfr. example 1.7 of http://www.mi-ras.ru/~akuznet/publications/1802.08097%5BOn%20residual%20categories%20for%20Grassmannians%5D.pdf)
-    if k == 2:
-        m = (n + 1) // 2
-        if n % 2 == 0:
-            G["lefschetz"].append({"support" : [m]*(2*m+1)})
-        else:
-            G["lefschetz"].append({"support" : [m]*m + [m-1]*m})
-
-    # Kapranov, non-minimal
-
-if T == "B":
-    if k == 1:
-        G["lefschetz"].append({"support" : [2] + [1]*(2*n-2)})
-
-if T == "D":
-    if k == 1 or (n == 4 and k in [3, 4]):
-        G["lefschetz"].append({"support" : [2, 2] + [1]*(2*n-4)})
-
-if T == "E":
-    # Faenzi--Manivel
-    if n == 6 and k in [1, 6]:
-        G["lefschetz"].append({"support" : [3]*3 + [2]*9})
-if T == "F":
-    # Belmans--Kuznetsov--Smirnov
-    if n == 4:
-        G["lefschetz"].append({"support" : [3]*2 + [2]*8})
 
 """
 
