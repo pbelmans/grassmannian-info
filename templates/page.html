@@ -40,18 +40,26 @@
 
     <link rel="stylesheet" href="/static/style.css">
 
-    <script>
-MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
-  },
-  svg: {
-    fontCache: 'global',
-  },
-  noReflows: true,
-};
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        extensions: ['tex2jax.js'],
+        jax: ['input/TeX','output/HTML-CSS'],
+        TeX: {
+          extensions: ['AMSmath.js', 'AMSsymbols.js'],
+          Macros: {
+            linebreak: ["", 1, ""],
+            },
+          TagSide: 'left'
+        },
+        tex2jax: {
+          inlineMath: [['$','$']],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        },
+        'HTML-CSS': { scale: 90 }
+      });
     </script>
-    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

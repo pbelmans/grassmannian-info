@@ -467,16 +467,14 @@
 
 {% block content %}
 <script>
-MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
-  },
-  svg: {
-    fontCache: 'global',
-    displayAlign: 'left',
-  },
-  noReflows: true,
-};
+  MathJax.Hub.Config({
+    displayAlign: "left",
+    "HTML-CSS" : {
+      linebreaks : {
+        automatic: true,
+      }
+    }
+  });
 </script>
 
 <header class="text-center">
