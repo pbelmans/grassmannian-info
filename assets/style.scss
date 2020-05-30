@@ -1,17 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
 
-div#menu {
-  background-color: black;
-  text-align: center;
-  height: 2.5rem;
-
-  ul {
-    padding-top: .5rem;
-  }
-
-  ul li {
-    margin: 0 1rem;
-  }
+nav#menu {
+  font-size: 14px;
 
   a {
     color: #81c3fc;
