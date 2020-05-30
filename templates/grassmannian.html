@@ -95,6 +95,10 @@
 {% macro exceptional_sequences(G) %}
 {% if G.exceptional_sequences() | length == 0 %}
   <p>No full exceptional collection is known for $\mathbf{D}^{\mathrm{b}}({{ G.latex() }})$. Will you be the first to construct one? Let us know if you do!
+
+  {% if G.D.T in ["A", "B", "C", "D"] %}
+    <p>Kuznetsov&ndash;Polishchuk have constructed an exceptional collection of maximal length in <a href="https://mathscinet.ams.org/mathscinet-getitem?mr=3463417">MR3463417</a>. Can you prove it's full?
+  {% endif %}
 {% else %}
   <ul>
   {% for sequence in G.exceptional_sequences() %}
