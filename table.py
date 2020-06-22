@@ -523,7 +523,7 @@ def name(T, n, k):
 
     elif T == "G":
         if k == 1: return name("B", 3, 1)
-        if k == 2: return "\\mathrm{G}_2$-Grassmannian"
+        if k == 2: return "$\\mathrm{G}_2$-Grassmannian"
 
     return "generalised Grassmannian of type {}<sub>{}</sub>/P<sub>{}</sub>".format(T, n, k)
 
