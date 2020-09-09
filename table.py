@@ -547,6 +547,7 @@ def exceptional(D, k):
         if k == 2: results.append(("Kuznetsov", 2008, "MR2434094"),)
         if k == 3 and n == 3: results.append(("Samokhin", 2001, "MR1859740"),)
         if k == 3 and n == 4: results.append(("Guseva", 2018, "1810.07777"),)
+        if k == 3 and n == 5: results.append(("Novikov", 2020, ""),)
         if k == 4 and n == 4: results.append(("Polishchuk&ndash;Samokhin", 2011, "MR2822466"),)
         if k == n: results.append(("Fonarev", 2019, "1911.08968"),)
 
