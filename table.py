@@ -298,6 +298,47 @@ class Grassmannian:
 
         return False
 
+    
+    def small_qh_not_semisimple(self):
+        # these are the 'no's in the table of page 33 of [MR2821244], Chaput--Perrin, On the quantum cohomology of adjoint varieties
+        if self.D.T == "B" and self.k in range(2, self.D.n) and self.k % 2 == 1: return True
+        if self.D.T == "C" and self.k in range(2, self.D.n) and self.k % 2 == 0: return True
+        if self.D.T == "D" and self.k in range(2, self.D.n - 1) and self.k % 2 == 0: return True
+        if self.D.T == "E" and self.D.n == 6 and self.k in [2, 4]: return True
+        if self.D.T == "E" and self.D.n == 7 and self.k in [1, 3, 6]: return True
+        if self.D.T == "E" and self.D.n == 8 and self.k in [1, 2, 3, 4, 5, 7, 8]: return True
+        if self.D.T == "F" and self.k in [3, 4]: return True
+
+        # this means that either it _is_ semisimple, or it's not known
+        return False
+
+
+    def small_qh_semisimple(self):
+        # these are the 'yes's in the table of page 33 of [MR2821244], Chaput--Perrin, On the quantum cohomology of adjoint varieties
+        if self.D.T == "A": return True
+        if self.D.T == "B" and self.k in [1, 2, self.D.n]: return True # table contains a typo (?): OGr(2,2n+1) is adjoint non-coadjoint
+        if self.D.T == "C" and self.k in [1, self.D.n]: return True
+        if self.D.T == "D" and self.k in [1, self.D.n - 1, self.D.n]: return True
+        if self.D.T == "E" and self.D.n == 6 and self.k in [1, 6]: return True
+        if self.D.T == "E" and self.D.n == 7 and self.k == 7: return True
+        if self.D.T == "F" and self.k == 1: return True
+        if self.D.T == "G": return True
+
+        # this means that either it _is_ semisimple, or it's not known
+        return False
+
+    
+    def big_qh_semisimple(self):
+        # small semisimplicity implies big semisimplicity
+        if self.small_qh_semisimple(): return True
+
+        # works of Perrin, Mellit--Perrin--Smirnov, Galkin--Mellit--Smirnov
+        if self.D.T == "C" and self.k == 2: return True
+        # work of Perrin, see Theorem 4 in [1405.5914], Perrin: Semisimple quantum cohomology of some Fano varieties
+        if self.D.T == "F" and self.k == 4: return True
+        # work of Perrin--Smirnov (in progress)
+        if self.is_coadjoint(): return True
+
 
     def latex(self):
         # TODO eventually the latex function just come here?

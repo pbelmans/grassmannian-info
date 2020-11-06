@@ -26,7 +26,7 @@
   <div class="col-lg-9 row">
     <div class="form-check col-6 ml-3 mb-2">
       <input class="form-check-input" type="radio" id="no-colors" name="color" value="no-colors" checked>
-      <label class="form-check-label" for="no-colors">no colors</label>
+      <label class="form-check-label" for="no-colors" checked="checked">no colors</label>
     </div>
 
     <div class="col-lg-6" id="typing">
@@ -53,6 +53,32 @@
         <input class="form-check-input" type="radio" id="exceptional" name="color" value="exceptional">
         <label class="form-check-label" for="exceptional">full exceptional collection?</label>
       </div>
+
+      <ul id="exceptional-colors">
+        <li class="exceptional-known">has been constructed
+        <li class="exceptional-unknown">has not yet been constructed
+      </ul>
+
+      <div class="form-check mt-3">
+        <input class="form-check-input" type="radio" id="small" name="color" value="small">
+        <label class="form-check-label" for="small">small quantum cohomology is:</label>
+      </div>
+
+      <ul id="small-semisimple-colors">
+        <li class="small-semisimple">semisimple
+        <li class="small-non-semisimple">not semisimple
+        <li class="small-unknown">unknown
+      </ul>
+
+      <div class="form-check mt-3">
+        <input class="form-check-input" type="radio" id="big" name="color" value="big">
+        <label class="form-check-label" for="big">big quantum cohomology is:</label>
+      </div>
+
+      <ul id="big-semisimple-colors">
+        <li class="big-semisimple">generically semisimple
+        <li class="big-unknown">unknown
+      </ul>
     </div>
   </div>
 
@@ -185,8 +211,16 @@
         <td id="type"></td>
       </tr>
       <tr>
-        <th scope="row">has full exceptional collection</th>
+        <th scope="row">a full exceptional collection</th>
         <td id="full"></td>
+      </tr>
+      <tr>
+        <th scope="row">small quantum cohomology is</th>
+        <td id="small-message"></td>
+      </tr>
+      <tr>
+        <th scope="row">big quantum cohomology is</th>
+        <td id="big-message"></td>
       </tr>
     </table>
   </div>
@@ -218,7 +252,7 @@ isomorphisms["G2-{{ k }}"] = {{ pretty_print_labels(Grassmannian("G", 2, k).isom
 {%- endfor %}
 
 // the data fields
-var fields = ["name", "dimension", "index", "euler", "type", "full"];
+var fields = ["name", "dimension", "index", "euler", "type", "full", "small-message", "big-message"];
 
 // interact with the table
 $("td.entry").mouseenter(function(e) {
@@ -241,11 +275,30 @@ $("td.entry").mouseenter(function(e) {
   });
 
   // indicate whether a full exceptional collection is known
-  if ($(e.currentTarget).data("derived").indexOf("exceptional") >= 0) {
-    $("td#full").text("a full exceptional collection is known");
+  if ($(e.currentTarget).data("exceptional").indexOf("known") >= 0) {
+    $("td#full").text("has been constructed");
   }
   else {
-    $("td#full").text("not known");
+    $("td#full").text("has not yet been constructed");
+  }
+
+  // indicate whether small quantum cohomology is semisimple
+  if ($(e.currentTarget).data("small") == "semisimple") {
+    $("td#small-message").text("generically semisimple");
+  }
+  else if ($(e.currentTarget).data("small") == "non-semisimple") {
+    $("td#small-message").text("generically non-semisimple");
+  }
+  else {
+    $("td#small-message").text("not known to be (non-)semisimple");
+  }
+  
+  // indicate whether small quantum cohomology is semisimple
+  if ($(e.currentTarget).data("big") == "semisimple") {
+    $("td#big-message").text("generically semisimple");
+  }
+  else {
+    $("td#big-message").text("not known to be (non-)semisimple");
   }
 
   // copy the Dynkin diagram
@@ -269,15 +322,31 @@ $("td.entry").mouseleave(function() {
 
 // change the color by activating a class which triggers the styling
 function colors() {
-  $("td.entry").removeClass("minuscule cominuscule adjoint coadjoint exceptional");
+  $("td.entry").removeClass("minuscule cominuscule adjoint coadjoint exceptional-known exceptional-unknown small-semisimple small-non-semisimple small-unknown big-semisimple big-unknown");
   $("div#typing div.form-check").removeClass("active");
 
   var value = $("input[name=color]:checked").val();
 
+  $("form#controls ul").hide();
+
   if (["minuscule", "cominuscule", "adjoint", "coadjoint"].indexOf(value) >= 0)
     $("td.entry[data-type~=" + value + "]").addClass(value);
-  if (["exceptional"].indexOf(value) >= 0)
-    $("td.entry[data-derived~=exceptional]").addClass(value);
+  if (["exceptional"].indexOf(value) >= 0) {
+    $("td.entry[data-exceptional=known]").addClass("exceptional-known");
+    $("td.entry[data-exceptional=unknown]").addClass("exceptional-unknown");
+    $("ul#exceptional-colors").show();
+  }
+  if (["small"].indexOf(value) >= 0) {
+    $("td.entry[data-small=semisimple]").addClass("small-semisimple");
+    $("td.entry[data-small=non-semisimple]").addClass("small-non-semisimple");
+    $("td.entry[data-small=unknown]").addClass("small-unknown");
+    $("ul#small-semisimple-colors").show();
+  }
+  if (["big"].indexOf(value) >= 0) {
+    $("td.entry[data-big=semisimple]").addClass("big-semisimple");
+    $("td.entry[data-big=unknown]").addClass("big-unknown");
+    $("ul#big-semisimple-colors").show();
+  }
 };
 
 $("input[type=radio][name=color]").change(colors);

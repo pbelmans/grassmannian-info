@@ -50,7 +50,9 @@
 
 
 {% macro QH(G) %}
-<em>to be done: at least discuss (generic) semisimplicity of small and big quantum cohomology</em>
+<p>The <em>small</em> quantum cohomology is <strong>{% if G.small_qh_semisimple() %}generically semisimple{% elif G.small_qh_not_semisimple() %}not generically semisimple{% else %}not known to be (non-)semisimple{% endif %}</strong>.
+
+<p>The <em>big</em> quantum cohomology is <strong>{% if G.big_qh_semisimple()%}generically semisimple{% else %}not known yet to be generically semisimple{% endif %}</strong>.
 {% endmacro %}
 
 
@@ -143,13 +145,9 @@
 
     {{ macros.component("Exceptional collections", exceptional_sequences(G)) }}
 
-    {#
     {{ macros.component("Quantum cohomology", QH(G)) }}
-    #}
 
-    {#
     {{ macros.component("Homological projective duality", hpd(G)) }}
-    #}
   </div>
 </div>
 
