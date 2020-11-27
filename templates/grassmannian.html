@@ -55,7 +55,7 @@
 <p>The <em>big</em> quantum cohomology is <strong>{% if G.big_qh_semisimple()%}generically semisimple{% else %}not known yet to be generically semisimple{% endif %}</strong>.
 
 {% if G.eigenvalues() %}
-<p>The eigenvalues of quantum multiplication by $\mathrm{c}_1({{ G.latex() }})$ are (up to scaling by the index) given by:
+<p>The eigenvalues of quantum multiplication by $\mathrm{c}_1({{ G.latex() }})$ are given by:
 
 <div id="eigenvalues"></div>
 
@@ -92,7 +92,7 @@ var svg = d3.select("#eigenvalues")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
-var eigenvalues = [{% for e in G.eigenvalues() %}[{{ e[0] }}, {{ e[1] }}], {% endfor %}];
+var eigenvalues = [{% for e in G.eigenvalues() %}[{{ G.index() * e[0] }}, {{ G.index() * e[1] }}], {% endfor %}];
 
 // add multiplicity
 var counts = {};
