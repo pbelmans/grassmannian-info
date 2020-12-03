@@ -275,7 +275,7 @@ $("td.entry").mouseenter(function(e) {
   });
 
   // indicate whether a full exceptional collection is known
-  if ($(e.currentTarget).data("exceptional").indexOf("known") >= 0) {
+  if ($(e.currentTarget).data("exceptional") == "known") {
     $("td#full").text("has been constructed");
   }
   else {
