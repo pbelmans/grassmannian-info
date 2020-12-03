@@ -425,20 +425,16 @@ class Grassmannian:
 
     def eigenvalues(self):
         try:
-            if self.D.T == "A" and self.D.n <= 7: return zip(*eigenvalues.A[self.D.n, self.k])
-            if self.D.T == "B" and self.D.n <= 7: return zip(*eigenvalues.B[self.D.n, self.k])
-            if self.D.T == "C" and self.D.n <= 7: return zip(*eigenvalues.C[self.D.n, self.k])
-            if self.D.T == "D" and self.D.n <= 7: return zip(*eigenvalues.D[self.D.n, self.k])
-            if self.D.T == "E" and self.D.n <= 7: return zip(*eigenvalues.E[self.D.n, self.k])
-            if self.D.T == "F" and self.D.n <= 7: return zip(*eigenvalues.F[self.D.n, self.k])
-            if self.D.T == "G" and self.D.n <= 7: return zip(*eigenvalues.G[self.D.n, self.k])
+            if self.D.T == "A": return zip(*eigenvalues.A[self.D.n, self.k])
+            if self.D.T == "B": return zip(*eigenvalues.B[self.D.n, self.k])
+            if self.D.T == "C": return zip(*eigenvalues.C[self.D.n, self.k])
+            if self.D.T == "D": return zip(*eigenvalues.D[self.D.n, self.k])
+            if self.D.T == "E": return zip(*eigenvalues.E[self.D.n, self.k])
+            if self.D.T == "F": return zip(*eigenvalues.F[self.D.n, self.k])
+            if self.D.T == "G": return zip(*eigenvalues.G[self.D.n, self.k])
         except KeyError: return None
 
         return None
-
-        
-
-
 
 
 # registering the Dynkin and Grassmannian class so that Jinja2 can use it directly
