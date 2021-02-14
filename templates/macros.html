@@ -1,7 +1,7 @@
 {% macro dynkin(T, n, height=20, k=[]) %}
 {% if T in ["B", "C"] and n == 1 %}{{ dynkin("A", 1, height=height, k=k) }}
 {% else %}
-<svg height="{{ height }}" id="dynkin-{{ T }}{{ n}}" viewBox="-10 -10 {% if T == "D" %}{{ n * 20 - 20 }}{% elif T in ["D", "E"] %}{{ n * 20 - 10 }}{% else %}{{ n * 20 }}{% endif %} 40">
+<svg class="dynkin" height="{{ height }}" id="dynkin-{{ T }}{{ n}}" viewBox="-10 -10 {% if T == "D" %}{{ n * 20 - 20 }}{% elif T in ["D", "E"] %}{{ n * 20 - 10 }}{% else %}{{ n * 20 }}{% endif %} 40">
   <g style="stroke-width:1; stroke-linejoin:bevel; stroke-linecap:butt; stroke:black; fill:white">
     {% if T == "A" %}
       <polyline points="0,10 {{ (n - 1) * 20 }},10" />
@@ -14,14 +14,22 @@
       <polyline points="0,10 {{ (n - 2) * 20 }},10" />
       <polyline points="{{ (n - 2) * 20 }},8 {{ (n - 1) * 20 }},8" />
       <polyline points="{{ (n - 2) * 20 }},12 {{ (n - 1) * 20 }},12" />
-      {% for i in range(n) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="B{{ n }}-{{ i + 1 }}" {% if i + 1 in k %}class="active"{% endif %} />{% endfor %}
+      {% for i in range(n) %}
+        <circle cx="{{ i * 20 }}" cy="10" r="5" data-label="B{{ n }}-{{ i + 1 }}" {% if i + 1 in k %}class="active"{% endif %} />
+        <text class="horospherical" x="{{ i * 20 - 3 }}" y="2" data-label="B{{ n }}-{{ i + 1 }}-y">Y</text>
+        <text class="horospherical" x="{{ i * 20 - 3 }}" y="2" data-label="B{{ n }}-{{ i + 1 }}-z">Z</text>
+      {% endfor %}
     {% elif T == "C" %}
       <polyline points="{{ (n - 2) * 20 + 13 }},17 {{ (n - 2) * 20 + 7 }},10 {{ (n - 2) * 20 + 13 }},3" />
       <polyline points="0,10 {{ (n - 2) * 20 }},10" />
       <polyline points="0,10 {{ (n - 2) * 20 }},10" />
       <polyline points="{{ (n - 2) * 20 }},8 {{ (n - 1) * 20 }},8" />
       <polyline points="{{ (n - 2) * 20 }},12 {{ (n - 1) * 20 }},12" />
-      {% for i in range(n) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="C{{ n }}-{{ i + 1 }}" {% if i + 1 in k %}class="active"{% endif %} />{% endfor %}
+      {% for i in range(n) %}
+        <circle cx="{{ i * 20 }}" cy="10" r="5" data-label="C{{ n }}-{{ i + 1 }}" {% if i + 1 in k %}class="active"{% endif %} />
+        <text class="horospherical" x="{{ i * 20 - 3 }}" y="2" data-label="C{{ n }}-{{ i + 1 }}-y">Y</text>
+        <text class="horospherical" x="{{ i * 20 - 3 }}" y="2" data-label="C{{ n }}-{{ i + 1 }}-z">Z</text>
+      {% endfor %}
     {% elif T == "D" %}
       {% if n >= 3 %}
         <polyline points="0,10 {{ (n - 3) * 20 }},10" />
@@ -43,13 +51,21 @@
       <polyline points="20,8 40,8" />
       <polyline points="20,12 40,12" />
       <polyline points="40,10 60,10" />
-      {% for i in range(n) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="F4-{{ i + 1 }}" {% if i + 1 in k %}class="active"{% endif %} />{% endfor %}
+      {% for i in range(n) %}
+        <circle cx="{{ i * 20 }}" cy="10" r="5" data-label="F4-{{ i + 1 }}" {% if i + 1 in k %}class="active"{% endif %} />
+        <text class="horospherical" x="{{ i * 20 - 3 }}" y="2" data-label="F{{ n }}-{{ i + 1 }}-y">Y</text>
+        <text class="horospherical" x="{{ i * 20 - 3 }}" y="2" data-label="F{{ n }}-{{ i + 1 }}-z">Z</text>
+      {% endfor %}
     {% elif T == "G" %}
       <polyline points="13,17 7,10 13,3" />
       <polyline points="0,10 20,10" />
       <polyline points="0,7 20,7" />
       <polyline points="0,13 20,13" />
-      {% for i in range(n) %}<circle cx="{{ i * 20 }}" cy="10" r="5" data-label="G2-{{ i + 1 }}" {% if i + 1 in k %}class="active"{% endif %}/>{% endfor %}
+      {% for i in range(n) %}
+        <circle cx="{{ i * 20 }}" cy="10" r="5" data-label="G2-{{ i + 1 }}" {% if i + 1 in k %}class="active"{% endif %}/>
+        <text class="horospherical" x="{{ i * 20 - 3 }}" y="2" data-label="G{{ n }}-{{ i + 1 }}-y">Y</text>
+        <text class="horospherical" x="{{ i * 20 - 3 }}" y="2" data-label="G{{ n }}-{{ i + 1 }}-z">Z</text>
+      {% endfor %}
     {% endif %}
   </g>
 </svg>
@@ -95,23 +111,6 @@
 {% macro data(G) -%}
 data-dimension="{{ G.dimension() }}" data-index="{{ G.index() }}" data-euler="{{ G.rank() }}" data-name="{{ G.name() | safe }}" data-exceptional="{% if G.exceptional_sequences() %}known{% else %}unknown{% endif %}" data-small="{% if G.small_qh_semisimple() %}semisimple{% elif G.small_qh_not_semisimple() %}non-semisimple{% else %}unknown{% endif %}" data-big="{% if G.big_qh_semisimple() %}semisimple{% else %}unknown{% endif %}"
 {%- endmacro %}
-
-
-{% macro entry(G) %}
-<td class="entry" data-type="{{ type(G) }}" {{ data(G) }} data-label="{{ G.D.T }}{{ G.D.n }}-{{ G.k }}">
-  <div class="alpha">
-    <a href="/{{ G.D.T }}{{ G.D.n }}/{{ G.k }}">{{ G.html() | safe }}</a>
-
-    <div class="information">
-      \begin{align*}
-        d&={{ G.dimension() }} \\
-        i&={{ G.index() }} \\
-        \chi&={{ G.rank() }}
-      \end{align*}
-    </div>
-  </div>
-</td>
-{% endmacro %}
 
 
 {% macro reference_link(reference) -%}

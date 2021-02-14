@@ -1,0 +1,64 @@
+{% extends "page.html" %}
+
+{% import "macros.html" as macros %}
+
+{% block title %}{{ X.name() | safe }} {{ X.plaintext() | safe }}{% endblock %}
+
+
+{% macro basic(X) %}
+<dl class="row">
+  <dt class="col-3 text-right">dimension
+  <dd class="col-9">{{ X.dimension() }}
+
+  <dt class="col-3 text-right">index
+  <dd class="col-9">{{ X.index() }}
+
+  <dt class="col-3 text-right">Euler characteristic
+  <dd class="col-9">{{ X.rank() }}
+
+  <dt class="d-lg-none col-3 text-right">Betti numbers
+  <dd class="d-lg-none col-9">{{ betti_horizontal(X) }}
+</dl>
+{% endmacro %}
+
+
+{% macro betti_vertical(X) %}
+\begin{align*}
+{%- for betti in X.betti() %}
+  \mathrm{b}_{ {{ loop.index }} } &= {{ betti }} {% if not loop.last %}\\{% endif %}
+{%- endfor %}
+\end{align*}
+{% endmacro %}
+
+{% macro betti_horizontal(X) %}
+{%- for betti in X.betti() -%}
+  $\mathrm{b}_{ {{ loop.index }} } = {{ betti }}${% if not loop.last %}, {% endif %}
+{%- endfor %}
+{% endmacro %}
+
+
+{% block content %}
+<header class="text-center">
+  <h2 class="mt-3">{{ X.name()[0] | upper }}{{ X.name()[1:] | safe }} ${{ X.latex() }}$</h2>
+
+  {{ macros.dynkin(X.D.T, X.D.n, height=100) }}
+</header>
+
+<div class="row">
+  <div class="col-2 d-none d-lg-block">
+    {{ macros.component("Betti numbers", betti_vertical(X)) }}
+  </div>
+
+  <div class="col-12 col-lg-10">
+    {{ macros.component("Basic information", basic(X)) }}
+  </div>
+</div>
+
+<script type="text/javascript">
+$("circle[data-label='{{ X.D.D }}-{{ X.y }}']").addClass("active");
+$("circle[data-label='{{ X.D.D }}-{{ X.z }}']").addClass("active");
+$("text[data-label='{{ X.D.D }}-{{ X.y }}-y']").addClass("active");
+$("text[data-label='{{ X.D.D }}-{{ X.z }}-z']").addClass("active");
+</script>
+{% endblock %}
+

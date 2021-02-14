@@ -10,6 +10,12 @@ app = Flask(__name__)
 import eigenvalues
 
 
+"""
+TODO
+- implement UTF8 subscripts systematically
+"""
+
+
 class Dynkin:
     def __init__(self, T, n):
         assert T in ["A", "B", "C", "D", "E", "F", "G"]
@@ -300,7 +306,7 @@ class Grassmannian:
 
         return False
 
-    
+
     def small_qh_not_semisimple(self):
         # these are the 'no's in the table of page 33 of [MR2821244], Chaput--Perrin, On the quantum cohomology of adjoint varieties
         if self.D.T == "B" and self.k in range(2, self.D.n) and self.k % 2 == 1: return True
@@ -329,7 +335,7 @@ class Grassmannian:
         # this means that either it _is_ semisimple, or it's not known
         return False
 
-    
+
     def big_qh_semisimple(self):
         # small semisimplicity implies big semisimplicity
         if self.small_qh_semisimple(): return True
@@ -437,9 +443,114 @@ class Grassmannian:
         return None
 
 
-# registering the Dynkin and Grassmannian class so that Jinja2 can use it directly
+class Horospherical:
+    # T and n determine the Lie type of the group G, y and z are the indices of the weights for \omega_Y and \omega_Z
+    def __init__(self, T, n, y, z):
+        assert T in ["B", "C", "F", "G"]
+        if T == "B": assert (n == 3 and y == 1 and z == 3) or (n >= 3 and y == n - 1 and z == n)
+        if T == "C": assert n >= 2 and y in range(2, n + 1) and z == y - 1
+        if T == "F": assert y == 2 and z == 3
+        if T == "G": assert y == 1 and z == 2
+
+        self.D = Dynkin(T, n)
+        self.y, self.z = y, z
+
+        self.Y =  Grassmannian(T, n, y)
+        self.Z =  Grassmannian(T, n, z)
+
+
+    def dimension(self):
+        if self.D.T == "B":
+            if self.y == self.D.n - 1: return self.D.n * (self.D.n + 3) // 2
+            else: return 9
+        if self.D.T == "C": return self.y * (2*self.D.n + 1 - self.y) - self.y * (self.y - 1) // 2
+        if self.D.T == "F": return 23
+        if self.D.T == "G": return 7
+
+
+    def latex(self):
+        if self.D.T == "B":
+            if self.y == self.D.n - 1: return "X^1({})".format(self.D.n)
+            else: return "X^2"
+        if self.D.T == "C": return "X^3({}, {})".format(self.D.n, self.y)
+        if self.D.T == "F": return "X^4"
+        if self.D.T == "G": return "X^5"
+
+
+    def html(self):
+        if self.D.T == "B":
+            if self.y == self.D.n - 1: return "<i>X</i><sup> 1</sup>({})".format(self.D.n)
+            else: return "<i>X</i><sup> 2</sup>"
+        if self.D.T == "C": return "<i>X</i><sup> 3</sup>({}, {})".format(self.D.n, self.y)
+        if self.D.T == "F": return "<i>X</i><sup> 4</sup>"
+        if self.D.T == "G": return "<i>X</i><sup> 5</sup>"
+
+
+    def plaintext(self):
+        if self.D.T == "B":
+            if self.y == self.D.n - 1: return "X1({})".format(self.D.n)
+            else: return "X2"
+        if self.D.T == "C": return "X3({},{})".format(self.D.n, self.y)
+        if self.D.T == "F": return "X4"
+        if self.D.T == "G": return "X5"
+
+
+    def name(self):
+        if self.D.T == "B":
+            if self.y == self.D.n - 1: return "horo-orthogonal Grassmannian"
+            else: return "B&#x2083;-horospherical variety"
+        if self.D.T == "C": return "odd symplectic Grassmannian"
+        if self.D.T == "F": return "F&#x2084;-horospherical variety"
+        if self.D.T == "G": return "G&#x2082;-horospherical variety"
+
+
+    def codimY(self):
+        return self.dimension() - self.Y.dimension()
+
+
+    def codimZ(self):
+        return self.dimension() - self.Z.dimension()
+
+
+    def index(self):
+        return self.codimY() + self.codimZ()
+
+
+    def betti(self):
+        Y = np.poly1d(self.Y.betti())
+        Z = np.poly1d(self.Z.betti())
+
+        PY = np.poly1d([1] * (self.codimY() + 1))
+        PZ = np.poly1d([1] * (self.codimZ()))
+
+        return np.asarray(Y * PY + Z - Z * PZ)
+
+
+    def rank(self):
+        return sum(self.betti())
+
+
+    def exceptional_sequences(self):
+        return []
+
+
+    def small_qh_not_semisimple(self):
+        return False
+
+
+    def small_qh_semisimple(self):
+        return False
+
+
+    def big_qh_semisimple(self):
+        return False
+
+
+
+# registering the Dynkin, Grassmannian and Horospherical class so that Jinja2 can use it directly
 app.add_template_global(Dynkin, "Dynkin")
 app.add_template_global(Grassmannian, "Grassmannian")
+app.add_template_global(Horospherical, "Horospherical")
 
 
 def latex(T, n, k):
@@ -682,9 +793,17 @@ Idea: maybe it would be better to move this to a template?
 
 - less convenient for MathSciNet / arXiv integration?
 - even further separation of content
-
-
 """
+
+
+# slightly different indexing scheme: just use the plaintext X1(n), X2, X3(n,m), X4, X5
+horospherical_varieties = \
+        [Horospherical("B", n, n - 1, n) for n in range(3, 20)] \
+        + [Horospherical("B", 3, 1, 3)] \
+        + [Horospherical("C", n, m, m - 1) for n in range(2, 20) for m in range(2, n)] \
+        + [Horospherical("F", 4, 2, 3)] \
+        + [Horospherical("G", 2, 1, 2)]
+horospherical_varieties = dict({X.plaintext() : X for X in horospherical_varieties})
 
 
 @app.route("/")
@@ -734,6 +853,16 @@ def show_grassmannian(D, k):
         return redirect("/A1/1")
 
     return render_template("grassmannian.html", G=Grassmannian(T, n, k))
+
+
+@app.route("/horospherical")
+def show_horospherical_table():
+    return render_template("horospherical.table.html", horospherical=horospherical_varieties)
+
+
+@app.route("/horospherical/<X>")
+def show_horospherical(X):
+    return render_template("horospherical.html", X=horospherical_varieties[X])
 
 
 """

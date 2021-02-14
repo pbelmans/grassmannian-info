@@ -262,3 +262,18 @@ div#type-information {
     margin-top: .2rem !important;
   }
 }
+
+text.horospherical {
+  font-style: italic;
+  display: none;
+  fill: black;
+  font-weight: 200;
+}
+
+text.horospherical.active {
+  display: block;
+}
+
+header text.horospherical {
+  font-size: smaller;
+}

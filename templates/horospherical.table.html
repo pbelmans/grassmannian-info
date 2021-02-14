@@ -1,0 +1,266 @@
+{% extends "page.html" %}
+
+{% block title %}Periodic table of horospherical varieties{% endblock %}
+
+{% import "macros.html" as macros %}
+
+{% macro th(T, n, dynkin_label) %}
+<th>
+  <a href="/{{ T }}{{ n }}">
+    {{ macros.dynkin(T, n) }}
+    {{ T }}<sub>{{ n }}</sub>
+  </a>
+  </di
+</th>
+{% endmacro %}
+
+
+{% macro entry(X) %}
+<td class="entry" {{ macros.data(X) }} data-dynkin="{{ X.D.D }}" data-y="{{ X.y }}" data-z="{{ X.z }}">
+  <div class="alpha">
+    <a href="/horospherical/{{ X.plaintext() }}">{{ X.html() | safe }}</a>
+
+    <div class="information">
+      \begin{align*}
+        d&={{ X.dimension() }} \\
+        i&={{ X.index() }} \\
+        \chi&={{ X.rank() }}
+      \end{align*}
+    </div>
+  </div>
+</td>
+{% endmacro %}
+
+
+{% block content %}
+<header class="text-center">
+  <h2 class="mt-3">Horospherical varieties of rank one</h2>
+</header>
+
+<form id="controls" class="form-group row">
+  <div class="col-lg-6">
+    <div class="form-check pl-0 pt-3">
+      <input id="information" type="checkbox" data-toggle="toggle" data-on="more" data-off="less" data-onstyle="secondary" data-size="xs">
+      <label for="information">information to display
+    </div>
+  </div>
+</form>
+
+<div class="row">
+  <div class="col-12 col-xl-6">
+    <div class="col-12">
+      <table class="atlas">
+        <tr></tr>
+        {% for n in range(3, 8) %}
+          <tr>
+            {{ th("B", n, "X1(" ~ n ~ ")") }}
+
+            {{ entry(Horospherical("B", n, n - 1, n)) }}
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="col-12">
+      <table class="atlas">
+        <tr>
+          {{ th("B", 3, "X2") }}
+
+          {{ entry(Horospherical("B", 3, 1, 3)) }}
+        </tr>
+      </table>
+    </div>
+
+    <div class="col-12">
+      <table class="atlas">
+        {% for n in range(2, 8) %}
+          <tr>
+            {{ th("C", n, "X3(" ~ n ~ ")") }}
+
+            {% for k in range(2, n + 1) %}
+              {{ entry(Horospherical("C", n, k, k - 1)) }}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="col-12">
+      <table class="atlas">
+        <tr>
+          {{ th("F", 4, "X4") }}
+
+          {{ entry(Horospherical("F", 4, 2, 3)) }}
+        </tr>
+      </table>
+    </div>
+
+    <div class="col-12">
+      <table class="atlas">
+        <tr>
+          {{ th("G", 2, "X5") }}
+
+          {{ entry(Horospherical("G", 2, 1, 2)) }}
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-12 col-xl-6">
+    <h4>Information</h4>
+    <table class="table table-striped table-sm information">
+      <tr>
+        <th scope="row">name(s)</th>
+        <td id="name"></td>
+      </tr>
+      <tr>
+        <th scope="row" style="vertical-align: middle">Dynkin diagram</th>
+        <td id="dynkin" style="vertical-align: middle">
+      </tr>
+      <tr>
+        <th scope="row">dimension</th>
+        <td id="dimension"></td>
+      </tr>
+      <tr>
+        <th scope="row">index</th>
+        <td id="index"></td>
+      </tr>
+      <tr>
+        <th scope="row">Euler&nbsp;characteristic</th>
+        <td id="euler"></td>
+      </tr>
+      <!--
+      <tr>
+        <th scope="row">a full exceptional collection</th>
+        <td id="full"></td>
+      </tr>
+      <tr>
+        <th scope="row">small quantum cohomology is</th>
+        <td id="small-message"></td>
+      </tr>
+      <tr>
+        <th scope="row">big quantum cohomology is</th>
+        <td id="big-message"></td>
+      </tr>
+      -->
+    </table>
+  </div>
+</div>
+
+<script type="text/javascript">
+<!-- TODO this is just a copy-paste from the Grassmannian table: can we unify these? -->
+
+// the data fields
+var fields = ["name", "dimension", "index", "euler", "type", "full", "small-message", "big-message"];
+
+// interact with the table
+$("td.entry").mouseenter(function(e) {
+  // clear the color on other cells
+  $("td.entry, circle, text").removeClass("active");
+
+  var D = $(e.currentTarget).data("dynkin");
+  var y = $(e.currentTarget).data("y");
+  var z = $(e.currentTarget).data("z");
+
+  // make the current one look active
+  $(e.currentTarget).addClass("active");
+  $("circle[data-label='" + D + "-" + y + "']", $(e.currentTarget).parent()).addClass("active");
+  $("circle[data-label='" + D + "-" + z + "']", $(e.currentTarget).parent()).addClass("active");
+  $("text[data-label='" + D + "-" + y + "-y']", $(e.currentTarget).parent()).addClass("active");
+  $("text[data-label='" + D + "-" + z + "-z']", $(e.currentTarget).parent()).addClass("active");
+
+  // display the specific data
+  fields.forEach(function (field) {
+    $("td#" + field).html($(e.currentTarget).data(field));
+  });
+
+  // indicate whether a full exceptional collection is known
+  if ($(e.currentTarget).data("exceptional") == "known") {
+    $("td#full").text("has been constructed");
+  }
+  else {
+    $("td#full").text("has not yet been constructed");
+  }
+
+  // indicate whether small quantum cohomology is semisimple
+  if ($(e.currentTarget).data("small") == "semisimple") {
+    $("td#small-message").text("generically semisimple");
+  }
+  else if ($(e.currentTarget).data("small") == "non-semisimple") {
+    $("td#small-message").text("generically non-semisimple");
+  }
+  else {
+    $("td#small-message").text("not known to be (non-)semisimple");
+  }
+  
+  // indicate whether small quantum cohomology is semisimple
+  if ($(e.currentTarget).data("big") == "semisimple") {
+    $("td#big-message").text("generically semisimple");
+  }
+  else {
+    $("td#big-message").text("not known to be (non-)semisimple");
+  }
+
+  // copy the Dynkin diagram
+  $("a > svg", $(e.currentTarget).parent()).clone().appendTo($("td#dynkin"));
+  // make it a bit bigger
+  $("td#dynkin svg")[0].setAttribute("height", 40);
+});
+
+$("td.entry").mouseleave(function() {
+  // clear the color
+  $("td.entry, circle, text").removeClass("active alternative");
+
+  // clear the fields
+  fields.forEach(function (field) {
+    $("td#" + field).text("");
+  });
+
+  // clear the Dynkin diagram
+  $("td#dynkin").empty();
+});
+
+// change the color by activating a class which triggers the styling
+function colors() {
+  $("td.entry").removeClass("minuscule cominuscule adjoint coadjoint exceptional-known exceptional-unknown small-semisimple small-non-semisimple small-unknown big-semisimple big-unknown");
+  $("div#typing div.form-check").removeClass("active");
+
+  var value = $("input[name=color]:checked").val();
+
+  $("form#controls ul").hide();
+
+  if (["minuscule", "cominuscule", "adjoint", "coadjoint"].indexOf(value) >= 0)
+    $("td.entry[data-type~=" + value + "]").addClass(value);
+  if (["exceptional"].indexOf(value) >= 0) {
+    $("td.entry[data-exceptional=known]").addClass("exceptional-known");
+    $("td.entry[data-exceptional=unknown]").addClass("exceptional-unknown");
+    $("ul#exceptional-colors").show();
+  }
+  if (["small"].indexOf(value) >= 0) {
+    $("td.entry[data-small=semisimple]").addClass("small-semisimple");
+    $("td.entry[data-small=non-semisimple]").addClass("small-non-semisimple");
+    $("td.entry[data-small=unknown]").addClass("small-unknown");
+    $("ul#small-semisimple-colors").show();
+  }
+  if (["big"].indexOf(value) >= 0) {
+    $("td.entry[data-big=semisimple]").addClass("big-semisimple");
+    $("td.entry[data-big=unknown]").addClass("big-unknown");
+    $("ul#big-semisimple-colors").show();
+  }
+};
+
+$("input[type=radio][name=color]").change(colors);
+$(document).ready(colors);
+
+$(function() {
+  // toggle between no or lots of information by activating a class which triggers the styling
+  $("input#information").change(function() {
+    if ($(this).prop("checked"))
+      $("table").addClass("expanded");
+    else
+      $("table").removeClass("expanded");
+  });
+});
+
+</script>
+{% endblock %}
