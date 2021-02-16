@@ -38,7 +38,47 @@
 </header>
 
 <form id="controls" class="form-group row">
-  <div class="col-lg-6">
+  <div class="col-lg-9 row">
+    <div class="form-check col-6 ml-3 mb-2">
+      <input class="form-check-input" type="radio" id="no-colors" name="color" value="no-colors" checked>
+      <label class="form-check-label" for="no-colors" checked="checked">no colors</label>
+    </div>
+
+    <div class="col-lg-6 mt-3 mt-lg-0" id="derived">
+      <div class="form-check exceptional">
+        <input class="form-check-input" type="radio" id="exceptional" name="color" value="exceptional">
+        <label class="form-check-label" for="exceptional">full exceptional collection?</label>
+      </div>
+
+      <ul id="exceptional-colors">
+        <li class="exceptional-known">has been constructed
+        <li class="exceptional-unknown">has not yet been constructed
+      </ul>
+
+      <div class="form-check mt-3">
+        <input class="form-check-input" type="radio" id="small" name="color" value="small">
+        <label class="form-check-label" for="small">small quantum cohomology is:</label>
+      </div>
+
+      <ul id="small-semisimple-colors">
+        <li class="small-semisimple">semisimple
+        <li class="small-non-semisimple">not semisimple
+        <li class="small-unknown">unknown
+      </ul>
+
+      <div class="form-check mt-3">
+        <input class="form-check-input" type="radio" id="big" name="color" value="big">
+        <label class="form-check-label" for="big">big quantum cohomology is:</label>
+      </div>
+
+      <ul id="big-semisimple-colors">
+        <li class="big-semisimple">generically semisimple
+        <li class="big-unknown">unknown
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-lg-3">
     <div class="form-check pl-0 pt-3">
       <input id="information" type="checkbox" data-toggle="toggle" data-on="more" data-off="less" data-onstyle="secondary" data-size="xs">
       <label for="information">information to display
@@ -50,7 +90,6 @@
   <div class="col-12 col-xl-6">
     <div class="col-12">
       <table class="atlas">
-        <tr></tr>
         {% for n in range(3, 8) %}
           <tr>
             {{ th("B", n, "X1(" ~ n ~ ")") }}
@@ -129,7 +168,6 @@
         <th scope="row">Euler&nbsp;characteristic</th>
         <td id="euler"></td>
       </tr>
-      <!--
       <tr>
         <th scope="row">a full exceptional collection</th>
         <td id="full"></td>
@@ -138,6 +176,7 @@
         <th scope="row">small quantum cohomology is</th>
         <td id="small-message"></td>
       </tr>
+      <!--
       <tr>
         <th scope="row">big quantum cohomology is</th>
         <td id="big-message"></td>

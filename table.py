@@ -531,7 +531,18 @@ class Horospherical:
 
 
     def exceptional_sequences(self):
+        if self.D.T == "B":
+            if self.y == self.D.n - 1:
+                pass
+            else:
+                return [("Gonzales&ndash;Pech&ndash;Perrin&ndash;Samokhin", 2018, "1803.05063")]
+        if self.D.T == "C":
+            if self.y == 2: return [("Pech", 2013, "MR2998953")]
+        if self.D.T == "F": pass
+        if self.D.T == "G": return [("Gonzales&ndash;Pech&ndash;Perrin&ndash;Samokhin", 2018, "1803.05063")]
+
         return []
+        
 
 
     def small_qh_not_semisimple(self):
@@ -539,11 +550,24 @@ class Horospherical:
 
 
     def small_qh_semisimple(self):
+        if self.D.T == "B":
+            if self.y == self.D.n - 1:
+                if self.D.n == 3:
+                    return True #[("Gonzales&ndash;Pech&ndash;Perrin&ndash;Samokhin", 2018, "1803.05063")]
+            else:
+                return True # [("Gonzales&ndash;Pech&ndash;Perrin&ndash;Samokhin", 2018, "1803.05063")]
+        if self.D.T == "C":
+            if self.y == 2: return True # [("Pech", 2013, "MR2998953")]
+            if self.D.n == 3 and self.y == 3: return True
+        if self.D.T == "F": pass
+        if self.D.T == "G": return True # [("Gonzales&ndash;Pech&ndash;Perrin&ndash;Samokhin", 2018, "1803.05063")]
+
         return False
 
 
     def big_qh_semisimple(self):
-        return False
+        # small semisimplicity implies big semisimplicity
+        if self.small_qh_semisimple(): return True
 
 
 
