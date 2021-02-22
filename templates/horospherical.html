@@ -18,7 +18,96 @@
 
   <dt class="d-lg-none col-3 text-right">Betti numbers
   <dd class="d-lg-none col-9">{{ betti_horizontal(X) }}
+
+  <dt class="col-3 text-right">$G$
+  <dd class="col-9">{{ macros.adjoint_group(X.Y.Aut().D) }}
+
+  <dt class="col-3 text-right">$\dim G$
+  <dd class="col-9">{{ X.Y.Aut().dimension() }}
+
+  <dt class="col-3 text-right">$\mathrm{Aut}^0({{ X.latex() }})$
+  <dd class="col-9">$G\ltimes U$
+
+  <dt class="col-3 text-right">$\dim G$
+  <dd class="col-9">{{ X.D.number_of_roots() + X.D.number_of_positive_roots() }}
 </dl>
+
+{% if X.D.T == "B" and X.y == 1 %}
+<hr>
+<dl class="row">
+  <dt class="col-3 text-right">Geometric description
+  <dd class="col-9">hyperplane section of <a href="/D5/4">$\operatorname{OGr}_+(5,10)$</a>.
+</dl>
+{% endif %}
+{% if X.D.T == "C" %}
+<hr>
+<dl class="row">
+  <dt class="col-3 text-right">Geometric description
+  <dd class="col-9">zero locus of $\bigwedge^2\mathcal{U}^\vee$ in <a href="/A{{ 2*X.D.n + 1 }}/{{ X.y }}">$\operatorname{Gr}({{ X.y }},{{ 2*X.D.n + 1 }})$</a>.
+</dl>
+{% endif %}
+{% endmacro %}
+
+{% macro blowup(X, Y, Z) %}
+\begin{equation}
+\xymatrix{
+E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
+\operatorname{Bl}_{ {{ Z.latex() }} } \ar@{->>}[r]^{\mathbb{P}^{ {{ X.dimension() - Y.dimension() }} }} \ar@{->>}[d] &
+\href{/{{ Y.url() }} }{ {{ Y.latex() }} } \\
+\href{/{{ Z.url() }} }{ {{ Z.latex() }} } \ar[r] &
+{{ X.latex() }}
+}
+\end{equation}
+{% endmacro %}
+
+
+{% macro description(X) %}
+<dl class="row">
+  <dt class="col-6 text-right">unique closed $\mathrm{Aut}({{ X.latex() }})$-orbit
+  <dd class="col-6">$Z={{ X.Z.latex() }}$
+
+  <dt class="col-6 text-right">other closed {{ macros.adjoint_group(X.Y.Aut().D) }}-orbit
+  <dd class="col-6">$Y={{ X.Y.latex() }}$
+</dl>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th class="text-center">dimension</th>
+      <th class="text-center">codimension</th>
+      <th class="text-center">index</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td class="text-right"><a href="{{ X.Y.url() }}">$Y={{ X.Y.latex() }}$</a></td>
+      <td class="text-center">{{ X.Y.dimension() }}</td>
+      <td class="text-center">{{ X.dimension() - X.Y.dimension() }}</td>
+      <td class="text-center">{{ X.Y.index() }}</td>
+    </tr>
+
+    <tr>
+      <td class="text-right"><a href="{{ X.Z.url() }}">$Z={{ X.Z.latex() }}$</a></td>
+      <td class="text-center">{{ X.Z.dimension() }}</td>
+      <td class="text-center">{{ X.dimension() - X.Z.dimension() }}</td>
+      <td class="text-center">{{ X.Z.index() }}</td>
+    </tr>
+  </tbody>
+</table>
+
+{{ blowup(X, X.Y, X.Z) }}
+{{ blowup(X, X.Z, X.Y) }}
+
+\begin{equation}
+E_{ {{ X.Y.latex() }} }
+\cong
+E_{ {{ X.Z.latex() }} }
+\cong
+\mathrm{ {{ X.D.T }} }_{ {{ X.D.n }} } / \mathrm{P}_{ {{ X.y }}, {{ X.z }} }
+\end{equation}
+
 {% endmacro %}
 
 
@@ -39,7 +128,7 @@
 
 {% block content %}
 <header class="text-center">
-  <h2 class="mt-3">{{ X.name()[0] | upper }}{{ X.name()[1:] | safe }} ${{ X.latex() }}$</h2>
+  <h2 class="mt-3">{{ X.name()[0] | upper }}{{ X.name()[1:] | safe }} ${% if X.D.T == "C" %}\operatorname{SGr}({{ X.y }},{{ 2*X.D.n + 1 }})={% endif %}{{ X.latex() }}$</h2>
 
   {{ macros.dynkin(X.D.T, X.D.n, height=100) }}
 </header>
@@ -51,6 +140,8 @@
 
   <div class="col-12 col-lg-10">
     {{ macros.component("Basic information", basic(X)) }}
+
+    {{ macros.component("Blowups and projections", description(X)) }}
   </div>
 </div>
 
