@@ -538,6 +538,7 @@ class Horospherical:
                 return [("Gonzales&ndash;Pech&ndash;Perrin&ndash;Samokhin", 2018, "1803.05063")]
         if self.D.T == "C":
             if self.y == 2: return [("Pech", 2013, "MR2998953")]
+            if self.D.n == 3 and self.y == 3: return [("Fonarev", 2020, "1804.06946")]
         if self.D.T == "F": pass
         if self.D.T == "G": return [("Gonzales&ndash;Pech&ndash;Perrin&ndash;Samokhin", 2018, "1803.05063")]
 
@@ -824,7 +825,7 @@ Idea: maybe it would be better to move this to a template?
 horospherical_varieties = \
         [Horospherical("B", n, n - 1, n) for n in range(3, 20)] \
         + [Horospherical("B", 3, 1, 3)] \
-        + [Horospherical("C", n, m, m - 1) for n in range(2, 20) for m in range(2, n)] \
+        + [Horospherical("C", n, m, m - 1) for n in range(2, 20) for m in range(2, n + 1)] \
         + [Horospherical("F", 4, 2, 3)] \
         + [Horospherical("G", 2, 1, 2)]
 horospherical_varieties = dict({X.plaintext() : X for X in horospherical_varieties})
