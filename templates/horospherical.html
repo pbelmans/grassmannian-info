@@ -64,10 +64,12 @@ E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
 {% macro description(X) %}
 <dl class="row">
   <dt class="col-6 text-right">unique closed $\mathrm{Aut}({{ X.latex() }})$-orbit
-  <dd class="col-6">$Z={{ X.Z.latex() }}$
+  <dd class="col-6">$Z={{ X.Z.latex() }}$<br>
+    {{ macros.dynkin(X.Z.D.T, X.Z.D.n, height=30, k=[X.Z.k]) }}</dd>
 
   <dt class="col-6 text-right">other closed {{ macros.adjoint_group(X.Y.Aut().D) }}-orbit
-  <dd class="col-6">$Y={{ X.Y.latex() }}$
+  <dd class="col-6">$Y={{ X.Y.latex() }}$<br>
+    {{ macros.dynkin(X.Y.D.T, X.Y.D.n, height=30, k=[X.Y.k]) }}</dd>
 </dl>
 
 <table class="table">
@@ -100,13 +102,17 @@ E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
 {{ blowup(X, X.Y, X.Z) }}
 {{ blowup(X, X.Z, X.Y) }}
 
-\begin{equation}
-E_{ {{ X.Y.latex() }} }
-\cong
-E_{ {{ X.Z.latex() }} }
-\cong
-\mathrm{ {{ X.D.T }} }_{ {{ X.D.n }} } / \mathrm{P}_{ {{ X.y }}, {{ X.z }} }
-\end{equation}
+<div class="text-left">
+  $
+    E_{ {{ X.Y.latex() }} }
+    \cong
+    E_{ {{ X.Z.latex() }} }
+    \cong
+    \mathrm{ {{ X.D.T }} }_{ {{ X.D.n }} } / \mathrm{P}_{ {{ X.y }}, {{ X.z }} }
+  $
+  <br>
+  {{ macros.dynkin(X.D.T, X.D.n, height=30, k=[X.y, X.z]) }}
+</div>
 
 {% endmacro %}
 
@@ -146,10 +152,10 @@ E_{ {{ X.Z.latex() }} }
 </div>
 
 <script type="text/javascript">
-$("circle[data-label='{{ X.D.D }}-{{ X.y }}']").addClass("active");
-$("circle[data-label='{{ X.D.D }}-{{ X.z }}']").addClass("active");
-$("text[data-label='{{ X.D.D }}-{{ X.y }}-y']").addClass("active");
-$("text[data-label='{{ X.D.D }}-{{ X.z }}-z']").addClass("active");
+$("header circle[data-label='{{ X.D.D }}-{{ X.y }}']").addClass("active");
+$("header circle[data-label='{{ X.D.D }}-{{ X.z }}']").addClass("active");
+$("header text[data-label='{{ X.D.D }}-{{ X.y }}-y']").addClass("active");
+$("header text[data-label='{{ X.D.D }}-{{ X.z }}-z']").addClass("active");
 </script>
 {% endblock %}
 

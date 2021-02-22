@@ -1,7 +1,7 @@
 {% macro dynkin(T, n, height=20, k=[]) %}
 {% if T in ["B", "C"] and n == 1 %}{{ dynkin("A", 1, height=height, k=k) }}
 {% else %}
-<svg class="dynkin" height="{{ height }}" id="dynkin-{{ T }}{{ n}}" viewBox="-10 -10 {% if T == "D" %}{{ n * 20 - 20 }}{% elif T in ["D", "E"] %}{{ n * 20 - 10 }}{% else %}{{ n * 20 }}{% endif %} 40">
+<svg class="dynkin" height="{{ height }}" id="dynkin-{{ T }}{{ n }}" viewBox="-10 -10 {% if T == "D" %}{{ n * 20 - 20 }}{% elif T in ["D", "E"] %}{{ n * 20 - 10 }}{% else %}{{ n * 20 }}{% endif %} 40">
   <g style="stroke-width:1; stroke-linejoin:bevel; stroke-linecap:butt; stroke:black; fill:white">
     {% if T == "A" %}
       <polyline points="0,10 {{ (n - 1) * 20 }},10" />
