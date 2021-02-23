@@ -28,7 +28,7 @@
   <dt class="col-3 text-right">$\mathrm{Aut}^0({{ X.latex() }})$
   <dd class="col-9">$G\ltimes U$
 
-  <dt class="col-3 text-right">$\dim G$
+  <dt class="col-3 text-right">$\dim\mathrm{Aut}^0({{ X.latex() }})$
   <dd class="col-9">{{ X.D.number_of_roots() + X.D.number_of_positive_roots() }}
 </dl>
 
@@ -52,7 +52,7 @@
 \begin{equation}
 \xymatrix{
 E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
-\operatorname{Bl}_{ {{ Z.latex() }} } \ar@{->>}[r]^{\mathbb{P}^{ {{ X.dimension() - Y.dimension() }} }} \ar@{->>}[d] &
+\operatorname{Bl}_{ {{ Z.latex() }} } {{ X.latex() }} \ar@{->>}[r]^(.6){\mathbb{P}^{ {{ X.dimension() - Y.dimension() }} }} \ar@{->>}[d] &
 \href{/{{ Y.url() }} }{ {{ Y.latex() }} } \\
 \href{/{{ Z.url() }} }{ {{ Z.latex() }} } \ar[r] &
 {{ X.latex() }}
@@ -103,6 +103,10 @@ E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
 {{ blowup(X, X.Z, X.Y) }}
 
 <div class="text-left">
+  The exceptional divisor is the partial flag variety
+  {{ macros.dynkin(X.D.T, X.D.n, height=25, k=[X.y, X.z]) }}
+  <br>
+  <div class="ml-5 mt-3">
   $
     E_{ {{ X.Y.latex() }} }
     \cong
@@ -110,8 +114,7 @@ E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
     \cong
     \mathrm{ {{ X.D.T }} }_{ {{ X.D.n }} } / \mathrm{P}_{ {{ X.y }}, {{ X.z }} }
   $
-  <br>
-  {{ macros.dynkin(X.D.T, X.D.n, height=30, k=[X.y, X.z]) }}
+  </div>
 </div>
 
 {% endmacro %}
