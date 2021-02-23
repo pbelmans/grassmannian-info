@@ -557,7 +557,7 @@ class Horospherical:
                 else:
                     return zip(*eigenvalues.X2)
             if self.D.T == "C":
-                if self.D.n == 3 and self.y == 3: return zip(*eigenvalues.X3[self.D.n, self.D.y])
+                return zip(*eigenvalues.X3[self.D.n, self.y])
             if self.D.T == "F": return zip(*eigenvalues.X4)
             if self.D.T == "G": return zip(*eigenvalues.X5)
         except (AttributeError, KeyError): return None
