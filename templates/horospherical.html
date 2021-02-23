@@ -95,7 +95,7 @@ E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
   <tbody>
     <tr>
       <td class="text-right">
-        <a href="{{ X.Z.url() }}">$Z={{ X.Z.latex() }}$</a>
+        <a href="/{{ X.Z.url() }}">$Z={{ X.Z.latex() }}$</a>
         {{ macros.dynkin(X.Z.D.T, X.Z.D.n, height=20, k=[X.Z.k]) }}</dd>
       </td>
       <td class="text-center">unique closed $\mathrm{Aut}({{ X.latex() }})$-orbit</td>
@@ -106,7 +106,7 @@ E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
 
     <tr>
       <td class="text-right">
-        <a href="{{ X.Y.url() }}">$Y={{ X.Y.latex() }}$</a>
+        <a href="/{{ X.Y.url() }}">$Y={{ X.Y.latex() }}$</a>
         {{ macros.dynkin(X.Y.D.T, X.Y.D.n, height=20, k=[X.Y.k]) }}
       </td>
       <td class="text-center">other closed {{ macros.adjoint_group(X.Y.Aut().D) }}-orbit</td>
