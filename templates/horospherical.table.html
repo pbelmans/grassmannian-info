@@ -7,7 +7,7 @@
 {% macro th(T, n, dynkin_label) %}
 <th>
   <a href="/{{ T }}{{ n }}">
-    {{ macros.dynkin(T, n) }}
+    {{ macros.dynkin(T, n, height=18) }}
     {{ T }}<sub>{{ n }}</sub>
   </a>
   </di
@@ -243,7 +243,7 @@ $("td.entry").mouseenter(function(e) {
   // copy the Dynkin diagram
   $("a > svg", $(e.currentTarget).parent()).clone().appendTo($("td#dynkin"));
   // make it a bit bigger
-  $("td#dynkin svg")[0].setAttribute("height", 40);
+  $("td#dynkin svg")[0].setAttribute("height", 35);
 });
 
 $("td.entry").mouseleave(function() {
