@@ -42,114 +42,6 @@
 {% endmacro %}
 
 
-{% macro hpd(G) %}
-{% for lefschetz in G.lefschetz() %}
-  {{ partition(lefschetz, G.embedding() + 1) }}
-{% endfor %}
-{% endmacro %}
-
-
-{% macro QH(G) %}
-<p>The <em>small</em> quantum cohomology is <strong>{% if G.small_qh_semisimple() %}generically semisimple{% elif G.small_qh_not_semisimple() %}not generically semisimple{% else %}not known to be (non-)semisimple{% endif %}</strong>.
-
-<p>The <em>big</em> quantum cohomology is <strong>{% if G.big_qh_semisimple()%}generically semisimple{% else %}not known yet to be generically semisimple{% endif %}</strong>.
-
-{% if G.eigenvalues() %}
-<p>The eigenvalues of quantum multiplication by $\mathrm{c}_1({{ G.latex() }})$ are given by:
-
-<div id="eigenvalues"></div>
-
-<div class="multiplicities d-none">
-  <input id="multiplicities" type="checkbox" data-toggle="toggle" data-on="show" data-off="hide" data-onstyle="secondary" data-size="xs">
-  <label for="multiplicities">multiplicities
-</div>
-
-
-<script src="https://d3js.org/d3.v5.js"></script>
-<script type="text/javascript">
-$(function() {
-  // toggle between no or lots of information by activating a class which triggers the styling
-  $("input#multiplicities").change(function() {
-    if ($(this).prop("checked"))
-      $("text.multiplicities").attr("display", "none");
-    else
-      $("text.multiplicities").removeAttr("display");
-  });
-});
-
-
-var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
-
-// append the svg object to the body of the page
-var svg = d3.select("#eigenvalues")
-  .append("svg")
-    .attr("viewBox", "0 0 460 400")
-  //  .attr("width", width + margin.left + margin.right)
-  //  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
-
-var eigenvalues = [{% for e in G.eigenvalues() %}[{{ G.index() * e[0] }}, {{ G.index() * e[1] }}], {% endfor %}];
-
-// add multiplicity
-var counts = {};
-eigenvalues.forEach(function(x) { counts[x] = (counts[x] || 0)+1; });
-
-var data = [];
-for (eigenvalue in counts) {
-  data.push({x: parseFloat(eigenvalue.split(",")[0]), y: parseFloat(eigenvalue.split(",")[1]), multiplicity: counts[eigenvalue]});
-
-  if (counts[eigenvalue] > 1)
-    $("div.multiplicities").removeClass("d-none");
-}
-
-// determine size of box around points
-var xMin = xMax = yMin = yMax = 0;
-for (var i = 0; i < data.length; i++) {
-  xMin = Math.min(xMin, data[i].x);
-  xMax = Math.max(xMax, data[i].x);
-  yMin = Math.min(yMin, data[i].y);
-  yMax = Math.max(yMax, data[i].y);
-}
-var epsilon = 1;
-
-// add X axis
-var x = d3.scaleLinear().domain([xMin - epsilon, xMax + epsilon]).range([ 0, width ]);
-var xAxis = svg.append("g").attr("transform", "translate(0," + height + ")").call(d3.axisBottom(x));
-
-// add y axis
-var y = d3.scaleLinear().domain([yMin - epsilon, yMax + epsilon]).range([ height, 0]);
-var yAxis = svg.append("g").call(d3.axisLeft(y));
-
-// add points
-var points = svg.append("g")
-  .selectAll("point")
-  .data(data)
-  .enter()
-  .append("circle")
-    .attr("cx", function(d) { return x(d.x); })
-    .attr("cy", function(d) { return y(d.y); })
-    .attr("fill", "red")
-    .attr("r", function(d) { return 0.5 * d.multiplicity + 0.5; });
-
-var multiplicities = svg.append("g")
-  .selectAll("point")
-  .data(data)
-  .enter()
-  .append("text")
-    .attr("class", "multiplicities")
-    .attr("x", function(d) { return x(d.x) + d.multiplicity + 1; })
-    .attr("y", function(d) { return y(d.y) + 2; })
-    .attr("font-size", "7px")
-    .text(function(d) { return d.multiplicity > 1 ? d.multiplicity : ""; });
-</script>
-{% endif %}
-{% endmacro %}
-
-
 {% macro betti_vertical(G) %}
 \begin{align*}
 {%- for betti in G.betti() %}
@@ -239,9 +131,9 @@ var multiplicities = svg.append("g")
 
     {{ macros.component("Exceptional collections", exceptional_sequences(G)) }}
 
-    {{ macros.component("Quantum cohomology", QH(G)) }}
+    {{ macros.component("Quantum cohomology", macros.QH(G)) }}
 
-    {{ macros.component("Homological projective duality", hpd(G)) }}
+    {{ macros.component("Homological projective duality", macros.hpd(G)) }}
   </div>
 </div>
 

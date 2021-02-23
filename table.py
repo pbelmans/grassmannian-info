@@ -543,7 +543,26 @@ class Horospherical:
         if self.D.T == "G": return [("Gonzales&ndash;Pech&ndash;Perrin&ndash;Samokhin", 2018, "1803.05063")]
 
         return []
-        
+
+
+    def lefschetz(self):
+        return []
+
+
+    def eigenvalues(self):
+        try:
+            if self.D.T == "B":
+                if self.y == self.D.n - 1:
+                    return zip(*eigenvalues.X1[self.D.n])
+                else:
+                    return zip(*eigenvalues.X2)
+            if self.D.T == "C":
+                if self.D.n == 3 and self.y == 3: return zip(*eigenvalues.X3[self.D.n, self.D.y])
+            if self.D.T == "F": return zip(*eigenvalues.X4)
+            if self.D.T == "G": return zip(*eigenvalues.X5)
+        except (AttributeError, KeyError): return None
+
+        return None
 
 
     def small_qh_not_semisimple(self):

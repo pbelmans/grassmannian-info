@@ -23,7 +23,7 @@
   <dd class="col-9">{{ macros.adjoint_group(X.Y.Aut().D) }}
 
   <dt class="col-3 text-right">$\dim G$
-  <dd class="col-9">{{ X.Y.Aut().dimension() }}
+  <dd class="col-9">{{ X.D.number_of_roots() }}
 
   <dt class="col-3 text-right">$\mathrm{Aut}^0({{ X.latex() }})$
   <dd class="col-9">$G\ltimes U$
@@ -48,6 +48,7 @@
 {% endif %}
 {% endmacro %}
 
+
 {% macro blowup(X, Y, Z) %}
 \begin{equation}
 \xymatrix{
@@ -61,21 +62,30 @@ E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
 {% endmacro %}
 
 
+{% macro exceptional_sequence(X, sequence) %}
+<li>{{ sequence[0] | safe }} constructed a full exceptional sequence in {{ sequence[1] }}, see {{ macros.reference_link(sequence[2]) }}.
+{% endmacro %}
+
+
+{% macro exceptional_sequences(X) %}
+{% if X.exceptional_sequences() | length == 0 %}
+  <p>No full exceptional collection is known for $\mathbf{D}^{\mathrm{b}}({{ X.latex() }})$. Will you be the first to construct one? Let us know if you do!
+{% else %}
+  <ul>
+  {% for sequence in X.exceptional_sequences() %}
+    {{ exceptional_sequence(X, sequence) }}
+  {% endfor %}
+  </ul>
+{% endif %}
+{% endmacro %}
+
+
 {% macro description(X) %}
-<dl class="row">
-  <dt class="col-6 text-right">unique closed $\mathrm{Aut}({{ X.latex() }})$-orbit
-  <dd class="col-6">$Z={{ X.Z.latex() }}$<br>
-    {{ macros.dynkin(X.Z.D.T, X.Z.D.n, height=30, k=[X.Z.k]) }}</dd>
-
-  <dt class="col-6 text-right">other closed {{ macros.adjoint_group(X.Y.Aut().D) }}-orbit
-  <dd class="col-6">$Y={{ X.Y.latex() }}$<br>
-    {{ macros.dynkin(X.Y.D.T, X.Y.D.n, height=30, k=[X.Y.k]) }}</dd>
-</dl>
-
 <table class="table">
   <thead>
     <tr>
       <th></th>
+      <th class="text-center">role</th>
       <th class="text-center">dimension</th>
       <th class="text-center">codimension</th>
       <th class="text-center">index</th>
@@ -84,17 +94,25 @@ E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
 
   <tbody>
     <tr>
-      <td class="text-right"><a href="{{ X.Y.url() }}">$Y={{ X.Y.latex() }}$</a></td>
-      <td class="text-center">{{ X.Y.dimension() }}</td>
-      <td class="text-center">{{ X.dimension() - X.Y.dimension() }}</td>
-      <td class="text-center">{{ X.Y.index() }}</td>
-    </tr>
-
-    <tr>
-      <td class="text-right"><a href="{{ X.Z.url() }}">$Z={{ X.Z.latex() }}$</a></td>
+      <td class="text-right">
+        <a href="{{ X.Z.url() }}">$Z={{ X.Z.latex() }}$</a>
+        {{ macros.dynkin(X.Z.D.T, X.Z.D.n, height=20, k=[X.Z.k]) }}</dd>
+      </td>
+      <td class="text-center">unique closed $\mathrm{Aut}({{ X.latex() }})$-orbit</td>
       <td class="text-center">{{ X.Z.dimension() }}</td>
       <td class="text-center">{{ X.dimension() - X.Z.dimension() }}</td>
       <td class="text-center">{{ X.Z.index() }}</td>
+    </tr>
+
+    <tr>
+      <td class="text-right">
+        <a href="{{ X.Y.url() }}">$Y={{ X.Y.latex() }}$</a>
+        {{ macros.dynkin(X.Y.D.T, X.Y.D.n, height=20, k=[X.Y.k]) }}
+      </td>
+      <td class="text-center">other closed {{ macros.adjoint_group(X.Y.Aut().D) }}-orbit</td>
+      <td class="text-center">{{ X.Y.dimension() }}</td>
+      <td class="text-center">{{ X.dimension() - X.Y.dimension() }}</td>
+      <td class="text-center">{{ X.Y.index() }}</td>
     </tr>
   </tbody>
 </table>
@@ -151,6 +169,12 @@ E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
     {{ macros.component("Basic information", basic(X)) }}
 
     {{ macros.component("Blowups and projections", description(X)) }}
+
+    {{ macros.component("Exceptional collections", exceptional_sequences(X)) }}
+
+    {{ macros.component("Quantum cohomology", macros.QH(X)) }}
+
+    {{ macros.component("Homological projective duality", macros.hpd(X)) }}
   </div>
 </div>
 
