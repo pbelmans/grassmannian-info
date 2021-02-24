@@ -332,7 +332,11 @@ class Grassmannian:
         if self.D.T == "F" and self.k == 1: return True
         if self.D.T == "G": return True
 
-        # this means that either it _is_ semisimple, or it's not known
+        # if all eigenvalues are distinct then we also have semisimplicity
+        if self.eigenvalues():
+            return len(set(self.eigenvalues())) == self.rank()
+
+        # this means that either it is _not_ semisimple, or it's not known
         return False
 
 
@@ -581,6 +585,10 @@ class Horospherical:
             if self.D.n == 3 and self.y == 3: return True
         if self.D.T == "F": pass
         if self.D.T == "G": return True # [("Gonzales&ndash;Pech&ndash;Perrin&ndash;Samokhin", 2018, "1803.05063")]
+
+        # if all eigenvalues are distinct then we also have semisimplicity
+        if self.eigenvalues():
+            return len(set(self.eigenvalues())) == self.rank()
 
         return False
 
