@@ -819,7 +819,7 @@ with open("grassmannians.json") as f:
                 G["lefschetz"].append({"support" : [3]*3 + [2]*9})
         if T == "F":
             # Belmans--Kuznetsov--Smirnov
-            if n == 4:
+            if k == 4:
                 G["lefschetz"].append({"support" : [3]*2 + [2]*8})
 
 
