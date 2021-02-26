@@ -17,7 +17,7 @@
   <dd class="col-9">{{ X.rank() }}
 
   <dt class="d-lg-none col-3 text-right">Betti numbers
-  <dd class="d-lg-none col-9">{{ betti_horizontal(X) }}
+  <dd class="d-lg-none col-9">{{ macros.betti_horizontal(X) }}
 
   <dt class="col-3 text-right">$G$
   <dd class="col-9">{{ macros.adjoint_group(X.Y.Aut().D) }}
@@ -138,21 +138,6 @@ E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
 {% endmacro %}
 
 
-{% macro betti_vertical(X) %}
-\begin{align*}
-{%- for betti in X.betti() %}
-  \mathrm{b}_{ {{ loop.index }} } &= {{ betti }} {% if not loop.last %}\\{% endif %}
-{%- endfor %}
-\end{align*}
-{% endmacro %}
-
-{% macro betti_horizontal(X) %}
-{%- for betti in X.betti() -%}
-  $\mathrm{b}_{ {{ loop.index }} } = {{ betti }}${% if not loop.last %}, {% endif %}
-{%- endfor %}
-{% endmacro %}
-
-
 {% block content %}
 <header class="text-center">
   <h2 class="mt-3">{{ X.name()[0] | upper }}{{ X.name()[1:] | safe }} ${% if X.D.T == "C" %}\operatorname{SGr}({{ X.y }},{{ 2*X.D.n + 1 }})={% endif %}{{ X.latex() }}$</h2>
@@ -162,7 +147,7 @@ E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
 
 <div class="row">
   <div class="col-2 d-none d-lg-block">
-    {{ macros.component("Betti numbers", betti_vertical(X)) }}
+    {{ macros.component("Betti numbers", macros.betti_vertical(X)) }}
   </div>
 
   <div class="col-12 col-lg-10" style="overflow-x: hidden">

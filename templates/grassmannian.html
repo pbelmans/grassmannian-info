@@ -17,7 +17,7 @@
   <dd class="col-9">{{ G.rank() }}
 
   <dt class="d-lg-none col-3 text-right">Betti numbers
-  <dd class="d-lg-none col-9">{{ betti_horizontal(G) }}
+  <dd class="d-lg-none col-9">{{ macros.betti_horizontal(G) }}
 
   <dt class="col-3 text-right">$\mathrm{Aut}^0({{ G.latex() }})$
   <dd class="col-9">{{ macros.adjoint_group(G.Aut().D) }}
@@ -28,21 +28,6 @@
   <dt class="col-3 text-right">$\dim\mathrm{Aut}^0({{ G.latex() }})$
   <dd class="col-9">{{ G.Aut().dimension() }}
 </dl>
-{% endmacro %}
-
-
-{% macro betti_vertical(G) %}
-\begin{align*}
-{%- for betti in G.betti() %}
-  \mathrm{b}_{ {{ loop.index }} } &= {{ betti }} {% if not loop.last %}\\{% endif %}
-{%- endfor %}
-\end{align*}
-{% endmacro %}
-
-{% macro betti_horizontal(G) %}
-{%- for betti in G.betti() -%}
-  $\mathrm{b}_{ {{ loop.index }} } = {{ betti }}${% if not loop.last %}, {% endif %}
-{%- endfor %}
 {% endmacro %}
 
 
@@ -110,7 +95,7 @@
 
 <div class="row">
   <div class="col-2 d-none d-lg-block">
-    {{ macros.component("Betti numbers", betti_vertical(G)) }}
+    {{ macros.component("Betti numbers", macros.betti_vertical(G)) }}
   </div>
 
   <div class="col-12 col-lg-10">
