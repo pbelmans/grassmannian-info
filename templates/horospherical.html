@@ -20,7 +20,7 @@
   <dd class="d-lg-none col-9">{{ macros.betti_horizontal(X) }}
 
   <dt class="col-3 text-right">$G$
-  <dd class="col-9">{{ macros.adjoint_group(X.Y.Aut().D) }}
+  <dd class="col-9">{{ macros.adjoint_group(X.D.D) }}
 
   <dt class="col-3 text-right">$\dim G$
   <dd class="col-9">{{ X.D.number_of_roots() }}
@@ -109,7 +109,7 @@ E_{ {{ Z.latex() }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
         <a href="/{{ X.Y.url() }}">$Y={{ X.Y.latex() }}$</a>
         {{ macros.dynkin(X.Y.D.T, X.Y.D.n, height=20, k=[X.Y.k]) }}
       </td>
-      <td class="text-center">other closed {{ macros.adjoint_group(X.Y.Aut().D) }}-orbit</td>
+      <td class="text-center">other closed {{ macros.adjoint_group(X.D.D) }}-orbit</td>
       <td class="text-center">{{ X.Y.dimension() }}</td>
       <td class="text-center">{{ X.dimension() - X.Y.dimension() }}</td>
       <td class="text-center">{{ X.Y.index() }}</td>
