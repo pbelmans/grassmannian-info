@@ -241,14 +241,14 @@ var multiplicities = svg.append("g")
 {% macro betti_vertical(X) %}
 \begin{align*}
 {%- for betti in X.betti() %}
-  \mathrm{b}_{ {{ loop.index - 1 }} } &= {{ betti }} {% if not loop.last %}\\{% endif %}
+  \mathrm{b}_{ {{ 2 * loop.index - 2 }} } &= {{ betti }} {% if not loop.last %}\\{% endif %}
 {%- endfor %}
 \end{align*}
 {% endmacro %}
 
 {% macro betti_horizontal(X) %}
 {%- for betti in X.betti() -%}
-  $\mathrm{b}_{ {{ loop.index }} } = {{ betti }}${% if not loop.last %}, {% endif %}
+  $\mathrm{b}_{ {{ 2 * loop.index - 2 }} } = {{ betti }}${% if not loop.last %}, {% endif %}
 {%- endfor %}
 {% endmacro %}
 
