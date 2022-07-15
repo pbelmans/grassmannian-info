@@ -446,6 +446,34 @@ class Grassmannian:
 
         return None
 
+    # the k-Fanoness
+    def fano(self):
+        # Theorems 1.3 and 1.4 of https://arxiv.org/abs/2110.02339
+
+        # 3-Fano: Theorem 1.4 of https://arxiv.org/abs/2110.02339
+        if self.D.T == "A" and self.k in [1, self.D.n] and self.D.n >= 3: return 3
+        if self.D.T == "B" and self.k == 1 and self.D.n >= 4: return 3
+        if self.D.T == "D" and self.k == 1 and self.D.n >= 5: return 3
+        # exceptional ways of getting P^3
+        if self.D.T == "B" and self.D.n == 2 and self.k == 2: return 3
+        if self.D.T == "D" and self.D.n == 3 and self.k in [2, 3]: return 3
+        # exceptional ways of getting P^{2n+1}
+        if self.D.T == "C" and self.D.n >= 2 and self.k == 1: return 3
+
+        # 2-Fano: Theorem 1.3 of https://arxiv.org/abs/2110.02339
+        if self.D.T == "A" and self.D.n >= 2 and self.k in [1, self.D.n, math.floor(self.D.n), math.ceil(self.D.n)]: return 2
+        if self.D.T == "B" and self.D.n == 3*self.k + 2: return 2
+        if self.D.T == "C" and self.D.n == 3*self.k - 2: return 2
+        if self.D.T == "C" and self.k == self.D.n: return 2
+        if self.D.T == "D" and self.D.n == 3*self.k + 2: return 2
+        if self.D.T == "D" and self.k in [self.D.n - 1, self.D.n]: return 2
+        if self.D.T == "E" and self.k in [1, 2, self.D.n]: return 2
+        if self.D.T == "F" and self.k == 4: return 2
+        if self.D.T == "G": return 2
+
+        # just Fano, not higher Fano
+        return 1
+
 
 class Horospherical:
     # T and n determine the Lie type of the group G, y and z are the indices of the weights for \omega_Y and \omega_Z

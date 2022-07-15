@@ -40,13 +40,13 @@
 
 {% block content %}
 <form id="controls" class="form-group row">
-  <div class="col-lg-9 row">
-    <div class="form-check col-6 ml-3 mb-2">
+  <div class="col-lg-9 row pt-3">
+    <div class="form-check col-2 ml-3 mb-2">
       <input class="form-check-input" type="radio" id="no-colors" name="color" value="no-colors" checked>
       <label class="form-check-label" for="no-colors" checked="checked">no colors</label>
     </div>
 
-    <div class="col-lg-6" id="typing">
+    <div class="col-lg-3" id="typing">
       <div class="form-check minuscule">
         <input class="form-check-input" type="radio" id="minuscule" name="color" value="minuscule">
         <label class="form-check-label" for="minuscule">minuscule</label>
@@ -65,7 +65,7 @@
       </div>
     </div>
 
-    <div class="col-lg-6 mt-3 mt-lg-0" id="derived">
+    <div class="col-lg-4 mt-3 mt-lg-0" id="derived">
       <div class="form-check exceptional">
         <input class="form-check-input" type="radio" id="exceptional" name="color" value="exceptional">
         <label class="form-check-label" for="exceptional">full exceptional collection?</label>
@@ -97,10 +97,23 @@
         <li class="big-unknown">unknown
       </ul>
     </div>
+
+    <div class="col-lg-2 mt-3 mt-lg-0" id="fano">
+      <div class="form-check exceptional">
+        <input class="form-check-input" type="radio" id="k-fano" name="color" value="fano">
+        <label class="form-check-label" for="fano">$k$-Fano</label>
+      </div>
+
+      <ul id="fano-colors">
+        <li class="fano-3">3-Fano
+        <li class="fano-2">2-Fano
+        <li class="fano-1">Fano
+      </ul>
+    </div>
   </div>
 
-  <div class="col-lg-3">
-    <div class="form-check pl-0 pt-3">
+  <div class="col-lg-3 pt-3">
+    <div class="form-check pl-0">
       <input id="information" type="checkbox" data-toggle="toggle" data-on="more" data-off="less" data-onstyle="secondary" data-size="xs">
       <label for="information">information to display
     </div>
@@ -269,7 +282,7 @@ isomorphisms["G2-{{ k }}"] = {{ pretty_print_labels(Grassmannian("G", 2, k).isom
 {%- endfor %}
 
 // the data fields
-var fields = ["name", "dimension", "index", "euler", "type", "full", "small-message", "big-message"];
+var fields = ["name", "dimension", "index", "euler", "type", "full", "small-message", "big-message", "fano"];
 
 // interact with the table
 $("td.entry").mouseenter(function(e) {
@@ -309,14 +322,9 @@ $("td.entry").mouseenter(function(e) {
   else {
     $("td#small-message").text("not known to be (non-)semisimple");
   }
-  
-  // indicate whether small quantum cohomology is semisimple
-  if ($(e.currentTarget).data("big") == "semisimple") {
-    $("td#big-message").text("generically semisimple");
-  }
-  else {
-    $("td#big-message").text("not known to be (non-)semisimple");
-  }
+
+  // k-Fanoness
+
 
   // copy the Dynkin diagram
   $("svg#dynkin-" + label.split("-")[0]).clone().appendTo($("td#dynkin"));
@@ -339,7 +347,7 @@ $("td.entry").mouseleave(function() {
 
 // change the color by activating a class which triggers the styling
 function colors() {
-  $("td.entry").removeClass("minuscule cominuscule adjoint coadjoint exceptional-known exceptional-unknown small-semisimple small-non-semisimple small-unknown big-semisimple big-unknown");
+  $("td.entry").removeClass("minuscule cominuscule adjoint coadjoint exceptional-known exceptional-unknown small-semisimple small-non-semisimple small-unknown big-semisimple big-unknown fano-3 fano-2 fano-1");
   $("div#typing div.form-check").removeClass("active");
 
   var value = $("input[name=color]:checked").val();
@@ -363,6 +371,13 @@ function colors() {
     $("td.entry[data-big=semisimple]").addClass("big-semisimple");
     $("td.entry[data-big=unknown]").addClass("big-unknown");
     $("ul#big-semisimple-colors").show();
+  }
+  if (["fano"].indexOf(value) >= 0) {
+    console.log(value);
+    $("td.entry[data-fano=3]").addClass("fano-3");
+    $("td.entry[data-fano=2]").addClass("fano-2");
+    $("td.entry[data-fano=1]").addClass("fano-1");
+    $("ul#fano-colors").show();
   }
 };
 

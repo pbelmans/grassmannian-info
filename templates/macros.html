@@ -109,7 +109,7 @@
 
 
 {% macro data(G) -%}
-data-dimension="{{ G.dimension() }}" data-index="{{ G.index() }}" data-euler="{{ G.rank() }}" data-name="{{ G.name() | safe }}" data-exceptional="{% if G.exceptional_sequences() %}known{% else %}unknown{% endif %}" data-small="{% if G.small_qh_semisimple() %}semisimple{% elif G.small_qh_not_semisimple() %}non-semisimple{% else %}unknown{% endif %}" data-big="{% if G.big_qh_semisimple() %}semisimple{% else %}unknown{% endif %}"
+data-dimension="{{ G.dimension() }}" data-index="{{ G.index() }}" data-euler="{{ G.rank() }}" data-name="{{ G.name() | safe }}" data-exceptional="{% if G.exceptional_sequences() %}known{% else %}unknown{% endif %}" data-small="{% if G.small_qh_semisimple() %}semisimple{% elif G.small_qh_not_semisimple() %}non-semisimple{% else %}unknown{% endif %}" data-big="{% if G.big_qh_semisimple() %}semisimple{% else %}unknown{% endif %}" data-fano="{{ G.fano() }}"
 {%- endmacro %}
 
 
