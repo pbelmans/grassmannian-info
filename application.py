@@ -461,12 +461,20 @@ class Grassmannian:
         if self.D.T == "C" and self.D.n >= 2 and self.k == 1: return 3
 
         # 2-Fano: Theorem 1.3 of https://arxiv.org/abs/2110.02339
-        if self.D.T == "A" and self.D.n >= 2 and self.k in [1, self.D.n, math.floor(self.D.n), math.ceil(self.D.n)]: return 2
-        if self.D.T == "B" and self.D.n == 3*self.k + 2: return 2
-        if self.D.T == "C" and self.D.n == 3*self.k - 2: return 2
+        if self.D.T == "A" and self.D.n >= 2 and self.k in [1, self.D.n, math.floor((self.D.n + 1) / 2), math.ceil((self.D.n + 1) / 2)]: return 2
+
+        if self.D.T == "B" and self.D.n >= 2 and self.k == 1: return 2
+        if self.D.T == "B" and 2 * self.D.n - 1 == 3*self.k: return 2
+        if self.D.T == "B" and self.D.n == self.k: return 2
+
+        if self.D.T == "C" and self.k == 1: return 2
+        if self.D.T == "C" and 2 * self.D.n + 2 == 3*self.k: return 2
         if self.D.T == "C" and self.k == self.D.n: return 2
-        if self.D.T == "D" and self.D.n == 3*self.k + 2: return 2
+
+        if self.D.T == "D" and self.k == 1: return 2
+        if self.D.T == "D" and 2 * self.D.n - 2 == 3*self.k: return 2
         if self.D.T == "D" and self.k in [self.D.n - 1, self.D.n]: return 2
+
         if self.D.T == "E" and self.k in [1, 2, self.D.n]: return 2
         if self.D.T == "F" and self.k == 4: return 2
         if self.D.T == "G": return 2
