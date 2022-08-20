@@ -227,6 +227,17 @@ var multiplicities = svg.append("g")
 {% endmacro %}
 
 
+{% macro kfano(G) %}
+{% if G.fano() > 1 %}
+  <p>This generalised Grassmannian is $k$-Fano</a> for the value $k={{ G.fano() }}$,
+  i.e. $\mathrm{ch}_i(\mathrm{T}_{ {{ G.latex() }} })\cdot Z>0$ for all effective cycles of codimension ${% for i in range(1, G.fano() + 1) %}{{ i }}{% if not loop.last %},{% endif %}{% endfor %}$.
+{% else %}
+  <p>This generalised Grassmannian is not higher Fano.
+{% endif %}
+<p>For more information one is referred to <a href="https://arxiv.org/abs/2110.02339v1">arXiv:2110.02339</a>.
+{% endmacro %}
+
+
 {% macro partition(lefschetz, embedding) %}
 <svg class="lefschetz" style="max-width: {{ [embedding * 40, 800] | min }}" viewBox="0 0 {{ embedding * 20 }} {{ lefschetz["support"][0] * 20 }} ">
   {% for i in range(embedding) %}
