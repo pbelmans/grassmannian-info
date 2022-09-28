@@ -633,6 +633,10 @@ class Horospherical:
         # small semisimplicity implies big semisimplicity
         if self.small_qh_semisimple(): return True
 
+    def fano(self):
+        # TODO maybe not true
+        return 1
+
 
 
 # registering the Dynkin, Grassmannian and Horospherical class so that Jinja2 can use it directly
