@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<style>
+circle.point {
+  stroke:black;
+  stroke-width: 2;
+}
+
+line.classical {
+  stroke: rgb(255, 0, 0);
+  stroke-width: 2;
+}
+
+line.freudenthal {
+  stroke: rgb(0, 0, 255);
+  stroke-width: 2;
+}
+
+line.axis {
+  stroke: rgb(200, 200, 200);
+  stroke-width: 2;
+}
+
+text.dynkin-label {
+  display: none;
+}
+
+text.algebra-label {
+  font-size: 80%;
+}
+
+tspan[baseline-shift] {
+  font-size: 70%;
+}
+
+a:hover {
+  fill: rgb(70, 140, 20);
+}
+</style>
+  </head>
+<body>
+
+<svg width="600" height="1000" viewBox="-40 -40 600 1000" class="cartesian">
+</svg>
+
+<script type="text/javascript">
+function dynkin(type, rank) {
+  return `${type}<tspan baseline-shift="sub">${rank}</tspan>`
+}
+function lie(type, rank) {
+  switch (type) {
+    case "A": return `𝖘𝖑<tspan baseline-shift="sub">${rank + 1}</tspan>`;
+    case "B": return `𝖘𝖔<tspan baseline-shift="sub">${2*rank + 1}</tspan>`;
+    case "C": return `𝖘𝖕<tspan baseline-shift="sub">${2*rank}</tspan>`;
+    case "D": return `𝖘𝖔<tspan baseline-shift="sub">${2*rank}</tspan>`;
+    case "E": return `𝖊<tspan baseline-shift="sub">${rank}</tspan>`;
+    case "F": return `𝖋<tspan baseline-shift="sub">${rank}</tspan>`;
+    case "G": return `𝖌<tspan baseline-shift="sub">${rank}</tspan>`;
+  }
+}
+
+function x(beta)  { return beta * 40; }
+function y(gamma) { return 880 - gamma * 40; }
+
+function addCoordinate(type, rank, beta, gamma) {
+  var link = d3.select("svg").append("a")
+    .attr("href", `${type}${rank}`)
+
+  link.append("circle")
+    .attr("r", "2")
+    .attr("cx", x(beta))
+    .attr("cy", y(gamma))
+    .attr("class", "point");
+
+  link.append("text").html(dynkin(type, rank))
+    .attr("x", x(beta) - 20)
+    .attr("y", y(gamma) + 5)
+    .attr("class", "dynkin-label");
+
+  link.append("text").html(lie(type, rank))
+    .attr("x", x(beta) + 5)
+    .attr("y", y(gamma) + 5)
+    .attr("class", "algebra-label");
+}
+
+// classical lines
+d3.select("svg").append("line")
+  .attr("x1", x(1)).attr("y1", y(3))
+  .attr("x2", x(1)).attr("y2", y(22))
+  .attr("class", "classical");
+
+d3.select("svg").append("line")
+  .attr("x1", x(2)).attr("y1", y(2))
+  .attr("x2", x(2)).attr("y2", y(22))
+  .attr("class", "classical");
+
+d3.select("svg").append("line")
+  .attr("x1", x(4)).attr("y1", y(-1))
+  .attr("x2", x(4)).attr("y2", y(22))
+  .attr("class", "classical");
+
+// third row of Freudenthal's magic square
+d3.select("svg").append("line")
+  .attr("x1", x(1)).attr("y1", y(5)) // C_3
+  .attr("x2", x(8)).attr("y2", y(12)) // E_7
+  .attr("class", "freudenthal");
+
+// fourth row of Freudenthal's magic square
+d3.select("svg").append("line")
+  .attr("x1", x(5)).attr("y1", y(6)) // F_4
+  .attr("x2", x(12)).attr("y2", y(20)) // E_8
+  .attr("class", "freudenthal");
+
+// coordinate system
+d3.select("svg").append("line")
+  .attr("x1", x(0)).attr("y1", y(-1))
+  .attr("x2", x(0)).attr("y2", y(23))
+  .attr("class", "axis");
+
+d3.select("svg").append("line")
+  .attr("x1", x(-1)).attr("y1", y(0))
+  .attr("x2", x(13)).attr("y2", y(0))
+  .attr("class", "axis");
+
+d3.select("svg").append("circle")
+  .attr("r", "2")
+  .attr("cx", x(1))
+  .attr("cy", y(0))
+  .attr("style", "fill:white; stroke:black; stroke-width: 3");
+
+d3.select("svg").append("circle")
+  .attr("r", "2")
+  .attr("cx", x(0))
+  .attr("cy", y(1))
+  .attr("style", "fill:white; stroke:black; stroke-width: 3");
+
+d3.select("svg").append("text").html("β")
+  .attr("x", x(13) + 5)
+  .attr("y", y(0) - 15)
+
+d3.select("svg").append("text").html("γ")
+  .attr("x", x(0) - 15)
+  .attr("y", y(23) + 15)
+
+d3.select("svg").append("text").html("1")
+  .attr("x", x(1) - 4)
+  .attr("y", y(0) + 20)
+
+d3.select("svg").append("text").html("1")
+  .attr("x", x(0) - 15)
+  .attr("y", y(1) + 5)
+
+// Lie algebras
+for (var n = 1; n <= 21; n++) addCoordinate("A", n, 2, n + 1,);
+for (var n = 1; n <= 12; n++) addCoordinate("B", n, 4, 2*n - 3);
+for (var n = 1; n <= 20; n++) addCoordinate("C", n, 1, n + 2);
+for (var n = 2; n <= 13; n++) addCoordinate("D", n, 4, 2*n - 4);
+addCoordinate("E", 6, 6, 8);
+addCoordinate("E", 7, 8, 12);
+addCoordinate("E", 8, 12, 20);
+addCoordinate("F", 4, 5, 6);
+addCoordinate("G", 2, 10/3, 8/3);
+
+</script>
+
+</body>
+</html>
