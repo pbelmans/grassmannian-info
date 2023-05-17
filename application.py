@@ -579,6 +579,7 @@ class Horospherical:
         if self.D.T == "C":
             if self.y == 2: return [("Pech", 2013, "MR2998953")]
             if self.D.n == 3 and self.y == 3: return [("Fonarev", 2020, "1804.06946")]
+            if self.D.n == 4 and self.y == 3: return [("Cattani", 2023, "2305.06867")]
         if self.D.T == "F": pass
         if self.D.T == "G": return [("Gonzales&ndash;Pech&ndash;Perrin&ndash;Samokhin", 2018, "1803.05063")]
 
