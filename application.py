@@ -350,6 +350,8 @@ class Grassmannian:
         if self.D.T == "F" and self.k == 4: return True
         # work of Perrin--Smirnov (in progress)
         if self.is_coadjoint(): return True
+        # by page 3 of 2307.03696
+        if self.D.T == "C" and self.k >= 3: return True
 
 
     def latex(self):
