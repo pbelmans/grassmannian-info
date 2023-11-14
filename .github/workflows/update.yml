@@ -1,8 +1,8 @@
 name: update and reload website
 on: workflow_dispatch
 jobs:
-  build:
-    name: Update website
+  update:
+    name: Update repository
     runs-on: ubuntu-latest
     steps:
     - name: git pull
@@ -12,4 +12,16 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        script: whoami
+        script: git pull
+
+  reload:
+    name: Reload website
+    needs: update
+    runs-on: ubuntu-latest
+    steps:
+    - name: touch WSGI
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: touch /var/www/www_grassmannian_info_wsgi.py
