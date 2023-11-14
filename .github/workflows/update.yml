@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: touch WSGI
+      with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
