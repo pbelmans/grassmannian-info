@@ -1,0 +1,15 @@
+name: update and reload website
+on: workflow_dispatch
+jobs:
+  build:
+    name: Update website
+    runs-on: ubuntu-latest
+    steps:
+    - name: git pull
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: whoami
