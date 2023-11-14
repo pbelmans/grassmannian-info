@@ -12,7 +12,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        script: git pull
+        script: cd grassmannian-info && git pull
 
   reload:
     name: Reload website
