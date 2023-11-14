@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template, redirect
 
+import os
 import json
 import math
 import numpy as np
@@ -833,7 +834,7 @@ def exceptional(D, k):
 grassmannians = {letter : {} for letter in "ABCDEFG"}
 
 # load the Sage-generated JSON file
-with open("grassmannians.json") as f:
+with open(os.path.join(os.path.realpath(os.path.dirname(__file__)), "grassmannians.json"), "r", encoding="utf8") as f:
     data = json.load(f)
 
     for G in data:
