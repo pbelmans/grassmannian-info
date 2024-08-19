@@ -817,6 +817,7 @@ def exceptional(D, k):
         if k == 1: results.append(("Kapranov", 1988, "MR0939472"),)
         if k == 2: results.append(("Kuznetsov&ndash;Smirnov", 2020, "2001.04148"),)
         if k == 4 and n == 5: results.append(("Kuznetsov", 2008, "MR2238172"),)
+        if k == 5 and n == 6: results.append(("Benedetti&ndash;Faenzi&ndash;Smirnov", 2023, "2310.01090"))
 
     if T == "E":
         if k == 1 and n == 6: results.append(("Faenzi&ndash;Manivel", 2013, "MR3293722"),)
