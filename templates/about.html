@@ -11,6 +11,22 @@
   <li><a href="https://github.com/pbelmans/grassmannian-info/issues">create an issue on GitHub</a>
 </ul>
 
+<h2>How to cite?</h2>
+If you use <a href="https://www.ctan.org/pkg/biblatex">biblatex</a>:
+<pre><code>@online{grassmannian,
+  author = {Belmans, Pieter},
+  title = {Grassmannian.info --- A periodic table of (generalised) Grassmannians},
+  url = {https://grassmannian.info},
+  year = {% raw %}{{% endraw %}{{ now.year }}{% raw %}}{% endraw %},
+}</code></pre>
+<p>If you still use <a href="https://www.bibtex.org">bibtex</a>:
+<pre><code>@misc{fanography,
+  author = {Belmans, Pieter},
+  title = {Grassmannian.info --- A periodic table of (generalised) Grassmannians},
+  howpublished = {% raw %}{\url{https://grassmannian.info}}{% endraw %},
+  year = {% raw %}{{% endraw %}{{ now.year }}{% raw %}}{% endraw %},
+}</code></pre>
+
 <h3>Acknowledgements</h3>
 <p>I would like to thank <em>Alexander Kuznetsov</em> and <em>Maxim Smirnov</em> for interesting discussions.
 Thanks to <em>Max Briest</em> for spotting typos.
