@@ -8,6 +8,8 @@ import numpy as np
 
 app = Flask(__name__)
 
+app.static_folder = "static"
+
 import eigenvalues
 
 
@@ -961,6 +963,11 @@ def show_horospherical_table():
 @app.route("/horospherical/<X>")
 def show_horospherical(X):
     return render_template("horospherical.html", X=horospherical_varieties[X])
+
+# to make the current year accessible in templates
+@app.context_processor
+def inject_now():
+    return {"now": datetime.utcnow()}
 
 
 """
