@@ -172,9 +172,9 @@
     {% endif %}
     {% if D.T == "D" %}
       \begin{aligned}
-        \displaystyle\epsilon_i-\epsilon_j&=\sum_{i&lt;k&lt;j}\alpha_k & 1\leq i&lt;j\leq n \\
+        \displaystyle\epsilon_i-\epsilon_j&=\sum_{i\leq k&lt;j}\alpha_k & 1\leq i&lt;j\leq n \\
         \displaystyle\epsilon_i+\epsilon_j&=\sum_{i\leq k&lt;j}\alpha_k+2\sum_{j\leq k&lt;n-1}\alpha_k+\alpha_{n-1}+\alpha_n & 1\leq i&lt;j&lt; n \\
-        \displaystyle\epsilon_i+\epsilon_n&=\sum_{i\leq k&lt;n-2}\alpha_k & 1\leq i&lt;n
+        \displaystyle\epsilon_i+\epsilon_n&=\sum_{i\leq k&lt;n-2}\alpha_k+\alpha_n & 1\leq i&lt;n
       \end{aligned}
     {% endif %}
     {% if D.T == "E" and D.n == 6 %}
