@@ -1,0 +1,430 @@
+{% extends "page.html" %}
+
+{% block title %}Lie.js &mdash; interactive Lie theory computations{% endblock %}
+
+{% block content %}
+<h2 class="mt-3 text-center">Lie.js &mdash; interactive Lie theory computations</h2>
+
+<p class="lead text-center">
+  <a href="https://github.com/pbelmans/Lie.js">Lie.js</a> is a JavaScript library for Lie-theoretic computations
+  on partial flag varieties and homogeneous vector bundles.
+  Use the console below to run computations directly in your browser.
+</p>
+
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Console</span>
+        <div>
+          <button id="btn-run" class="btn btn-sm btn-primary mr-1">Run <kbd>Ctrl+Enter</kbd></button>
+          <button id="btn-clear" class="btn btn-sm btn-outline-secondary">Clear output</button>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <div id="editor"></div>
+      </div>
+      <div class="card-footer p-0">
+        <pre id="output" class="lie-output mb-0"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Examples</h3>
+<p>Click an example to load it into the editor.</p>
+
+<div class="row mb-4" id="examples">
+  <div class="col-md-6 col-lg-4 mb-3">
+    <div class="card example-card" data-code="const X = Gr(2, 5);
+console.log('Dimension:', dimension(X));
+console.log('Fano index:', fanoIndex(X));
+console.log('Euler characteristic:', eulerCharacteristic(X).toString());
+console.log('Betti numbers:', bettiNumbers(X));">
+      <div class="card-body">
+        <h6 class="card-title">Dimension of Gr(2,5)</h6>
+        <p class="card-text text-muted small">Compute basic invariants of the Grassmannian $\mathrm{Gr}(2,5)$.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4 mb-3">
+    <div class="card example-card" data-code="for (let n = 2; n <= 8; n++) {
+  const Q = quadric(n);
+  console.log(`Q_${n}: dim=${dimension(Q)}, betti=${bettiNumbers(Q)}`);
+}">
+      <div class="card-body">
+        <h6 class="card-title">Betti numbers of quadrics</h6>
+        <p class="card-text text-muted small">Loop over quadric hypersurfaces $Q_2,\ldots,Q_8$ and print their Betti numbers.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4 mb-3">
+    <div class="card example-card" data-code="const CP = cayleyPlane();
+console.log('Cayley plane E6/P1');
+console.log('dimension:', dimension(CP));
+console.log('index:', fanoIndex(CP));
+console.log('Betti numbers:', bettiNumbers(CP));
+console.log('Euler characteristic:', eulerCharacteristic(CP).toString());">
+      <div class="card-body">
+        <h6 class="card-title">Cayley plane invariants</h6>
+        <p class="card-text text-muted small">The Cayley plane $\mathrm{E}_6/P_1$: dimension, index, Betti numbers.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4 mb-3">
+    <div class="card example-card" data-code="const dt = parseDynkinType('A3');
+const V = [1, 0, 0]; // fundamental representation
+const decomp = dominantCharacter(dt, new Int32Array(V));
+console.log('Dominant character of V(ω₁) for A₃:');
+for (const [key, mult] of decomp)
+  console.log(`  weight [${key}]: multiplicity ${mult}`);">
+      <div class="card-body">
+        <h6 class="card-title">Dominant character</h6>
+        <p class="card-text text-muted small">Compute the dominant character of the fundamental representation of $A_3$.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4 mb-3">
+    <div class="card example-card" data-code="const X = Gr(2, 5);
+const T = tangentBundle(X);
+console.log('Tangent bundle of Gr(2,5)');
+console.log('Rank:', rankBundle(T));
+const dims = cohomologyDimensions(T);
+console.log('Cohomology dimensions:', dims.map(d => d.toString()));">
+      <div class="card-body">
+        <h6 class="card-title">Tangent bundle cohomology</h6>
+        <p class="card-text text-muted small">Compute cohomology of the tangent bundle on $\mathrm{Gr}(2,5)$ via Borel&ndash;Weil&ndash;Bott.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4 mb-3">
+    <div class="card example-card" data-code="const X = Gr(3, 6);
+const series = hilbertSeries(X, 15);
+console.log('Hilbert series of Gr(3,6):');
+console.log(series.map(v => v.toString()));">
+      <div class="card-body">
+        <h6 class="card-title">Hilbert series</h6>
+        <p class="card-text text-muted small">Compute the first 15 terms of the Hilbert series of $\mathrm{Gr}(3,6)$.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4 mb-3">
+    <div class="card example-card" data-code="// Build an arbitrary G/P
+const dt = parseDynkinType('D5');
+const X = partialFlagVariety(dt, [2, 4]);
+console.log('D5 / P_{2,4}');
+console.log('dimension:', dimension(X));
+console.log('index:', fanoIndex(X));
+console.log('Euler characteristic:', eulerCharacteristic(X).toString());
+console.log('Betti numbers:', bettiNumbers(X));">
+      <div class="card-body">
+        <h6 class="card-title">Partial flag variety D<sub>5</sub>/P<sub>2,4</sub></h6>
+        <p class="card-text text-muted small">Build an arbitrary partial flag variety and compute its invariants.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4 mb-3">
+    <div class="card example-card" data-code="// Iterate over all G/P of type A_n for small n
+for (let n = 1; n <= 5; n++) {
+  for (let k = 1; k <= n; k++) {
+    const X = Gr(k, n + 1);
+    console.log(`Gr(${k},${n+1}): dim=${dimension(X)}, index=${fanoIndex(X)}, chi=${eulerCharacteristic(X)}`);
+  }
+}">
+      <div class="card-body">
+        <h6 class="card-title">Survey of type A Grassmannians</h6>
+        <p class="card-text text-muted small">Iterate over all $\mathrm{Gr}(k,n)$ for small $n$.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-4 mb-3">
+    <div class="card example-card" data-code="const X = LGr(3);
+const L = lineBundle(X, [1]);
+console.log('Line bundle O(1) on LGr(3)');
+const dims = cohomologyDimensions(L);
+console.log('h^i:', dims.map(d => d.toString()));
+console.log('chi:', eulerCharacteristicBundle(L).toString());">
+      <div class="card-body">
+        <h6 class="card-title">Line bundle on Lagrangian Grassmannian</h6>
+        <p class="card-text text-muted small">Cohomology of $\mathcal{O}(1)$ on $\mathrm{LGr}(3)=\mathrm{C}_3/P_3$.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>API reference</h3>
+<p>All functions from Lie.js are available in the console without <code>import</code> statements. Here is a summary of the main functions.</p>
+
+<div class="card mb-4">
+  <div class="card-header">Constructing varieties</div>
+  <div class="card-body">
+    <table class="table table-sm">
+      <thead><tr><th>Function</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>Gr(k, n)</code></td><td>Grassmannian $\mathrm{Gr}(k,n) = A_{n-1}/P_k$</td></tr>
+        <tr><td><code>projectiveSpace(n)</code></td><td>Projective space $\mathbb{P}^n = A_n/P_1$</td></tr>
+        <tr><td><code>quadric(n)</code></td><td>Smooth quadric hypersurface $Q_n$</td></tr>
+        <tr><td><code>OGr(k, n)</code></td><td>Orthogonal Grassmannian $\mathrm{OGr}(k,n)$</td></tr>
+        <tr><td><code>SGr(k, n)</code></td><td>Symplectic Grassmannian $\mathrm{SGr}(k,n)$, $n$ even</td></tr>
+        <tr><td><code>LGr(n)</code></td><td>Lagrangian Grassmannian $\mathrm{LGr}(n) = C_n/P_n$</td></tr>
+        <tr><td><code>cayleyPlane()</code></td><td>Cayley plane $E_6/P_1$</td></tr>
+        <tr><td><code>freudenthalVariety()</code></td><td>Freudenthal variety $E_7/P_7$</td></tr>
+        <tr><td><code>partialFlagVariety(dt, marked)</code></td><td>General $G/P$: <code>dt</code> is a Dynkin type (string or object), <code>marked</code> is an array of 1-based node indices</td></tr>
+        <tr><td><code>parseDynkinType(s)</code></td><td>Parse a string like <code>"A3"</code>, <code>"D5"</code>, <code>"E6xA2"</code> into a Dynkin type object</td></tr>
+        <tr><td><code>adjointVariety(dt)</code></td><td>Adjoint variety of the given simple type</td></tr>
+        <tr><td><code>coadjointVariety(dt)</code></td><td>Coadjoint variety of the given simple type</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">Invariants of varieties</div>
+  <div class="card-body">
+    <table class="table table-sm">
+      <thead><tr><th>Function</th><th>Returns</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>dimension(X)</code></td><td><code>number</code></td><td>Dimension of the variety</td></tr>
+        <tr><td><code>eulerCharacteristic(X)</code></td><td><code>BigInt</code></td><td>Topological Euler characteristic (= order of Weyl group quotient)</td></tr>
+        <tr><td><code>bettiNumbers(X)</code></td><td><code>number[]</code></td><td>Betti numbers $b_0, b_2, b_4, \ldots$ (only even-degree ones, which are all nonzero)</td></tr>
+        <tr><td><code>fanoIndex(X)</code></td><td><code>number</code></td><td>Fano index = gcd of anticanonical degrees</td></tr>
+        <tr><td><code>hilbertSeries(X, d)</code></td><td><code>BigInt[]</code></td><td>Hilbert series coefficients $h^0(\mathcal{O}(k))$ for $k=0,\ldots,d$</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">Vector bundles and cohomology</div>
+  <div class="card-body">
+    <table class="table table-sm">
+      <thead><tr><th>Function</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>tangentBundle(X)</code></td><td>Tangent bundle $T_X$</td></tr>
+        <tr><td><code>cotangentBundle(X)</code></td><td>Cotangent bundle $\Omega_X$</td></tr>
+        <tr><td><code>canonicalBundle(X)</code></td><td>Canonical bundle $\omega_X$</td></tr>
+        <tr><td><code>lineBundle(X, weights)</code></td><td>Line bundle $\mathcal{O}(\lambda)$ from an array of weights on marked nodes</td></tr>
+        <tr><td><code>rankBundle(E)</code></td><td>Rank of a bundle</td></tr>
+        <tr><td><code>cohomologyDimensions(E)</code></td><td>Array of $h^i(X, E)$ via Borel&ndash;Weil&ndash;Bott</td></tr>
+        <tr><td><code>eulerCharacteristicBundle(E)</code></td><td>Euler characteristic $\chi(X, E)$</td></tr>
+        <tr><td><code>directSum(E, F)</code></td><td>Direct sum $E \oplus F$</td></tr>
+        <tr><td><code>tensorProductBundle(E, F)</code></td><td>Tensor product $E \otimes F$</td></tr>
+        <tr><td><code>exteriorPowerBundle(E, k)</code></td><td>Exterior power $\bigwedge^k E$</td></tr>
+        <tr><td><code>symmetricPowerBundle(E, k)</code></td><td>Symmetric power $\mathrm{Sym}^k E$</td></tr>
+        <tr><td><code>dualBundle(E)</code></td><td>Dual bundle $E^\vee$</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">Representation theory</div>
+  <div class="card-body">
+    <table class="table table-sm">
+      <thead><tr><th>Function</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>dominantCharacter(dt, weight)</code></td><td>Dominant character of $V(\lambda)$ via Freudenthal's formula</td></tr>
+        <tr><td><code>weylDimension(dt, weight)</code></td><td>Dimension of the irreducible representation $V(\lambda)$</td></tr>
+        <tr><td><code>tensorProduct(dt, w1, w2)</code></td><td>Decompose $V(\lambda)\otimes V(\mu)$</td></tr>
+        <tr><td><code>exteriorPower(dt, weight, k)</code></td><td>Decompose $\bigwedge^k V(\lambda)$</td></tr>
+        <tr><td><code>symmetricPower(dt, weight, k)</code></td><td>Decompose $\mathrm{Sym}^k V(\lambda)$</td></tr>
+        <tr><td><code>cartanMatrix(dt)</code></td><td>Cartan matrix of the Dynkin type</td></tr>
+        <tr><td><code>rootSystem(dt)</code></td><td>Positive roots of the Dynkin type</td></tr>
+        <tr><td><code>weylOrder(dt)</code></td><td>Order of the Weyl group</td></tr>
+        <tr><td><code>coxeterNumber(dt)</code></td><td>Coxeter number</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- CodeMirror 6 — self-hosted bundle (avoids multi-instance CDN issues) -->
+<script type="module">
+import {basicSetup, EditorView, EditorState, keymap, javascript} from "/static/cm.bundle.js";
+
+// Import the Lie.js bundle — all exports become available
+import * as Lie from "/static/lie.bundle.js";
+
+const defaultCode = `// Try editing this code, then press Run (or Ctrl+Enter)
+const X = Gr(2, 5);
+console.log("Gr(2,5)");
+console.log("  dimension:", dimension(X));
+console.log("  Fano index:", fanoIndex(X));
+console.log("  Euler characteristic:", eulerCharacteristic(X).toString());
+console.log("  Betti numbers:", bettiNumbers(X));
+`;
+
+const outputEl = document.getElementById("output");
+
+function appendOutput(text, cls = "") {
+  const span = document.createElement("span");
+  if (cls) span.className = cls;
+  span.textContent = text + "\n";
+  outputEl.appendChild(span);
+  outputEl.scrollTop = outputEl.scrollHeight;
+}
+
+async function runCode(code) {
+  outputEl.innerHTML = "";
+
+  // Build a context with all Lie.js exports available as local variables
+  const argNames = Object.keys(Lie);
+  const argValues = Object.values(Lie);
+
+  // Capture console.log/warn/error
+  const logs = [];
+  const fakeConsole = {
+    log: (...args) => appendOutput(args.map(formatValue).join(" ")),
+    warn: (...args) => appendOutput(args.map(formatValue).join(" "), "warn"),
+    error: (...args) => appendOutput(args.map(formatValue).join(" "), "error"),
+    info: (...args) => appendOutput(args.map(formatValue).join(" ")),
+  };
+
+  try {
+    const fn = new Function(...argNames, "console", `"use strict";\n${code}`);
+    const result = fn(...argValues, fakeConsole);
+    if (result !== undefined) {
+      appendOutput("→ " + formatValue(result), "result");
+    }
+  } catch (e) {
+    appendOutput("Error: " + e.message, "error");
+  }
+}
+
+function formatValue(v) {
+  if (v === undefined) return "undefined";
+  if (v === null) return "null";
+  if (typeof v === "bigint") return v.toString();
+  if (Array.isArray(v)) return "[" + v.map(formatValue).join(", ") + "]";
+  if (v instanceof Int32Array) return "[" + Array.from(v).join(", ") + "]";
+  if (v instanceof Map) {
+    const entries = [];
+    for (const [k, val] of v) entries.push(formatValue(k) + " => " + formatValue(val));
+    return "Map { " + entries.join(", ") + " }";
+  }
+  if (typeof v === "object") {
+    try { return JSON.stringify(v, (_, val) => typeof val === "bigint" ? val.toString() + "n" : val, 2); }
+    catch { return String(v); }
+  }
+  return String(v);
+}
+
+// Custom keymap for Ctrl+Enter / Cmd+Enter to run
+const runKeymap = keymap.of([{
+  key: "Ctrl-Enter",
+  mac: "Cmd-Enter",
+  run: (view) => { runCode(view.state.doc.toString()); return true; },
+}]);
+
+const editor = new EditorView({
+  state: EditorState.create({
+    doc: defaultCode,
+    extensions: [
+      basicSetup,
+      javascript(),
+      runKeymap,
+      EditorView.theme({
+        "&": { fontSize: "14px" },
+        ".cm-editor": { minHeight: "180px", maxHeight: "400px" },
+        ".cm-scroller": { overflow: "auto" },
+      }),
+    ],
+  }),
+  parent: document.getElementById("editor"),
+});
+
+document.getElementById("btn-run").addEventListener("click", () => {
+  runCode(editor.state.doc.toString());
+});
+
+document.getElementById("btn-clear").addEventListener("click", () => {
+  outputEl.innerHTML = "";
+});
+
+// Example cards: click to load code into editor
+// Code strings are kept here to avoid HTML attribute encoding issues with
+// template literals and special characters.
+const EXAMPLES = [
+  // 1. Dimension of Gr(2,5)
+  `const X = Gr(2, 5);
+console.log('Dimension:', dimension(X));
+console.log('Fano index:', fanoIndex(X));
+console.log('Euler characteristic:', eulerCharacteristic(X).toString());
+console.log('Betti numbers:', bettiNumbers(X));`,
+  // 2. Betti numbers of quadrics
+  `for (let n = 2; n <= 8; n++) {
+  const Q = quadric(n);
+  console.log(\`Q_\${n}: dim=\${dimension(Q)}, betti=\${bettiNumbers(Q)}\`);
+}`,
+  // 3. Cayley plane invariants
+  `const CP = cayleyPlane();
+console.log('Cayley plane E6/P1');
+console.log('dimension:', dimension(CP));
+console.log('index:', fanoIndex(CP));
+console.log('Betti numbers:', bettiNumbers(CP));
+console.log('Euler characteristic:', eulerCharacteristic(CP).toString());`,
+  // 4. Dominant character
+  `const dt = parseDynkinType('A3');
+const V = [1, 0, 0]; // fundamental representation \u03c9\u2081
+const decomp = dominantCharacter(dt, new Int32Array(V));
+console.log('Dominant character of V(\u03c9\u2081) for A\u2083:');
+for (const [key, mult] of decomp)
+  console.log(\`  weight [\${key}]: multiplicity \${mult}\`);`,
+  // 5. Tangent bundle cohomology
+  `const X = Gr(2, 5);
+const T = tangentBundle(X);
+console.log('Tangent bundle of Gr(2,5)');
+console.log('Rank:', rankBundle(T));
+const dims = cohomologyDimensions(T);
+console.log('Cohomology dimensions:', dims.map(d => d.toString()));`,
+  // 6. Hilbert series
+  `const X = Gr(3, 6);
+const series = hilbertSeries(X, 15);
+console.log('Hilbert series of Gr(3,6):');
+console.log(series.map(v => v.toString()));`,
+  // 7. Partial flag variety D5/P_{2,4}
+  `// Build an arbitrary G/P
+const dt = parseDynkinType('D5');
+const X = partialFlagVariety(dt, [2, 4]);
+console.log('D5 / P_{2,4}');
+console.log('dimension:', dimension(X));
+console.log('index:', fanoIndex(X));
+console.log('Euler characteristic:', eulerCharacteristic(X).toString());
+console.log('Betti numbers:', bettiNumbers(X));`,
+  // 8. Survey of type A Grassmannians
+  `// Iterate over all G/P of type A_n for small n
+for (let n = 1; n <= 5; n++) {
+  for (let k = 1; k <= n; k++) {
+    const X = Gr(k, n + 1);
+    console.log(\`Gr(\${k},\${n+1}): dim=\${dimension(X)}, index=\${fanoIndex(X)}, chi=\${eulerCharacteristic(X)}\`);
+  }
+}`,
+  // 9. Line bundle on Lagrangian Grassmannian
+  `const X = LGr(3);
+const L = lineBundle(X, [1]);
+console.log('Line bundle O(1) on LGr(3)');
+const dims = cohomologyDimensions(L);
+console.log('h^i:', dims.map(d => d.toString()));
+console.log('chi:', eulerCharacteristicBundle(L).toString());`,
+];
+
+document.querySelectorAll(".example-card").forEach((card, i) => {
+  card.style.cursor = "pointer";
+  card.addEventListener("click", () => {
+    const code = EXAMPLES[i] ?? "";
+    editor.dispatch({
+      changes: { from: 0, to: editor.state.doc.length, insert: code },
+    });
+  });
+});
+</script>
+
+{% endblock %}

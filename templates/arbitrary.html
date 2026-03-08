@@ -1,0 +1,393 @@
+{% extends "page.html" %}
+
+{% block title %}Build your own G/P{% endblock %}
+
+{% block content %}
+<h2 class="mt-3 text-center">Build your own $G/P$</h2>
+<p class="text-center text-muted">
+  Select a Dynkin type and click nodes to mark them. Invariants are computed on the fly using <a href="/lie">Lie.js</a>.
+</p>
+
+<div class="row">
+  <div class="col-lg-8">
+    {# Dynkin type selector #}
+    <div class="card mb-4">
+      <div class="card-header">Dynkin type and parabolic subgroup</div>
+      <div class="card-body">
+        <div class="form-row align-items-center mb-3">
+          <div class="col-auto">
+            <label class="mb-0"><strong>Type:</strong></label>
+          </div>
+          <div class="col-auto">
+            <div class="dropdown" id="dynkin-type-dropdown">
+              <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                      id="dynkin-type-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">A4</button>
+              <div class="dropdown-menu p-2" aria-labelledby="dynkin-type-btn" style="min-width:430px;"></div>
+            </div>
+          </div>
+          <div class="col-auto">
+            <button id="btn-select-all" class="btn btn-sm btn-outline-secondary" title="Select all nodes">Select all</button>
+            <button id="btn-clear-all" class="btn btn-sm btn-outline-secondary" title="Clear all nodes">Clear all</button>
+          </div>
+        </div>
+
+        <div id="dynkin-container" class="text-center py-3" style="min-height: 80px;"></div>
+
+        <p class="text-muted small mb-0 text-center" id="variety-label"></p>
+      </div>
+    </div>
+
+    {# Invariants panel #}
+    <div class="card mb-4" id="invariants-card">
+      <div class="card-header">Invariants</div>
+      <div class="card-body">
+        <div id="invariants-placeholder" class="text-muted text-center py-3">
+          Click at least one node to compute invariants.
+        </div>
+        <div id="invariants-content" style="display: none;">
+          <dl class="row mb-0">
+            <dt class="col-4 text-right">dimension</dt>
+            <dd class="col-8" id="inv-dimension"></dd>
+
+            <dt class="col-4 text-right">index</dt>
+            <dd class="col-8" id="inv-index"></dd>
+
+            <dt class="col-4 text-right">Euler characteristic</dt>
+            <dd class="col-8" id="inv-euler"></dd>
+
+            <dt class="col-4 text-right">Betti numbers</dt>
+            <dd class="col-8" id="inv-betti"></dd>
+
+            <dt class="col-4 text-right">anticanonical bundle</dt>
+            <dd class="col-8" id="inv-anticanonical"></dd>
+
+            <dt class="col-4 text-right">$h^0(-K)$</dt>
+            <dd class="col-8" id="inv-h0K"></dd>
+
+            <dt class="col-4 text-right">$h^0(\mathcal{L})$ (generator)</dt>
+            <dd class="col-8" id="inv-h0gen"></dd>
+          </dl>
+        </div>
+        <div id="invariants-error" class="text-danger text-center py-3" style="display: none;"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card mb-4">
+      <div class="card-header">Quick reference</div>
+      <div class="card-body small">
+        <p><strong>Dynkin types</strong> classify simple algebraic groups.
+          A <strong>parabolic subgroup</strong> $P$ is determined by marking a subset of nodes in the Dynkin diagram.
+          The quotient $G/P$ is a <em>partial flag variety</em>.</p>
+        <p>If a single node $k$ is marked, $G/P$ is a <em>generalised Grassmannian</em>, denoted $X/P_k$.
+          If all nodes are marked, $G/P = G/B$ is the <em>full flag variety</em>.</p>
+
+        <hr>
+        <p><strong>Invariants computed:</strong></p>
+        <ul class="mb-0">
+          <li><strong>Dimension</strong>: $\dim G/P = |\Phi^+ \setminus \Phi^+_P|$</li>
+          <li><strong>Index</strong>: Fano index $= \gcd$ of anticanonical degrees</li>
+          <li><strong>Euler characteristic</strong>: $\chi(G/P) = |W|/|W_P|$</li>
+          <li><strong>Betti numbers</strong>: from Poincar&eacute; polynomial of $G/P$</li>
+          <li><strong>Anticanonical bundle</strong>: $-K_{G/P} = \sum d_i\omega_{k_i}$ where $k_i$ are the marked nodes</li>
+          <li><strong>$h^0(-K)$</strong>: sections of the anticanonical bundle (via Borel&ndash;Weil)</li>
+          <li><strong>$h^0(\mathcal{L})$</strong>: sections of the ample generator $\mathcal{L} = -K^{1/i}$</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">Examples</div>
+      <div class="card-body small">
+        <ul class="list-unstyled mb-0">
+          <li class="mb-1"><a href="/arbitrary/A4/2" class="arbitrary-link">$\mathrm{Gr}(2,5) = A_4/P_2$</a></li>
+          <li class="mb-1"><a href="/arbitrary/B3/3" class="arbitrary-link">$\mathrm{OGr}(1,7) = B_3/P_3$</a></li>
+          <li class="mb-1"><a href="/arbitrary/C3/3" class="arbitrary-link">$\mathrm{LGr}(3) = C_3/P_3$</a></li>
+          <li class="mb-1"><a href="/arbitrary/D5/5" class="arbitrary-link">$\mathrm{OGr}(5,10) = D_5/P_5$</a></li>
+          <li class="mb-1"><a href="/arbitrary/E6/1" class="arbitrary-link">Cayley plane $= E_6/P_1$</a></li>
+          <li class="mb-1"><a href="/arbitrary/A4/1-2-3-4" class="arbitrary-link">Full flag $A_4/B$</a></li>
+          <li class="mb-1"><a href="/arbitrary/D5/2-4" class="arbitrary-link">$D_5/P_{2,4}$</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="module">
+import { renderDynkin } from "/static/dynkin.js";
+import {
+  parseDynkinType, partialFlagVariety,
+  dimension, eulerCharacteristic, bettiNumbers, fanoIndex,
+  anticanonicalDegrees, lineBundle, cohomologyDimensions,
+} from "/static/lie.bundle.js";
+
+// --- Valid Dynkin types by series ---
+const SERIES = {
+  A: Array.from({length: 10}, (_, i) => `A${i + 1}`),
+  B: Array.from({length: 9},  (_, i) => `B${i + 2}`),
+  C: Array.from({length: 9},  (_, i) => `C${i + 2}`),
+  D: Array.from({length: 7},  (_, i) => `D${i + 4}`),
+  E: ["E6", "E7", "E8"],
+  F: ["F4"],
+  G: ["G2"],
+};
+const validTypes = Object.values(SERIES).flat();
+
+// Minimum rank per series — used to align columns so that rank N items
+// appear at the same vertical position across all series (e.g. A4 ≡ D4).
+const START_RANKS = { A: 1, B: 2, C: 2, D: 4, E: 6, F: 4, G: 2 };
+const ITEM_LINE_HEIGHT = 1.6; // em, must match lineHeight below
+
+// --- Build multi-column dropdown menu ---
+const menu = document.querySelector("#dynkin-type-dropdown .dropdown-menu");
+const colWrap = document.createElement("div");
+colWrap.className = "d-flex";
+for (const [letter, types] of Object.entries(SERIES)) {
+  const col = document.createElement("div");
+  col.className = "mr-2";
+  const hdr = document.createElement("div");
+  hdr.className = "px-2 pb-1 font-weight-bold text-muted small";
+  hdr.style.borderBottom = "1px solid #dee2e6";
+  hdr.textContent = letter;
+  col.appendChild(hdr);
+  // Item wrapper — top padding aligns rank N rows across all columns
+  const items = document.createElement("div");
+  items.style.paddingTop = `${(START_RANKS[letter] - 1) * ITEM_LINE_HEIGHT}em`;
+  for (const t of types) {
+    const a = document.createElement("a");
+    a.className = "dynkin-type-item dropdown-item px-2 py-0";
+    a.style.lineHeight = `${ITEM_LINE_HEIGHT}`;
+    a.textContent = t;
+    a.setAttribute("data-value", t);
+    a.href = "#";
+    items.appendChild(a);
+  }
+  col.appendChild(items);
+  colWrap.appendChild(col);
+}
+menu.appendChild(colWrap);
+
+// --- State ---
+let currentType = "A";
+let currentRank = 4;
+let currentMarked = [];
+
+const typeBtn = document.getElementById("dynkin-type-btn");
+function setTypeBtnLabel(typeStr) {
+  typeBtn.textContent = typeStr;
+}
+
+// --- URL parsing ---
+function parseURL() {
+  const path = window.location.pathname;
+  const m = path.match(/^\/arbitrary\/([A-G]\d+)(?:\/(.+))?$/);
+  if (m) {
+    const typeStr = m[1];
+    const T = typeStr[0];
+    const n = parseInt(typeStr.slice(1), 10);
+    if (validTypes.includes(typeStr)) {
+      currentType = T;
+      currentRank = n;
+      setTypeBtnLabel(typeStr);
+      if (m[2]) {
+        currentMarked = m[2].split("-").map(Number).filter(x => x >= 1 && x <= n);
+      } else {
+        currentMarked = [];
+      }
+    }
+  }
+}
+
+function updateURL() {
+  const typeStr = currentType + currentRank;
+  let url = `/arbitrary/${typeStr}`;
+  if (currentMarked.length > 0) {
+    url += "/" + currentMarked.join("-");
+  }
+  history.replaceState(null, "", url);
+}
+
+// --- Rendering ---
+const dynkinContainer = document.getElementById("dynkin-container");
+
+function renderDiagram() {
+  renderDynkin(dynkinContainer, currentType, currentRank, currentMarked, {
+    interactive: true,
+    height: 80,
+    showLabels: false,
+    onToggle: (marked) => {
+      currentMarked = marked;
+      updateURL();
+      updateInvariants();
+      updateLabel();
+    },
+  });
+}
+
+function updateLabel() {
+  const label = document.getElementById("variety-label");
+  const typeStr = currentType + currentRank;
+  if (currentMarked.length === 0) {
+    label.textContent = `Select nodes in the ${typeStr} diagram`;
+  } else if (currentMarked.length === currentRank) {
+    label.textContent = `${typeStr}\u202fB (full flag variety)`;
+  } else {
+    label.textContent = `${typeStr}\u202fP_{${currentMarked.join(",")}}`;
+  }
+}
+
+function formatAnticanonical(degs, marked) {
+  const terms = degs.map((d, j) => {
+    const k = marked[j];
+    return d === 1 ? `\\omega_{${k}}` : `${d}\\omega_{${k}}`;
+  });
+  return "$" + terms.join(" + ") + "$";
+}
+
+function updateInvariants() {
+  const placeholder = document.getElementById("invariants-placeholder");
+  const content = document.getElementById("invariants-content");
+  const errorEl = document.getElementById("invariants-error");
+
+  if (currentMarked.length === 0) {
+    placeholder.style.display = "";
+    content.style.display = "none";
+    errorEl.style.display = "none";
+    return;
+  }
+
+  try {
+    const typeStr = currentType + currentRank;
+    const dt = parseDynkinType(typeStr);
+    const X = partialFlagVariety(dt, currentMarked);
+
+    const dim = dimension(X);
+    const idx = fanoIndex(X);
+    const euler = eulerCharacteristic(X);
+    const betti = bettiNumbers(X);
+
+    document.getElementById("inv-dimension").textContent = dim;
+    document.getElementById("inv-index").textContent = idx;
+    document.getElementById("inv-euler").textContent = euler.toString();
+
+    // Betti numbers
+    const bettiEl = document.getElementById("inv-betti");
+    bettiEl.innerHTML = "";
+    betti.forEach((b, i) => {
+      const span = document.createElement("span");
+      span.textContent = b;
+      span.title = `b_${2 * i} = ${b}`;
+      span.className = "badge badge-light border mr-1";
+      bettiEl.appendChild(span);
+    });
+
+    // Anticanonical bundle
+    const degs = anticanonicalDegrees(X.mdt);
+    const markedNodes = X.mdt.marked;
+    document.getElementById("inv-anticanonical").innerHTML = formatAnticanonical(degs, markedNodes);
+
+    // h^0(-K)
+    const Kanti = lineBundle(X, degs);
+    const h0K = cohomologyDimensions(Kanti)[0];
+    document.getElementById("inv-h0K").textContent = h0K.toString();
+
+    // h^0(generator = -K / index)
+    const genDegs = degs.map(d => Math.round(d / idx));
+    const gen = lineBundle(X, genDegs);
+    const h0gen = cohomologyDimensions(gen)[0];
+    document.getElementById("inv-h0gen").textContent = h0gen.toString();
+
+    // Re-typeset MathJax for the anticanonical expression
+    if (window.MathJax) {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub, content]);
+    }
+
+    placeholder.style.display = "none";
+    content.style.display = "";
+    errorEl.style.display = "none";
+  } catch (e) {
+    placeholder.style.display = "none";
+    content.style.display = "none";
+    errorEl.style.display = "";
+    errorEl.textContent = "Error: " + e.message;
+  }
+}
+
+// --- Dropdown item click handler ---
+document.getElementById("dynkin-type-dropdown").addEventListener("click", (e) => {
+  const item = e.target.closest(".dynkin-type-item");
+  if (!item) return;
+  e.preventDefault();
+  const val = item.getAttribute("data-value");
+  currentType = val[0];
+  currentRank = parseInt(val.slice(1), 10);
+  currentMarked = [];
+  setTypeBtnLabel(val);
+  updateURL();
+  renderDiagram();
+  updateInvariants();
+  updateLabel();
+});
+
+document.getElementById("btn-select-all").addEventListener("click", () => {
+  currentMarked = Array.from({ length: currentRank }, (_, i) => i + 1);
+  updateURL();
+  renderDiagram();
+  updateInvariants();
+  updateLabel();
+});
+
+document.getElementById("btn-clear-all").addEventListener("click", () => {
+  currentMarked = [];
+  updateURL();
+  renderDiagram();
+  updateInvariants();
+  updateLabel();
+});
+
+// Handle example links without page reload
+document.querySelectorAll(".arbitrary-link").forEach(link => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const href = link.getAttribute("href");
+    history.pushState(null, "", href);
+    parseURL();
+    renderDiagram();
+    updateInvariants();
+    updateLabel();
+  });
+});
+
+// Handle browser back/forward
+window.addEventListener("popstate", () => {
+  parseURL();
+  renderDiagram();
+  updateInvariants();
+  updateLabel();
+});
+
+// --- Initialize ---
+const initialType = "{{ initial_type or '' }}";
+const initialMarked = "{{ initial_marked or '' }}";
+
+if (initialType) {
+  const typeStr = initialType;
+  currentType = typeStr[0];
+  currentRank = parseInt(typeStr.slice(1), 10);
+  setTypeBtnLabel(typeStr);
+  if (initialMarked) {
+    currentMarked = initialMarked.split("-").map(Number).filter(x => x >= 1 && x <= currentRank);
+  }
+} else {
+  parseURL();
+}
+
+renderDiagram();
+updateInvariants();
+updateLabel();
+</script>
+
+{% endblock %}

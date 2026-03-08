@@ -1,0 +1,21 @@
+{
+  "name": "grassmannian",
+  "version": "1.0.0",
+  "description": "## How to deploy the website",
+  "main": "index.js",
+  "scripts": {
+    "build:lie": "esbuild ~/Documents/Projects/HomogeneousTools/Lie.js/src/index.js --bundle --format=esm --outfile=static/lie.bundle.js",
+    "build:cm": "esbuild static/cm.entry.js --bundle --format=esm --outfile=static/cm.bundle.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.27.3"
+  },
+  "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.5",
+    "codemirror": "^6.0.2"
+  }
+}

@@ -927,6 +927,18 @@ def show_freudenthal():
     return render_template("freudenthal.html")
 
 
+@app.route("/lie")
+def show_lie():
+    return render_template("lie.html")
+
+
+@app.route("/arbitrary")
+@app.route("/arbitrary/<string:D>")
+@app.route("/arbitrary/<string:D>/<string:marked>")
+def show_arbitrary(D=None, marked=None):
+    return render_template("arbitrary.html", initial_type=D, initial_marked=marked)
+
+
 @app.route("/<string:route>")
 def show_type(route):
     # try for Dynkin type
