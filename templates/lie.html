@@ -6,7 +6,7 @@
 <h2 class="mt-3 text-center">Lie.js &mdash; interactive Lie theory computations</h2>
 
 <p class="lead text-center">
-  <a href="https://github.com/pbelmans/Lie.js">Lie.js</a> is a JavaScript library for Lie-theoretic computations
+  <a href="https://github.com/HomogeneousTools/Lie.js">Lie.js</a> is a JavaScript library for Lie-theoretic computations
   on partial flag varieties and homogeneous vector bundles.
   Use the console below to run computations directly in your browser.
 </p>
@@ -16,13 +16,29 @@
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <span>Console</span>
-        <div>
+        <div class="d-flex align-items-center">
+          <div class="btn-group btn-group-sm mr-3" role="group">
+            <button id="btn-mode-editor" type="button" class="btn btn-secondary">Editor</button>
+            <button id="btn-mode-repl" type="button" class="btn btn-outline-secondary">REPL</button>
+          </div>
           <button id="btn-run" class="btn btn-sm btn-primary mr-1">Run <kbd>Ctrl+Enter</kbd></button>
           <button id="btn-clear" class="btn btn-sm btn-outline-secondary">Clear output</button>
         </div>
       </div>
       <div class="card-body p-0">
         <div id="editor"></div>
+        <div id="repl-area" style="display:none;">
+          <div class="d-flex align-items-center px-2 py-2"
+               style="background:#1e1e1e; border-top:1px solid #333;">
+            <span style="color:#569cd6; font-family:monospace; font-size:13px; flex-shrink:0; margin-right:6px;">&gt;</span>
+            <input type="text" id="repl-input"
+                   style="flex:1; background:transparent; border:none; outline:none; color:#d4d4d4;
+                          font-family:'SF Mono','Fira Code',Menlo,Consolas,monospace; font-size:13px; padding:0;"
+                   placeholder="type JS, press Enter (↑↓ for history; assignments persist between entries, let/const do not)"
+                   autocomplete="off" spellcheck="false">
+            <button id="btn-repl-run" class="btn btn-sm btn-primary ml-2">Run</button>
+          </div>
+        </div>
       </div>
       <div class="card-footer p-0">
         <pre id="output" class="lie-output mb-0"></pre>
@@ -32,7 +48,7 @@
 </div>
 
 <h3>Examples</h3>
-<p>Click an example to load it into the editor.</p>
+<p>Click an example to load it into the editor, or to run it immediately in REPL mode.</p>
 
 <div class="row mb-4" id="examples">
   <div class="col-md-6 col-lg-4 mb-3">
@@ -49,13 +65,11 @@ console.log('Betti numbers:', bettiNumbers(X));">
   </div>
 
   <div class="col-md-6 col-lg-4 mb-3">
-    <div class="card example-card" data-code="for (let n = 2; n <= 8; n++) {
-  const Q = quadric(n);
-  console.log(`Q_${n}: dim=${dimension(Q)}, betti=${bettiNumbers(Q)}`);
-}">
+    <div class="card example-card" data-code="">
       <div class="card-body">
         <h6 class="card-title">Betti numbers of quadrics</h6>
-        <p class="card-text text-muted small">Loop over quadric hypersurfaces $Q_2,\ldots,Q_8$ and print their Betti numbers.</p>
+        <p class="card-text text-muted small">Loop over quadric hypersurfaces $Q_2,\ldots,Q_8$.
+          Note: <code>quadric(n)</code> returns the smooth $n$-dimensional quadric, isomorphic to $A_{n-1}/P_2$ for $n\geq 2$.</p>
       </div>
     </div>
   </div>
@@ -194,7 +208,7 @@ console.log('chi:', eulerCharacteristicBundle(L).toString());">
       <tbody>
         <tr><td><code>dimension(X)</code></td><td><code>number</code></td><td>Dimension of the variety</td></tr>
         <tr><td><code>eulerCharacteristic(X)</code></td><td><code>BigInt</code></td><td>Topological Euler characteristic (= order of Weyl group quotient)</td></tr>
-        <tr><td><code>bettiNumbers(X)</code></td><td><code>number[]</code></td><td>Betti numbers $b_0, b_2, b_4, \ldots$ (only even-degree ones, which are all nonzero)</td></tr>
+        <tr><td><code>bettiNumbers(X)</code></td><td><code>number[]</code></td><td>Betti numbers $\operatorname{b}_0, \operatorname{b}_2, \operatorname{b}_4, \ldots$ (only even-degree ones, which are all nonzero)</td></tr>
         <tr><td><code>fanoIndex(X)</code></td><td><code>number</code></td><td>Fano index = gcd of anticanonical degrees</td></tr>
         <tr><td><code>hilbertSeries(X, d)</code></td><td><code>BigInt[]</code></td><td>Hilbert series coefficients $h^0(\mathcal{O}(k))$ for $k=0,\ldots,d$</td></tr>
       </tbody>
@@ -208,7 +222,7 @@ console.log('chi:', eulerCharacteristicBundle(L).toString());">
     <table class="table table-sm">
       <thead><tr><th>Function</th><th>Description</th></tr></thead>
       <tbody>
-        <tr><td><code>tangentBundle(X)</code></td><td>Tangent bundle $T_X$</td></tr>
+        <tr><td><code>tangentBundle(X)</code></td><td>Tangent bundle $\mathrm{T}_X$</td></tr>
         <tr><td><code>cotangentBundle(X)</code></td><td>Cotangent bundle $\Omega_X$</td></tr>
         <tr><td><code>canonicalBundle(X)</code></td><td>Canonical bundle $\omega_X$</td></tr>
         <tr><td><code>lineBundle(X, weights)</code></td><td>Line bundle $\mathcal{O}(\lambda)$ from an array of weights on marked nodes</td></tr>
@@ -231,11 +245,11 @@ console.log('chi:', eulerCharacteristicBundle(L).toString());">
     <table class="table table-sm">
       <thead><tr><th>Function</th><th>Description</th></tr></thead>
       <tbody>
-        <tr><td><code>dominantCharacter(dt, weight)</code></td><td>Dominant character of $V(\lambda)$ via Freudenthal's formula</td></tr>
-        <tr><td><code>weylDimension(dt, weight)</code></td><td>Dimension of the irreducible representation $V(\lambda)$</td></tr>
-        <tr><td><code>tensorProduct(dt, w1, w2)</code></td><td>Decompose $V(\lambda)\otimes V(\mu)$</td></tr>
-        <tr><td><code>exteriorPower(dt, weight, k)</code></td><td>Decompose $\bigwedge^k V(\lambda)$</td></tr>
-        <tr><td><code>symmetricPower(dt, weight, k)</code></td><td>Decompose $\mathrm{Sym}^k V(\lambda)$</td></tr>
+        <tr><td><code>dominantCharacter(dt, weight)</code></td><td>Dominant character of $\operatorname{V}(\lambda)$ via Freudenthal's formula</td></tr>
+        <tr><td><code>weylDimension(dt, weight)</code></td><td>Dimension of the irreducible representation $\operatorname{V}(\lambda)$</td></tr>
+        <tr><td><code>tensorProduct(dt, w1, w2)</code></td><td>Decompose $\operatorname{V}(\lambda)\otimes \operatorname{V}(\mu)$</td></tr>
+        <tr><td><code>exteriorPower(dt, weight, k)</code></td><td>Decompose $\bigwedge^k \operatorname{V}(\lambda)$</td></tr>
+        <tr><td><code>symmetricPower(dt, weight, k)</code></td><td>Decompose $\mathrm{Sym}^k \operatorname{V}(\lambda)$</td></tr>
         <tr><td><code>cartanMatrix(dt)</code></td><td>Cartan matrix of the Dynkin type</td></tr>
         <tr><td><code>rootSystem(dt)</code></td><td>Positive roots of the Dynkin type</td></tr>
         <tr><td><code>weylOrder(dt)</code></td><td>Order of the Weyl group</td></tr>
@@ -349,80 +363,166 @@ document.getElementById("btn-clear").addEventListener("click", () => {
   outputEl.innerHTML = "";
 });
 
-// Example cards: click to load code into editor
-// Code strings are kept here to avoid HTML attribute encoding issues with
-// template literals and special characters.
+// --- REPL mode ---
+// Persistent scope: assignments persist across entries via Proxy with has:()=>true.
+// 'var' declarations also persist. 'let'/'const' declarations do not.
+const replScopeBase = Object.create(null);
+Object.assign(replScopeBase, Lie);
+const replScope = new Proxy(replScopeBase, {
+  has()          { return true; },                     // all names route through this scope
+  get(t, k)      { return k in t ? t[k] : globalThis[k]; }, // fall back to globals (eval, etc.)
+  set(t, k, v)   { t[k] = v; return true; },
+});
+
+let replMode = false;
+const replHistory = [];
+let replHistoryPos = -1;
+
+const editorWrap  = document.getElementById("editor");
+const replArea    = document.getElementById("repl-area");
+const replInputEl = document.getElementById("repl-input");
+
+function setMode(mode) {
+  replMode = (mode === "repl");
+  editorWrap.style.display = replMode ? "none" : "";
+  replArea.style.display   = replMode ? "" : "none";
+  document.getElementById("btn-run").style.display = replMode ? "none" : "";
+  document.getElementById("examples").style.display = replMode ? "none" : "";
+  document.getElementById("btn-mode-editor").className =
+    "btn btn-" + (replMode ? "outline-" : "") + "secondary";
+  document.getElementById("btn-mode-repl").className =
+    "btn btn-" + (replMode ? "" : "outline-") + "secondary";
+  if (replMode) replInputEl.focus();
+}
+
+document.getElementById("btn-mode-editor").addEventListener("click", () => setMode("editor"));
+document.getElementById("btn-mode-repl").addEventListener("click",   () => setMode("repl"));
+
+function runRepl(code) {
+  if (!code.trim()) return;
+  appendOutput("> " + code, "repl-prompt");
+  try {
+    // with(scope) lets 'var' declarations persist on replScope
+    const fn = new Function("_s", "with (_s) { return eval(" + JSON.stringify(code) + "); }");
+    const result = fn(replScope);
+    if (result !== undefined) appendOutput(formatValue(result), "result");
+  } catch (e) {
+    appendOutput("Error: " + e.message, "error");
+  }
+}
+
+replInputEl.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    const code = replInputEl.value;
+    replHistory.unshift(code);
+    replHistoryPos = -1;
+    replInputEl.value = "";
+    runRepl(code);
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    if (replHistoryPos < replHistory.length - 1) {
+      replHistoryPos++;
+      replInputEl.value = replHistory[replHistoryPos];
+    }
+  } else if (e.key === "ArrowDown") {
+    e.preventDefault();
+    if (replHistoryPos > 0) {
+      replHistoryPos--;
+      replInputEl.value = replHistory[replHistoryPos];
+    } else {
+      replHistoryPos = -1;
+      replInputEl.value = "";
+    }
+  }
+});
+
+document.getElementById("btn-repl-run").addEventListener("click", () => {
+  const code = replInputEl.value;
+  replHistory.unshift(code);
+  replHistoryPos = -1;
+  replInputEl.value = "";
+  runRepl(code);
+});
+
+// Code strings — kept in JS to avoid HTML attribute encoding issues.
 const EXAMPLES = [
   // 1. Dimension of Gr(2,5)
   `const X = Gr(2, 5);
-console.log('Dimension:', dimension(X));
-console.log('Fano index:', fanoIndex(X));
-console.log('Euler characteristic:', eulerCharacteristic(X).toString());
-console.log('Betti numbers:', bettiNumbers(X));`,
-  // 2. Betti numbers of quadrics
+console.log('\u0047r(2,5)');
+console.log('  dimension:', dimension(X));
+console.log('  Fano index:', fanoIndex(X));
+console.log('  Euler characteristic:', eulerCharacteristic(X).toString());
+console.log('  Betti numbers:', bettiNumbers(X));`,
+  // 2. Betti numbers of quadrics (note: Q\u2084 \u2245 \u2119\u00b3 via D\u2083 \u2245 A\u2083)
   `for (let n = 2; n <= 8; n++) {
   const Q = quadric(n);
-  console.log(\`Q_\${n}: dim=\${dimension(Q)}, betti=\${bettiNumbers(Q)}\`);
+  const d = dimension(Q);
+  const note = (n === 4) ? '  // Q\u2084 \u2245 \u2119\u00b3 (D\u2083 \u2245 A\u2083)' : '';
+  console.log('Q' + n + ': dim=' + d + ', betti=' + bettiNumbers(Q) + note);
 }`,
   // 3. Cayley plane invariants
   `const CP = cayleyPlane();
-console.log('Cayley plane E6/P1');
-console.log('dimension:', dimension(CP));
-console.log('index:', fanoIndex(CP));
-console.log('Betti numbers:', bettiNumbers(CP));
-console.log('Euler characteristic:', eulerCharacteristic(CP).toString());`,
+console.log('Cayley plane E\u2086/P\u2081');
+console.log('  dimension:', dimension(CP));
+console.log('  index:', fanoIndex(CP));
+console.log('  Betti numbers:', bettiNumbers(CP));
+console.log('  Euler characteristic:', eulerCharacteristic(CP).toString());`,
   // 4. Dominant character
   `const dt = parseDynkinType('A3');
-const V = [1, 0, 0]; // fundamental representation \u03c9\u2081
-const decomp = dominantCharacter(dt, new Int32Array(V));
+const decomp = dominantCharacter(dt, new Int32Array([1, 0, 0]));
 console.log('Dominant character of V(\u03c9\u2081) for A\u2083:');
 for (const [key, mult] of decomp)
-  console.log(\`  weight [\${key}]: multiplicity \${mult}\`);`,
+  console.log('  weight [' + key + ']: multiplicity ' + mult);`,
   // 5. Tangent bundle cohomology
   `const X = Gr(2, 5);
 const T = tangentBundle(X);
 console.log('Tangent bundle of Gr(2,5)');
-console.log('Rank:', rankBundle(T));
+console.log('  rank:', rankBundle(T));
 const dims = cohomologyDimensions(T);
-console.log('Cohomology dimensions:', dims.map(d => d.toString()));`,
+console.log('  h\u02b0, h\u00b9, \u2026:', dims.map(d => d.toString()));`,
   // 6. Hilbert series
   `const X = Gr(3, 6);
-const series = hilbertSeries(X, 15);
 console.log('Hilbert series of Gr(3,6):');
-console.log(series.map(v => v.toString()));`,
-  // 7. Partial flag variety D5/P_{2,4}
-  `// Build an arbitrary G/P
-const dt = parseDynkinType('D5');
+console.log(hilbertSeries(X, 15).map(v => v.toString()));`,
+  // 7. Partial flag variety D\u2085/P\u2082,\u2084
+  `const dt = parseDynkinType('D5');
 const X = partialFlagVariety(dt, [2, 4]);
-console.log('D5 / P_{2,4}');
-console.log('dimension:', dimension(X));
-console.log('index:', fanoIndex(X));
-console.log('Euler characteristic:', eulerCharacteristic(X).toString());
-console.log('Betti numbers:', bettiNumbers(X));`,
+console.log('D\u2085/P\u2082,\u2084');
+console.log('  dimension:', dimension(X));
+console.log('  index:', fanoIndex(X));
+console.log('  Euler characteristic:', eulerCharacteristic(X).toString());
+console.log('  Betti numbers:', bettiNumbers(X));`,
   // 8. Survey of type A Grassmannians
-  `// Iterate over all G/P of type A_n for small n
-for (let n = 1; n <= 5; n++) {
+  `for (let n = 1; n <= 5; n++) {
   for (let k = 1; k <= n; k++) {
     const X = Gr(k, n + 1);
-    console.log(\`Gr(\${k},\${n+1}): dim=\${dimension(X)}, index=\${fanoIndex(X)}, chi=\${eulerCharacteristic(X)}\`);
+    console.log('Gr(' + k + ',' + (n+1) + '): dim=' + dimension(X) +
+      ', index=' + fanoIndex(X) + ', \u03c7=' + eulerCharacteristic(X));
   }
 }`,
-  // 9. Line bundle on Lagrangian Grassmannian
+  // 9. Line bundle on LGr(3) = C\u2083/P\u2083
   `const X = LGr(3);
 const L = lineBundle(X, [1]);
-console.log('Line bundle O(1) on LGr(3)');
-const dims = cohomologyDimensions(L);
-console.log('h^i:', dims.map(d => d.toString()));
-console.log('chi:', eulerCharacteristicBundle(L).toString());`,
+console.log('\u2112(1) on LGr(3) = C\u2083/P\u2083');
+const hh = cohomologyDimensions(L);
+console.log('  h\u1d35:', hh.map(d => d.toString()));
+console.log('  \u03c7:', eulerCharacteristicBundle(L).toString());`,
 ];
 
 document.querySelectorAll(".example-card").forEach((card, i) => {
   card.style.cursor = "pointer";
   card.addEventListener("click", () => {
     const code = EXAMPLES[i] ?? "";
-    editor.dispatch({
-      changes: { from: 0, to: editor.state.doc.length, insert: code },
-    });
+    if (replMode) {
+      runRepl(code);
+      replInputEl.focus();
+    } else {
+      editor.dispatch({
+        changes: { from: 0, to: editor.state.doc.length, insert: code },
+      });
+      editor.focus();
+    }
   });
 });
 </script>

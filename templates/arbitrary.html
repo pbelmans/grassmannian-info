@@ -61,10 +61,10 @@
             <dt class="col-4 text-right">anticanonical bundle</dt>
             <dd class="col-8" id="inv-anticanonical"></dd>
 
-            <dt class="col-4 text-right">$h^0(-K)$</dt>
+            <dt class="col-4 text-right">$\mathrm{h}^0(\omega_{G/P}^\vee)$</dt>
             <dd class="col-8" id="inv-h0K"></dd>
 
-            <dt class="col-4 text-right">$h^0(\mathcal{L})$ (generator)</dt>
+            <dt class="col-4 text-right">$\mathrm{h}^0(\mathcal{L})$ (generator)</dt>
             <dd class="col-8" id="inv-h0gen"></dd>
           </dl>
         </div>
@@ -92,8 +92,8 @@
           <li><strong>Euler characteristic</strong>: $\chi(G/P) = |W|/|W_P|$</li>
           <li><strong>Betti numbers</strong>: from Poincar&eacute; polynomial of $G/P$</li>
           <li><strong>Anticanonical bundle</strong>: $-K_{G/P} = \sum d_i\omega_{k_i}$ where $k_i$ are the marked nodes</li>
-          <li><strong>$h^0(-K)$</strong>: sections of the anticanonical bundle (via Borel&ndash;Weil)</li>
-          <li><strong>$h^0(\mathcal{L})$</strong>: sections of the ample generator $\mathcal{L} = -K^{1/i}$</li>
+          <li><strong>$\mathrm{h}^0(\omega_{G/P}^\vee)$</strong>: sections of the anticanonical bundle (via Borel&ndash;Weil)</li>
+          <li><strong>$\mathrm{h}^0(\mathcal{L})$</strong>: sections of the ample generator $\mathcal{L} = (\omega_{G/P}^\vee)^{1/i}$</li>
         </ul>
       </div>
     </div>
@@ -102,13 +102,13 @@
       <div class="card-header">Examples</div>
       <div class="card-body small">
         <ul class="list-unstyled mb-0">
-          <li class="mb-1"><a href="/arbitrary/A4/2" class="arbitrary-link">$\mathrm{Gr}(2,5) = A_4/P_2$</a></li>
-          <li class="mb-1"><a href="/arbitrary/B3/3" class="arbitrary-link">$\mathrm{OGr}(1,7) = B_3/P_3$</a></li>
-          <li class="mb-1"><a href="/arbitrary/C3/3" class="arbitrary-link">$\mathrm{LGr}(3) = C_3/P_3$</a></li>
-          <li class="mb-1"><a href="/arbitrary/D5/5" class="arbitrary-link">$\mathrm{OGr}(5,10) = D_5/P_5$</a></li>
-          <li class="mb-1"><a href="/arbitrary/E6/1" class="arbitrary-link">Cayley plane $= E_6/P_1$</a></li>
-          <li class="mb-1"><a href="/arbitrary/A4/1-2-3-4" class="arbitrary-link">Full flag $A_4/B$</a></li>
-          <li class="mb-1"><a href="/arbitrary/D5/2-4" class="arbitrary-link">$D_5/P_{2,4}$</a></li>
+          <li class="mb-1"><a href="/build/A4/2" class="arbitrary-link">$\mathrm{Gr}(2,5) = A_4/P_2$</a></li>
+          <li class="mb-1"><a href="/build/B3/3" class="arbitrary-link">$\mathrm{OGr}(1,7) = B_3/P_3$</a></li>
+          <li class="mb-1"><a href="/build/C3/3" class="arbitrary-link">$\mathrm{LGr}(3) = C_3/P_3$</a></li>
+          <li class="mb-1"><a href="/build/D5/5" class="arbitrary-link">$\mathrm{OGr}(5,10) = D_5/P_5$</a></li>
+          <li class="mb-1"><a href="/build/E6/1" class="arbitrary-link">Cayley plane $= E_6/P_1$</a></li>
+          <li class="mb-1"><a href="/build/A4/1-2-3-4" class="arbitrary-link">Full flag $A_4/B$</a></li>
+          <li class="mb-1"><a href="/build/D5/2-4" class="arbitrary-link">$D_5/P_{2,4}$</a></li>
         </ul>
       </div>
     </div>
@@ -143,6 +143,11 @@ const ITEM_LINE_HEIGHT = 1.6; // em, must match lineHeight below
 
 // --- Build multi-column dropdown menu ---
 const menu = document.querySelector("#dynkin-type-dropdown .dropdown-menu");
+// Helper to convert type string to subscript form (A4 → A₄)
+function addSubscripts(typeStr) {
+  const subs = { 0: "₀", 1: "₁", 2: "₂", 3: "₃", 4: "₄", 5: "₅", 6: "₆", 7: "₇", 8: "₈", 9: "₉" };
+  return typeStr.replace(/(\d)/g, (d) => subs[d]);
+}
 const colWrap = document.createElement("div");
 colWrap.className = "d-flex";
 for (const [letter, types] of Object.entries(SERIES)) {
@@ -160,7 +165,7 @@ for (const [letter, types] of Object.entries(SERIES)) {
     const a = document.createElement("a");
     a.className = "dynkin-type-item dropdown-item px-2 py-0";
     a.style.lineHeight = `${ITEM_LINE_HEIGHT}`;
-    a.textContent = t;
+    a.textContent = addSubscripts(t);
     a.setAttribute("data-value", t);
     a.href = "#";
     items.appendChild(a);
@@ -177,13 +182,13 @@ let currentMarked = [];
 
 const typeBtn = document.getElementById("dynkin-type-btn");
 function setTypeBtnLabel(typeStr) {
-  typeBtn.textContent = typeStr;
+  typeBtn.textContent = addSubscripts(typeStr);
 }
 
 // --- URL parsing ---
 function parseURL() {
   const path = window.location.pathname;
-  const m = path.match(/^\/arbitrary\/([A-G]\d+)(?:\/(.+))?$/);
+  const m = path.match(/^\/build\/([A-G]\d+)(?:\/(.+))?$/);
   if (m) {
     const typeStr = m[1];
     const T = typeStr[0];
@@ -203,7 +208,7 @@ function parseURL() {
 
 function updateURL() {
   const typeStr = currentType + currentRank;
-  let url = `/arbitrary/${typeStr}`;
+  let url = `/build/${typeStr}`;
   if (currentMarked.length > 0) {
     url += "/" + currentMarked.join("-");
   }
@@ -229,14 +234,19 @@ function renderDiagram() {
 
 function updateLabel() {
   const label = document.getElementById("variety-label");
-  const typeStr = currentType + currentRank;
+  const typeMath = `${currentType}_{${currentRank}}`;
+  let inner;
   if (currentMarked.length === 0) {
-    label.textContent = `Select nodes in the ${typeStr} diagram`;
+    inner = `Select nodes in the $${typeMath}$ diagram`;
   } else if (currentMarked.length === currentRank) {
-    label.textContent = `${typeStr}\u202fB (full flag variety)`;
+    inner = `$${typeMath}/B$ &mdash; full flag variety`;
+  } else if (currentMarked.length === 1) {
+    inner = `$${typeMath}/P_{${currentMarked[0]}}$`;
   } else {
-    label.textContent = `${typeStr}\u202fP_{${currentMarked.join(",")}}`;
+    inner = `$${typeMath}/P_{${currentMarked.join(",")}}$`;
   }
+  label.innerHTML = inner;
+  if (window.MathJax) MathJax.Hub.Queue(["Typeset", MathJax.Hub, label]);
 }
 
 function formatAnticanonical(degs, marked) {

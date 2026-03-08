@@ -932,9 +932,9 @@ def show_lie():
     return render_template("lie.html")
 
 
-@app.route("/arbitrary")
-@app.route("/arbitrary/<string:D>")
-@app.route("/arbitrary/<string:D>/<string:marked>")
+@app.route("/build")
+@app.route("/build/<string:D>")
+@app.route("/build/<string:D>/<string:marked>")
 def show_arbitrary(D=None, marked=None):
     return render_template("arbitrary.html", initial_type=D, initial_marked=marked)
 
