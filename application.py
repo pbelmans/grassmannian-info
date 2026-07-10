@@ -4,7 +4,6 @@ from flask import render_template, redirect
 import os
 import json
 import math
-import numpy as np
 from datetime import datetime
 
 app = Flask(__name__)
@@ -12,6 +11,35 @@ app = Flask(__name__)
 app.static_folder = "static"
 
 import eigenvalues
+
+
+# Exact polynomial arithmetic on ascending-coefficient integer lists.
+# numpy's polymul overflows int64 for large Weyl groups and polydiv works in
+# float64 (losing integer precision above 2**52), which made Betti numbers of
+# large varieties wrong/negative. Python ints are unbounded, so these are exact.
+def _polymul(a, b):
+    if not a or not b: return [0]
+    r = [0] * (len(a) + len(b) - 1)
+    for i, x in enumerate(a):
+        for j, y in enumerate(b):
+            r[i + j] += x * y
+    return r
+
+def _polyadd(a, b):
+    return [(a[i] if i < len(a) else 0) + (b[i] if i < len(b) else 0) for i in range(max(len(a), len(b)))]
+
+def _polysub(a, b):
+    return [(a[i] if i < len(a) else 0) - (b[i] if i < len(b) else 0) for i in range(max(len(a), len(b)))]
+
+def _polyexactdiv(P, Q):
+    # exact division P / Q of ascending-coefficient integer polynomials; Q[0] != 0
+    P = list(P)
+    q = [0] * (len(P) - len(Q) + 1)
+    for k in range(len(q)):
+        c = q[k] = P[k] // Q[0]
+        for i in range(len(Q)): P[k + i] -= c * Q[i]
+    assert all(x == 0 for x in P[len(q):]), "polynomial division was not exact"
+    return q
 
 
 """
@@ -231,20 +259,16 @@ class Grassmannian:
     def betti(self):
         #if self.D.T == "A" and self.D.n == 1: return [1, 1]
 
-        P = np.poly1d([1])
+        P = [1]
         for e in self.D.exponents():
-            factor = np.poly1d([0])
-            for i in range(e + 1): factor = np.polyadd(factor, np.poly1d([1] + [0]*i))
-            P = np.polymul(P, factor)
+            P = _polymul(P, [1] * (e + 1))
 
-        Q = np.poly1d([1])
+        Q = [1]
         for D in self.L:
             for e in D.exponents():
-                factor = np.poly1d([0])
-                for i in range(e + 1): factor = np.polyadd(factor, np.poly1d([1] + [0]*i))
-                Q = np.polymul(Q, factor)
+                Q = _polymul(Q, [1] * (e + 1))
 
-        return list(map(int, np.polydiv(P, Q)[0]))
+        return _polyexactdiv(P, Q)
 
 
     def index(self):
@@ -563,13 +587,13 @@ class Horospherical:
 
 
     def betti(self):
-        Y = np.poly1d(self.Y.betti())
-        Z = np.poly1d(self.Z.betti())
+        Y = self.Y.betti()
+        Z = self.Z.betti()
 
-        PY = np.poly1d([1] * (self.codimY() + 1))
-        PZ = np.poly1d([1] * (self.codimZ()))
+        PY = [1] * (self.codimY() + 1)
+        PZ = [1] * self.codimZ()
 
-        return np.asarray(Y * PY + Z - Z * PZ)
+        return _polysub(_polyadd(_polymul(Y, PY), Z), _polymul(Z, PZ))
 
 
     def rank(self):
@@ -925,6 +949,11 @@ def show_explained():
 @app.route("/freudenthal")
 def show_freudenthal():
     return render_template("freudenthal.html")
+
+
+@app.route("/vogel")
+def show_vogel():
+    return render_template("vogel.html")
 
 
 @app.route("/<string:route>")
