@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this website, please cite it as below."
+type: dataset
+title: "Grassmannian.info: a periodic table of (generalised) Grassmannians"
+abstract: >-
+  A periodic table of (generalised) Grassmannians: an interactive presentation
+  of (generalised) Grassmannians and their invariants.
+authors:
+  - family-names: Belmans
+    given-names: Pieter
+    affiliation: "Utrecht University"
+    orcid: "https://orcid.org/0000-0002-0140-2824"
+url: "https://grassmannian.info"
+repository-code: "https://github.com/pbelmans/grassmannian-info"
+license: CC-BY-4.0
+version: 1.0.0
+date-released: "2026-07-10"
+keywords:
+  - Grassmannians
+  - generalised Grassmannians
+  - homogeneous varieties
+  - algebraic geometry
