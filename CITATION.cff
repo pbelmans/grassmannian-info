@@ -12,6 +12,7 @@ authors:
     orcid: "https://orcid.org/0000-0002-0140-2824"
 url: "https://grassmannian.info"
 repository-code: "https://github.com/pbelmans/grassmannian-info"
+doi: "10.5281/zenodo.21296785"
 license: CC-BY-4.0
 version: 1.0.0
 date-released: "2026-07-10"
