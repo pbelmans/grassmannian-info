@@ -260,8 +260,21 @@ def projective_duality(G):
                     degree_reference="magic-square", degree_locator="Section 4.1")
     if ((T == "C" and n == k == 3) or (T == "A" and n == 5 and k == 3)
             or (T == "spinor" and n == 6) or (T == "E" and n == 7 and k == 7)):
-        return dict(result, description="The invariant quartic hypersurface.", codimension=1, degree=4, self_dual=False,
-                    degree_reference="magic-square", degree_locator="Proposition 5.8")
+        group, representation = {
+            "C": (r"\mathrm{Sp}_6", r"the 14-dimensional kernel of the symplectic contraction $\bigwedge^3\mathbb C^6\to\mathbb C^6$"),
+            "A": (r"\mathrm{SL}_6", r"the 20-dimensional representation $\bigwedge^3\mathbb C^6$"),
+            "spinor": (r"\mathrm{Spin}_{12}", r"a 32-dimensional half-spin representation of $\mathrm{Spin}_{12}$"),
+            "E": (r"E_7", "the 56-dimensional minuscule representation of $E_7$"),
+        }[T]
+        description = (
+            rf"The dual is the hypersurface $Q=0$ in $\mathbb P(V^\vee)\cong\mathbb P^{{{G.embedding()}}}$, "
+            rf"where $V$ is {representation}. "
+            rf"The polynomial $Q$ is the unique, up to scale, ${group}$-invariant quartic. "
+            rf"The invariant symplectic form on $V$ identifies this dual with the tangential variety of ${G.latex()}$: "
+            "the union of its embedded projective tangent spaces."
+        )
+        return dict(result, description=description, codimension=1, degree=4, self_dual=False,
+                    degree_reference="magic-square", degree_locator="Propositions 5.4, 5.5 and 5.8 (arXiv version)")
     if T == "G" and k == 2:
         return dict(result, description="The dual sextic hypersurface.", codimension=1, degree=6, self_dual=False,
                     degree_reference="kuznetsov-hyperplanes", degree_locator="Section 6.4")
