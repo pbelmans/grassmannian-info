@@ -8,18 +8,20 @@
 {{ variety_template(G.latex(), G.embedding(), dimension=G.dimension(), index=G.index(), rank=G.rank(), link=G.url()) }}
 {% endmacro %}
 
-{% macro variety_template(latex, embedding, dimension=0, index=0, rank=0, link="") %}
-<td class="text-center">
+{% macro variety_template(latex, embedding, dimension, index, rank, link="") %}
+<td class="text-center" data-dimension="{{ dimension }}" data-index="{{ index }}" data-euler="{{ rank }}">
   {% if link != "" %}<a href="/{{ link }}">{% endif %}
   ${{ latex | safe }}\hookrightarrow\mathbb{P}^{ {{ embedding }} }$
   {% if link != "" %}</a>{% endif %}
 
   <div class="information">
-    \begin{align*}
+    \begin{equation}
+    \begin{aligned}
       d&={{ dimension }} \\
       i&={{ index }} \\
       \chi&={{ rank }}
-    \end{align*}
+    \end{aligned}
+    \end{equation}
   </div>
 </td>
 {% endmacro %}
@@ -33,7 +35,7 @@
   <div class="col-lg-6">
     <div class="form-check pl-0 pt-3">
       <input id="information" type="checkbox" data-toggle="toggle" data-on="more" data-off="less" data-onstyle="secondary" data-size="xs">
-      <label for="information">information to display
+      <label for="information">information to display</label>
     </div>
   </div>
 </form>
@@ -46,16 +48,16 @@
     </tr>
 
     <tr>
-      {{ variety_template("\\nu_4(\mathrm{Q}^1)", 4, link="B1/1") }}
-      {{ variety_template("\mathrm{Fl}(1,2;3)", 7) }}
+      {{ variety_template("\\nu_2(\mathrm{Q}^1)", 4, dimension=1, index=2, rank=2, link="B1/1") }}
+      {{ variety_template("\mathrm{Fl}(1,2;3)", 7, dimension=3, index=2, rank=6) }}
       {{ variety(Grassmannian("C", 3, 2)) }}
       {{ variety(Grassmannian("F", 4, 4)) }}
       <td>hyperplane section of Severi varieties</td>
     </tr>
 
     <tr>
-      {{ variety_template("\\nu_2(\mathbb{P}^2)", 5, link="A2/1") }}
-      {{ variety_template("\mathbb{P}^2\\times\mathbb{P}^2", 8) }}
+      {{ variety_template("\\nu_2(\mathbb{P}^2)", 5, dimension=2, index=3, rank=3, link="A2/1") }}
+      {{ variety_template("\mathbb{P}^2\\times\mathbb{P}^2", 8, dimension=4, index=3, rank=9) }}
       {{ variety(Grassmannian("A", 5, 2)) }}
       {{ variety(Grassmannian("E", 6, 1)) }}
       <td>Severi varieties</td>
@@ -188,8 +190,8 @@
         </tr>
 
         <tr>
-          {{ variety_template(["\mathbb{P}^{", n - 1, "}"] | join, (n + 1) * n // 2 - 1, dimension=n-1, index=n-1, rank=n, link=["A", n - 1, "/1"] | join) }}
-          {{ variety_template(["\mathbb{P}^{", n - 1, "}\\times\mathbb{P}^{", n - 1, "}"] | join, n*n - 1, dimension=(n-1)*(n-1), index=n, rank=n*n) }}
+          {{ variety_template(["\mathbb{P}^{", n - 1, "}"] | join, (n + 1) * n // 2 - 1, dimension=n-1, index=n, rank=n, link=["A", n - 1, "/1"] | join) }}
+          {{ variety_template(["\mathbb{P}^{", n - 1, "}\\times\mathbb{P}^{", n - 1, "}"] | join, n*n - 1, dimension=2*(n-1), index=n, rank=n*n) }}
           {{ variety(Grassmannian("A", 2*n-1, 2)) }}
           <td></td>
         </tr>
