@@ -1,12 +1,21 @@
 {{ define "main" }}
 {{ $G := index hugo.Data.catalog.records .Params.record_route }}
+{{ $betti := index $G.invariants "Betti numbers" }}
 
 <h2 class="text-center mb-4">{{ with $G.latex }}${{ . }}${{ else }}Dynkin type {{ $.Title }}{{ end }}</h2>
 
+<div class="row">
+{{ with $betti }}
+  <div class="col-12 col-lg-2 order-2 order-lg-1">
+    {{ partial "betti.html" . }}
+  </div>
+{{ end }}
+
+<div class="{{ if $betti }}col-12 col-lg-10 order-1 order-lg-2{{ else }}col-12{{ end }}">
 <div class="card mb-4">
   <div class="card-header">Basic information</div>
   <div class="card-body">
-    {{ partial "invariants.html" (dict "values" $G.invariants "fields" (slice "dimension" "index" "Euler characteristic" "rank" "Coxeter number" "Weyl group order" "exponents" "roots" "Betti numbers")) }}
+    {{ partial "invariants.html" (dict "values" $G.invariants "fields" (slice "dimension" "index" "Euler characteristic" "rank" "Coxeter number" "Weyl group order" "exponents" "roots")) }}
   </div>
 </div>
 
@@ -77,6 +86,8 @@
   {{ end }}
 </ul>
 {{ end }}
+</div>
+</div>
 
 <script type="application/json" id="model-data">{{ $G | jsonify | safeJS }}</script>
 {{ end }}
