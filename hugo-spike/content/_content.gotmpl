@@ -1,11 +1,16 @@
 {{ range hugo.Data.catalog.records }}
+  {{ $title := .name | default (strings.TrimPrefix "/" .route) }}
+  {{ $weight := 0 }}
+  {{ if eq .family "Dynkin type" }}{{ $weight = int .invariants.rank }}{{ end }}
   {{ $.AddPage (dict
     "path" (strings.TrimPrefix "/" .route)
     "url" (printf "%s/" .route)
     "kind" .kind
-    "title" .route
+    "title" $title
+    "weight" $weight
     "layout" "record"
     "params" (dict "record_route" .route "family" .family)
   ) }}
 {{ end }}
+{{ .AddPage (dict "path" "horospherical" "kind" "section" "title" "Horospherical varieties") }}
 {{ .AddPage (dict "path" "references" "title" "References" "layout" "references") }}

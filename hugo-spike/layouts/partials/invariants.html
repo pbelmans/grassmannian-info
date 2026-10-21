@@ -1,0 +1,9 @@
+<dl class="row mb-0">
+{{ range .fields }}
+  {{ $value := index $.values . }}
+  {{ if ne $value nil }}
+    <dt class="col-sm-3">{{ . }}</dt>
+    <dd class="col-sm-9 text-break" data-invariant="{{ . }}">{{ if reflect.IsSlice $value }}{{ delimit $value ", " }}{{ else }}{{ $value }}{{ end }}</dd>
+  {{ end }}
+{{ end }}
+</dl>

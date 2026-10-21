@@ -1,34 +1,82 @@
 {{ define "main" }}
-  {{ $record := index hugo.Data.catalog.records .Params.record_route }}
-  <p>{{ $record.family }}{{ with $record.name }}: {{ . }}{{ end }}</p>
-  <dl>
-    {{ range $key, $value := $record.invariants }}
-      <dt>{{ $key }}</dt>
-      <dd data-invariant="{{ $key }}">{{ if reflect.IsSlice $value }}{{ delimit $value ", " }}{{ else }}{{ $value }}{{ end }}</dd>
+{{ $G := index hugo.Data.catalog.records .Params.record_route }}
+
+<h2 class="text-center mb-4">{{ with $G.latex }}${{ . }}${{ else }}Dynkin type {{ $.Title }}{{ end }}</h2>
+
+<div class="card mb-4">
+  <div class="card-header">Basic information</div>
+  <div class="card-body">
+    {{ partial "invariants.html" (dict "values" $G.invariants "fields" (slice "dimension" "index" "Euler characteristic" "rank" "Coxeter number" "Weyl group order" "exponents" "roots" "Betti numbers")) }}
+  </div>
+</div>
+
+{{ if eq $G.family "Grassmannian" }}
+<div class="card mb-4">
+  <div class="card-header">Projective geometry</div>
+  <div class="card-body">
+    {{ partial "invariants.html" (dict "values" $G.invariants "fields" (slice "embedding dimension" "degree" "Hilbert values")) }}
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">Exceptional collections</div>
+  <div class="card-body">
+    <p class="mb-0">A full exceptional collection exists. {{ partial "citation.html" (dict "reference" "samokhin-vdk") }}</p>
+  </div>
+</div>
+{{ end }}
+
+{{ with $G.small_quantum }}
+<div class="card mb-4">
+  <div class="card-header">Quantum cohomology</div>
+  <div class="card-body">
+    <dl class="row mb-0">
+      <dt class="col-sm-3">small</dt>
+      <dd class="col-sm-9">{{ .status }}
+        {{ partial "citation.html" . }}
+        {{ with .text }}<p class="mt-2 mb-0">{{ . }}</p>{{ end }}
+      </dd>
+
+      <dt class="col-sm-3">big</dt>
+      <dd class="col-sm-9">{{ if $G.big_quantum }}generically semisimple{{ else }}unknown{{ end }}
+        {{ if eq $G.family "Grassmannian" }}{{ partial "citation.html" (dict "reference" "big-qh") }}{{ end }}
+      </dd>
+    </dl>
+  </div>
+</div>
+{{ end }}
+
+{{ if or $G.lefschetz $G.hpd }}
+<div class="card mb-4">
+  <div class="card-header">Homological projective duality</div>
+  <div class="card-body">
+    {{ range $G.lefschetz }}
+      <p>Lefschetz block sizes: $({{ delimit .support ", " }})$.</p>
+      <p>{{ .text }} {{ partial "citation.html" . }}</p>
     {{ end }}
-  </dl>
-  {{ with $record.small_quantum }}
-    <section><h2>Quantum cohomology</h2>
-      <p>Small: {{ .status }}. {{ .text }} {{ partial "citation.html" . }}</p>
-      <p>Big: {{ if $record.big_quantum }}generically semisimple{{ else }}unknown{{ end }}.
-        {{ if eq $record.family "Grassmannian" }}{{ partial "citation.html" (dict "reference" "big-qh") }}{{ end }}</p>
-    </section>
+    {{ range $G.hpd }}
+      <p>{{ .text }} {{ partial "citation.html" . }}</p>
+    {{ end }}
+  </div>
+</div>
+{{ end }}
+
+{{ with $G.references }}
+<div class="card mb-4" id="references">
+  <div class="card-header">References</div>
+  <div class="card-body">
+    {{ partial "bibliography.html" . }}
+  </div>
+</div>
+{{ end }}
+
+{{ if .IsSection }}
+<ul class="list-inline">
+  {{ range .Pages }}
+    <li class="list-inline-item mr-3"><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
   {{ end }}
-  {{ if eq $record.family "Grassmannian" }}
-    <section><h2>Exceptional collections</h2>
-      <p>A full exceptional collection exists. {{ partial "citation.html" (dict "reference" "samokhin-vdk") }}</p>
-    </section>
-    <section><h2>Homological projective duality</h2>
-      {{ range $record.lefschetz }}
-        <p>Lefschetz block sizes: <code>{{ delimit .support ", " }}</code>.</p>
-        <p>{{ .text }} {{ partial "citation.html" . }}
-          {{ if not .full }}Fullness of this particular collection is conjectural.{{ end }}</p>
-      {{ end }}
-      {{ range $record.hpd }}<p>{{ .text }} {{ partial "citation.html" . }}</p>{{ end }}
-    </section>
-    <section><h2>References</h2>{{ partial "bibliography.html" $record.references }}</section>
-  {{ end }}
-  {{ if .IsSection }}<ul>{{ range .Pages }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul>{{ end }}
-  {{/* Round-trip all structured model data through Hugo, including exact integers. */}}
-  <script type="application/json" id="model-data">{{ $record | jsonify | safeJS }}</script>
+</ul>
+{{ end }}
+
+<script type="application/json" id="model-data">{{ $G | jsonify | safeJS }}</script>
 {{ end }}

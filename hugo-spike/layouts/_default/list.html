@@ -1,7 +1,30 @@
 {{ define "main" }}
-  {{ range .Pages.GroupByParam "family" }}
-    <h2>{{ .Key }}</h2>
-    <ul>{{ range .Pages }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul>
+{{ if .IsHome }}
+  <h2 class="text-center mb-4">Grassmannians</h2>
+
+  <table class="table table-sm">
+    <tbody>
+    {{ range $letter := slice "A" "B" "C" "D" "E" "F" "G" }}
+      <tr>
+        <th>{{ $letter }}</th>
+        <td>
+        {{ range $.Pages.ByWeight }}
+          {{ if and (eq .Params.family "Dynkin type") (strings.HasPrefix .Title $letter) }}
+            <a class="d-inline-block mr-3" href="{{ .RelPermalink }}">{{ .Title }}</a>
+          {{ end }}
+        {{ end }}
+        </td>
+      </tr>
+    {{ end }}
+    </tbody>
+  </table>
+{{ else }}
+  <h2 class="text-center mb-4">{{ .Title }}</h2>
+
+  <ul class="list-inline">
+  {{ range .Pages }}
+    <li class="list-inline-item mr-3 mb-2"><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
   {{ end }}
-  {{ range where .Pages "Params.family" nil }}<p><a href="{{ .RelPermalink }}">{{ .Title }}</a></p>{{ end }}
+  </ul>
+{{ end }}
 {{ end }}

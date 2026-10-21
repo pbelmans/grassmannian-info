@@ -1,4 +1,8 @@
 baseURL = "https://www.grassmannian.info/"
-title = "Grassmannian.info — Hugo feasibility prototype"
+title = "Grassmannian.info"
 disablePathToLower = true
 disableKinds = ["taxonomy", "term", "RSS", "sitemap"]
+
+[[module.mounts]]
+source = "../static"
+target = "static/static"

@@ -1,5 +1,9 @@
-<ul>
-  {{ range . }}
-    <li id="reference-{{ .key }}">{{ .authors }}. <a href="{{ .url }}">{{ .title }}</a>. {{ .venue }}</li>
-  {{ end }}
-</ul>
+<ol class="bibliography mb-0">
+{{ range . }}
+  <li id="reference-{{ .key }}">
+    {{ strings.TrimSuffix "." .authors }}.
+    <a href="{{ .url }}"><cite>{{ .title }}</cite></a>.
+    {{ .venue }}{{ if eq .venue "Preprint" }} ({{ .year }}){{ end }}.
+  </li>
+{{ end }}
+</ol>
