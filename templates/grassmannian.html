@@ -51,7 +51,6 @@
 
 {% macro projective_duality(G) %}
 {% set dual = G.projective_duality() %}
-<p>The classical projective dual parametrises tangent hyperplanes, using the minimal ample-generator embedding above.</p>
 <p>{{ dual.description }}</p>
 {% if not dual.empty %}
 <dl class="row">
