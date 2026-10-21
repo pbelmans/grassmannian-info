@@ -238,3 +238,32 @@ def page_references(G):
         keys.add(result["reference"])
     if G.D.T == "C" and not lefschetz_collections(G): keys.add("kuznetsov-polishchuk")
     return ordered_references(keys)
+
+
+def projective_duality(G):
+    """Classical duality for the minimal ample-generator embedding, not an adjoint re-embedding."""
+    T, n, k = presentation(G)
+    result = {"reference": "tevelev", "locator": "Theorem 9.19 (arXiv version)"}
+    if T == "projective":
+        return dict(result, description="The dual is empty: no hyperplane contains a projective tangent space of the full projective space.", empty=True)
+    if T == "quadric":
+        return dict(result, description="A smooth quadric in the dual projective space.", codimension=1, degree=2, self_dual=True)
+    if T == "A" and min(k, n + 1 - k) == 2:
+        N = n + 1
+        return dict(result, description=f"The Pfaffian locus of skew forms of rank at most {N - 2 if N % 2 == 0 else N - 3}.",
+                    codimension=1 if N % 2 == 0 else 3, degree=N // 2 if N % 2 == 0 else None,
+                    self_dual=N in {4, 5})
+    if T == "spinor" and n == 5:
+        return dict(result, description="The other spinor tenfold in the dual half-spin projective space.", codimension=5, degree=None, self_dual=True)
+    if T == "E" and n == 6 and k in {1, 6}:
+        return dict(result, description="The Cartan cubic hypersurface.", codimension=1, degree=3, self_dual=False,
+                    degree_reference="magic-square", degree_locator="Section 4.1")
+    if ((T == "C" and n == k == 3) or (T == "A" and n == 5 and k == 3)
+            or (T == "spinor" and n == 6) or (T == "E" and n == 7 and k == 7)):
+        return dict(result, description="The invariant quartic hypersurface.", codimension=1, degree=4, self_dual=False,
+                    degree_reference="magic-square", degree_locator="Proposition 5.8")
+    if T == "G" and k == 2:
+        return dict(result, description="The dual sextic hypersurface.", codimension=1, degree=6, self_dual=False,
+                    degree_reference="kuznetsov-hyperplanes", degree_locator="Section 6.4")
+    return dict(result, description="The projective dual is a hypersurface.", codimension=1,
+                degree=None, self_dual=False)

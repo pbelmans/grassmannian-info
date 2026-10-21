@@ -100,6 +100,14 @@ class LiteratureTests(unittest.TestCase):
         links = Links(client.get('/references').get_data(as_text=True))
         self.assertFalse(links.citations - links.ids)
 
+    def test_classical_duality(self):
+        self.assertTrue(Grassmannian('C', 6, 1).projective_duality()['empty'])
+        self.assertEqual(Grassmannian('A', 6, 2).projective_duality()['codimension'], 3)
+        self.assertEqual(Grassmannian('A', 5, 2).projective_duality()['degree'], 3)
+        self.assertEqual(Grassmannian('B', 4, 4).projective_duality()['codimension'], 5)
+        self.assertTrue(Grassmannian('D', 5, 5).projective_duality()['self_dual'])
+        self.assertEqual(Grassmannian('C', 6, 3).projective_duality()['codimension'], 1)
+        self.assertEqual(Grassmannian('E', 7, 7).projective_duality()['degree'], 4)
 
 
 if __name__ == '__main__':

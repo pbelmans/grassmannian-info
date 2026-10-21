@@ -355,6 +355,9 @@ class Grassmannian:
     def hpd_results(self):
         return literature.hpd_results(self)
 
+    def projective_duality(self):
+        return literature.projective_duality(self)
+
     def latex(self):
         # TODO eventually the latex function just come here?
         return latex(self.D.T, self.D.n, self.k)

@@ -477,6 +477,20 @@
       "2307.03696"
     ]
   },
+  "tevelev": {
+    "label": "Tevelev",
+    "authors": "Evgueni Tevelev",
+    "title": "Projective Duality and Homogeneous Spaces",
+    "year": 2005,
+    "venue": "Encyclopaedia of Mathematical Sciences 133, Springer (2005)",
+    "url": "https://doi.org/10.1007/b138367",
+    "topic": "Projective duality",
+    "summary": "Classical projective duality, dual defects, and homogeneous examples.",
+    "arxiv": "math/0112028",
+    "aliases": [
+      "math/0112028"
+    ]
+  },
   "quantum-computation": {
     "label": "Belmans (quantum spectra)",
     "authors": "Pieter Belmans",
@@ -500,6 +514,20 @@
     "arxiv": "math/0112183",
     "aliases": [
       "math/0112183"
+    ]
+  },
+  "magic-square": {
+    "label": "Landsberg–Manivel",
+    "authors": "J. M. Landsberg; L. Manivel",
+    "title": "The projective geometry of Freudenthal's magic square",
+    "year": 2001,
+    "topic": "Projective duality",
+    "summary": "Cubic and quartic dual hypersurfaces in the magic square.",
+    "venue": "J. Algebra 239 (2001), 477–512",
+    "url": "https://doi.org/10.1006/jabr.2000.8697",
+    "arxiv": "math/9908039",
+    "aliases": [
+      "math/9908039"
     ]
   },
   "horospherical": {
