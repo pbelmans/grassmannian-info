@@ -137,12 +137,12 @@ class LiteratureTests(unittest.TestCase):
         self.assertEqual(Grassmannian('C', 6, 3).projective_duality()['codimension'], 1)
         self.assertEqual(Grassmannian('E', 7, 7).projective_duality()['degree'], 4)
 
-    def test_projective_duality_table_covers_catalogue(self):
+    def test_projective_duality_table_covers_rank_eight(self):
         response = app.test_client().get('/projective-duality')
         self.assertEqual(response.status_code, 200)
         html = response.get_data(as_text=True)
         rows = DualityTable(html).rows
-        expected = sorted(((G.D.T, G.D.n, G.k) for G in varieties()))
+        expected = sorted((G.D.T, G.D.n, G.k) for G in varieties() if G.D.n <= 8)
         self.assertEqual(list(rows), [f'{T}{n}-{k}' for T, n, k in expected])
         # Ambient dimension, codimension, degree and self-duality in the
         # empty, hypersurface and higher-codimension cases.

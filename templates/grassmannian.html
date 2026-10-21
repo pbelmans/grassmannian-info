@@ -67,7 +67,7 @@
 {% if dual.degree_reference %}
 <a href="{{ reference_catalog[dual.degree_reference].url }}">{{ reference_catalog[dual.degree_reference].label }}, {{ dual.degree_locator }}</a>.
 {% endif %}</p>
-<p><a href="/projective-duality#{{ G.D.T }}{{ G.D.n }}-{{ G.k }}">Projective duality for all Grassmannians</a>.</p>
+<p><a href="/projective-duality#{% if G.D.n <= 8 %}{{ G.D.T }}{{ G.D.n }}-{{ G.k }}{% else %}type-{{ G.D.T }}{% endif %}">Projective duality tables</a>.</p>
 {% endmacro %}
 
 

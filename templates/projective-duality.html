@@ -11,7 +11,8 @@ A general tangent hyperplane is tangent along a linear space $\mathbb P^\delta$.
 Among the Grassmannians with nonempty dual, the only defective cases are $\Gr(2,2m+1)$ for $m\geq2$, with $\delta=2$, and the spinor tenfold, with $\delta=4$.
 The self-dual cases are quadrics, $\Gr(2,5)$ and the spinor tenfold.
 {{ macros.cite("tevelev", "Theorems 1.12, 9.19 and 10.22; Examples 2.20–2.21 (arXiv version)") }}</p>
-<p>An empty dual has no codimension or degree listed; “not recorded” means that a degree has not yet been entered here.
+<p>The tables cover Dynkin types of rank at most 8.
+An empty dual has no codimension or degree listed; “not recorded” means that a degree has not yet been entered here.
 For a self-dual variety, the degree is that of the Grassmannian itself.</p>
 
 <p>Types:
@@ -39,7 +40,7 @@ For a self-dual variety, the degree is that of the Grassmannian itself.</p>
         </tr>
       </thead>
       <tbody>
-      {% for n, parabolics in ranks | dictsort %}
+      {% for n, parabolics in ranks | dictsort if n <= 8 %}
       {% for k in parabolics | sort %}
       {% set G = Grassmannian(T, n, k) %}
       {% set dual = G.projective_duality() %}
