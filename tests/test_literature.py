@@ -24,6 +24,34 @@ class Links(HTMLParser):
             self.entries.append(attrs)
 
 
+class DualityTable(HTMLParser):
+    def __init__(self, source):
+        super().__init__()
+        self.rows = {}
+        self.row = None
+        self.cell = None
+        self.feed(source)
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'tr' and 'data-duality-row' in attrs:
+            self.row = attrs['id']
+            self.rows[self.row] = []
+        if self.row is not None and tag in {'td', 'th'}:
+            self.cell = []
+
+    def handle_data(self, value):
+        if self.cell is not None:
+            self.cell.append(value)
+
+    def handle_endtag(self, tag):
+        if tag in {'td', 'th'} and self.cell is not None:
+            self.rows[self.row].append(''.join(self.cell).strip())
+            self.cell = None
+        if tag == 'tr':
+            self.row = None
+
+
 def varieties():
     for row in data:
         yield Grassmannian(row['type'][0], int(row['type'][1:]), row['parabolic'])
@@ -108,6 +136,29 @@ class LiteratureTests(unittest.TestCase):
         self.assertTrue(Grassmannian('D', 5, 5).projective_duality()['self_dual'])
         self.assertEqual(Grassmannian('C', 6, 3).projective_duality()['codimension'], 1)
         self.assertEqual(Grassmannian('E', 7, 7).projective_duality()['degree'], 4)
+
+    def test_projective_duality_table_covers_catalogue(self):
+        response = app.test_client().get('/projective-duality')
+        self.assertEqual(response.status_code, 200)
+        html = response.get_data(as_text=True)
+        rows = DualityTable(html).rows
+        expected = sorted(((G.D.T, G.D.n, G.k) for G in varieties()))
+        self.assertEqual(list(rows), [f'{T}{n}-{k}' for T, n, k in expected])
+        # Ambient dimension, codimension, degree and self-duality in the
+        # empty, hypersurface and higher-codimension cases.
+        for key, values in {
+            'A3-1': ['3', '—', '—', 'no'],
+            'A4-2': ['9', '3', '5', 'yes'],
+            'A5-2': ['14', '1', '3', 'no'],
+            'A6-2': ['20', '3', 'not recorded', 'no'],
+            'C3-3': ['13', '1', '4', 'no'],
+            'D5-5': ['15', '5', '12', 'yes'],
+            'E7-7': ['55', '1', '4', 'no'],
+        }.items():
+            self.assertEqual(rows[key][2:6], values, key)
+        links = Links(html)
+        self.assertFalse(links.citations - links.ids)
+        self.assertTrue({f'type-{T}' for T in 'ABCDEFG'} <= links.ids)
 
 
 if __name__ == '__main__':

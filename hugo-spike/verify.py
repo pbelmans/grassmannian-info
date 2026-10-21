@@ -99,7 +99,7 @@ def main():
                     longest = max(longest, len(str(number)))
                     large += abs(number) > 2**53 - 1
         count += 1
-    for route in ("/", "/horospherical", "/freudenthal", "/references", "/about", "/explained"):
+    for route in ("/", "/horospherical", "/freudenthal", "/projective-duality", "/references", "/about", "/explained"):
         compare(route, public, client)
         count += 1
     for alias in ("B1/1", "C1/1"):

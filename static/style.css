@@ -292,3 +292,20 @@ svg.dynkin {
 .reference-overview {
   margin: 1.5rem 0;
 }
+
+.projective-duality {
+  font-size: 0.9rem;
+}
+.projective-duality th, .projective-duality td {
+  vertical-align: middle;
+}
+.projective-duality tbody th {
+  font-weight: normal;
+  white-space: nowrap;
+}
+.projective-duality .rank-start > * {
+  border-top: 2px solid #aaa;
+}
+.projective-duality tr:target {
+  background: #fff4d6;
+}

@@ -43,7 +43,7 @@ Hugo 0.161.1. The generated catalogue, including page content, is about 32 MB.
 | Other pages and assets | About, explanation, site navigation, website icons, MathJax/Xy-pic, and quantum-certificate download |
 | Legacy aliases | B1/1 and C1/1 redirect to A1/1 |
 
-`verify.py` compares all 1,140 generated page bodies with independent Flask
+`verify.py` compares all 1,141 generated page bodies with independent Flask
 responses, including markup, text, SVG, scripts, and citation targets. This
 would reject the earlier abbreviated layouts. It also round-trips all model
 records, checks the aliases and certificate bytes, and compares browser

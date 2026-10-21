@@ -37,6 +37,8 @@ def page_specs(model_records):
     yield "/freudenthal", "freudenthal.html", {}
     yield "/about", "about.html", {}
     yield "/explained", "explained.html", {}
+    yield "/projective-duality", "projective-duality.html", {"grassmannians": grassmannians,
+        "references": literature.ordered_references(["tevelev", "magic-square", "kuznetsov-hyperplanes"])}
     yield "/references", "references.html", {"references": literature.ordered_references(literature.REFERENCES)}
 
 
