@@ -309,3 +309,12 @@ svg.dynkin {
 .projective-duality tr:target {
   background: #fff4d6;
 }
+
+.projective-duality .dual-degree {
+  max-width: 24rem;
+}
+
+.dual-degree {
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
