@@ -271,21 +271,16 @@ var multiplicities = svg.append("g")
 
 {% macro hpd(G) %}
 {% if G.hpd_results is defined %}
-<h4>Lefschetz collections</h4>
-<p>A shape $(a_0,\ldots,a_{m-1})$ records the number of exceptional objects in successive blocks
-$\mathcal A_0,\mathcal A_1(1),\ldots,\mathcal A_{m-1}(m-1)$, for the minimal ample generator $\mathcal O(1)$.
-Rectangular means all blocks have the same size; minimality concerns the choice of first block.</p>
 {% for c in G.lefschetz() %}
-<div class="lefschetz-collection">
-  <p><strong>{% if c.full %}Full{% else %}Proposed{% endif %} {% if c.rectangular %}rectangular{% else %}nonrectangular{% endif %} collection</strong>
-  {% if c.minimal == true %}<span class="badge badge-light">minimal</span>{% endif %}
-  {% if c.minimal == false %}<span class="badge badge-light">not minimal</span>{% endif %}
-  {% if c.minimal is none %}<span class="badge badge-light">minimality not recorded</span>{% endif %}
+<div class="mb-4">
+  <p>{% if c.full %}Full{% else %}Proposed{% endif %} {% if c.minimal == true %}minimal {% endif %}{% if c.rectangular %}rectangular{% else %}nonrectangular{% endif %} Lefschetz collection.
+  {% if c.minimal == false %}Not minimal.{% endif %}
+  {% if c.minimal is none %}Minimality is not recorded here.{% endif %}
   {{ cite(c.reference, c.locator) }}</p>
-  <p>{{ c.text }}</p>
+  {{ partition(c, G.embedding() + 1, "lefschetz-" ~ loop.index) }}
   <p class="lefschetz-shape">Block sizes: $({{ c.support | join(', ') }})$.
   Total: {{ c.support | sum }} objects.</p>
-  {{ partition(c) }}
+  <p>{{ c.text }}</p>
 </div>
 {% else %}
 <p>No explicit Lefschetz shape is recorded here.
@@ -294,7 +289,6 @@ The Kuznetsov–Polishchuk collection is full by Guseva–Novikov, but these exc
 {{ cite("kuznetsov-polishchuk") }} {{ cite("guseva-novikov", "Theorem 1.2") }}
 {% endif %}</p>
 {% endfor %}
-<h4>HP dual</h4>
 {% for result in G.hpd_results() %}
 <p>{{ result.text }} {{ cite(result.reference, result.locator) }}</p>
 {% else %}
@@ -302,7 +296,7 @@ The Kuznetsov–Polishchuk collection is full by Guseva–Novikov, but these exc
 Existence of a full exceptional collection alone does not specify an HP dual.</p>
 {% endfor %}
 {% else %}
-{% for c in G.lefschetz() %}{{ partition(c) }}{% endfor %}
+{% for c in G.lefschetz() %}{{ partition(c, identifier="lefschetz-" ~ loop.index) }}{% endfor %}
 {% endif %}
 {% endmacro %}
 
@@ -321,17 +315,26 @@ The table records positivity only up to $k=3$.</p>
 {% endmacro %}
 
 
-{% macro partition(lefschetz) %}
+{% macro partition(lefschetz, embedding=0, identifier="lefschetz") %}
 {% set support = lefschetz.support %}
+{% set columns = embedding if embedding else support | length %}
 <div class="lefschetz-diagram">
 <svg class="lefschetz" role="img" aria-label="Lefschetz block sizes: {{ support | join(', ') }}"
-     style="width: {{ [support | length * 24, 800] | min }}px; max-height: 240px"
-     viewBox="-1 -1 {{ support | length * 20 + 2 }} {{ support[0] * 20 + 2 }}">
+     data-support="{{ support | join(',') }}" data-columns="{{ columns }}"
+     style="width: {{ [columns * 40, 800] | min }}px"
+     viewBox="-1 -1 {{ columns * 20 + 2 }} {{ support[0] * 20 + 2 }}">
   <title>Lefschetz block sizes: {{ support | join(', ') }}</title>
+  <defs>
+    {# The original square grid, without one SVG element per object. #}
+    <pattern id="{{ identifier }}-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 H 0 V 20" fill="none" stroke="black" stroke-width="1" />
+    </pattern>
+  </defs>
+  <rect width="{{ columns * 20 }}" height="{{ support[0] * 20 }}" class="block" />
   {% for height in support %}
-    {# One rectangle per block keeps large Grassmannian diagrams small. #}
-    <rect x="{{ loop.index0 * 20 }}" y="{{ (support[0] - height) * 20 }}" width="20" height="{{ height * 20 }}" class="block original" />
+    <rect x="{{ loop.index0 * 20 }}" y="0" width="20" height="{{ height * 20 }}" class="block original" />
   {% endfor %}
+  <rect width="{{ columns * 20 }}" height="{{ support[0] * 20 }}" fill="url(#{{ identifier }}-grid)" stroke="black" stroke-width="1" />
 </svg>
 </div>
 {% endmacro %}
