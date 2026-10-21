@@ -1,0 +1,91 @@
+{% extends "page.html" %}
+{% import "macros.html" as macros %}
+{% block title %}Projective duality{% endblock %}
+{% block content %}
+<h2 class="mt-3">Projective duality</h2>
+<p>For each Grassmannian $X\subset\mathbb P^N$, the table gives the codimension and degree of $X^\vee\subset(\mathbb P^N)^\vee$,
+and whether $X$ and $X^\vee$ are projectively isomorphic.
+The embedding is given by the ample generator of $\operatorname{Pic}(X)$.</p>
+<p>The dual defect is $\delta=\operatorname{codim}(X^\vee)-1$.
+A general tangent hyperplane is tangent along a linear space $\mathbb P^\delta$.
+Among the Grassmannians with nonempty dual, the only defective cases are $\Gr(2,2m+1)$ for $m\geq2$, with $\delta=2$, and the spinor tenfold, with $\delta=4$.
+The self-dual cases are quadrics, $\Gr(2,5)$ and the spinor tenfold.
+{{ macros.cite("tevelev", "Theorems 1.12, 9.19 and 10.22; Examples 2.20–2.21 (arXiv version)") }}</p>
+<p>An empty dual has no codimension or degree listed; “not recorded” means that a degree has not yet been entered here.
+For a self-dual variety, the degree is that of the Grassmannian itself.</p>
+
+<p>Types:
+{% for T in grassmannians %}<a class="mr-3" href="#type-{{ T }}">{{ T }}</a>{% endfor %}
+</p>
+<div class="form-group">
+  <label for="duality-search">Find a Grassmannian</label>
+  <input type="search" id="duality-search" class="form-control" style="max-width: 24rem" placeholder="e.g. C6/3, Gr(2,7), spinor">
+</div>
+
+{% for T, ranks in grassmannians.items() %}
+<section class="duality-type" id="type-{{ T }}">
+  <h3 class="mt-4">Type {{ T }}</h3>
+  <div class="table-responsive">
+    <table class="table table-sm projective-duality">
+      <thead>
+        <tr>
+          <th scope="col">$G/P$</th>
+          <th scope="col">Grassmannian</th>
+          <th scope="col" class="text-right">$N$</th>
+          <th scope="col" class="text-right">codimension</th>
+          <th scope="col" class="text-right">degree</th>
+          <th scope="col">self-dual</th>
+          <th scope="col">dual variety</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for n, parabolics in ranks | dictsort %}
+      {% for k in parabolics | sort %}
+      {% set G = Grassmannian(T, n, k) %}
+      {% set dual = G.projective_duality() %}
+        <tr id="{{ T }}{{ n }}-{{ k }}" data-duality-row data-search="{{ G.url() }} {{ G.plaintext() }} {{ dual.label }}"{% if k == parabolics | min %} class="rank-start"{% endif %}>
+          <th scope="row"><a href="/{{ G.url() }}">{{ T }}<sub>{{ n }}</sub>/P<sub>{{ k }}</sub></a></th>
+          <td><a href="/{{ G.url() }}">{{ G.html() | safe }}</a></td>
+          <td class="text-right">{{ G.embedding() }}</td>
+          <td class="text-right">{{ "—" if dual.empty else dual.codimension }}</td>
+          <td class="text-right">{{ "—" if dual.empty else dual.degree if dual.degree else "not recorded" }}</td>
+          <td>{{ "no" if dual.empty else "yes" if dual.self_dual else "no" }}</td>
+          <td>{{ dual.label }}{% if dual.degree_reference %} {{ macros.cite(dual.degree_reference, dual.degree_locator) }}{% endif %}</td>
+        </tr>
+      {% endfor %}
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endfor %}
+<p id="duality-no-results" hidden>No matching Grassmannians.</p>
+
+<h3 class="mt-4">References</h3>
+{{ macros.bibliography(references) }}
+
+<script>
+const dualitySearch = document.getElementById("duality-search");
+function filterDuality() {
+  const query = dualitySearch.value.toLowerCase().replace(/\s/g, "");
+  let matches = 0;
+  document.querySelectorAll(".duality-type").forEach(function (section) {
+    let visible = 0;
+    section.querySelectorAll("[data-duality-row]").forEach(function (row) {
+      row.hidden = !row.dataset.search.toLowerCase().replace(/\s/g, "").includes(query);
+      if (!row.hidden) visible++;
+    });
+    section.hidden = visible === 0;
+    matches += visible;
+  });
+  document.getElementById("duality-no-results").hidden = matches !== 0;
+}
+dualitySearch.addEventListener("input", filterDuality);
+document.querySelectorAll('a[href^="#type-"]').forEach(function (link) {
+  link.addEventListener("click", function () {
+    dualitySearch.value = "";
+    filterDuality();
+  });
+});
+</script>
+{% endblock %}

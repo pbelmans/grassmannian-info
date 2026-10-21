@@ -824,6 +824,12 @@ def show_table():
     return render_template("table.html", grassmannians=grassmannians)
 
 
+@app.route("/projective-duality")
+def show_projective_duality():
+    return render_template("projective-duality.html", grassmannians=grassmannians,
+                           references=literature.ordered_references(["tevelev", "magic-square", "kuznetsov-hyperplanes"]))
+
+
 @app.route("/references")
 def show_references():
     return render_template("references.html", references=literature.ordered_references(literature.REFERENCES))
