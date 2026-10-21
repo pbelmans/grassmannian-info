@@ -405,7 +405,7 @@ class Grassmannian:
         if self.D.T == "G":
             if self.k == 1: result.append(("B3", 1),)
 
-        return list(set(result))
+        return sorted(set(result))
 
     def embedding(self):
         global grassmannians
