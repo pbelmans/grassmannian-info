@@ -1,0 +1,34 @@
+{{ define "main" }}
+  {{ $record := index hugo.Data.catalog.records .Params.record_route }}
+  <p>{{ $record.family }}{{ with $record.name }}: {{ . }}{{ end }}</p>
+  <dl>
+    {{ range $key, $value := $record.invariants }}
+      <dt>{{ $key }}</dt>
+      <dd data-invariant="{{ $key }}">{{ if reflect.IsSlice $value }}{{ delimit $value ", " }}{{ else }}{{ $value }}{{ end }}</dd>
+    {{ end }}
+  </dl>
+  {{ with $record.small_quantum }}
+    <section><h2>Quantum cohomology</h2>
+      <p>Small: {{ .status }}. {{ .text }} {{ partial "citation.html" . }}</p>
+      <p>Big: {{ if $record.big_quantum }}generically semisimple{{ else }}unknown{{ end }}.
+        {{ if eq $record.family "Grassmannian" }}{{ partial "citation.html" (dict "reference" "big-qh") }}{{ end }}</p>
+    </section>
+  {{ end }}
+  {{ if eq $record.family "Grassmannian" }}
+    <section><h2>Exceptional collections</h2>
+      <p>A full exceptional collection exists. {{ partial "citation.html" (dict "reference" "samokhin-vdk") }}</p>
+    </section>
+    <section><h2>Homological projective duality</h2>
+      {{ range $record.lefschetz }}
+        <p>Lefschetz block sizes: <code>{{ delimit .support ", " }}</code>.</p>
+        <p>{{ .text }} {{ partial "citation.html" . }}
+          {{ if not .full }}Fullness of this particular collection is conjectural.{{ end }}</p>
+      {{ end }}
+      {{ range $record.hpd }}<p>{{ .text }} {{ partial "citation.html" . }}</p>{{ end }}
+    </section>
+    <section><h2>References</h2>{{ partial "bibliography.html" $record.references }}</section>
+  {{ end }}
+  {{ if .IsSection }}<ul>{{ range .Pages }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul>{{ end }}
+  {{/* Round-trip all structured model data through Hugo, including exact integers. */}}
+  <script type="application/json" id="model-data">{{ $record | jsonify | safeJS }}</script>
+{{ end }}

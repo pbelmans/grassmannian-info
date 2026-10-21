@@ -1,0 +1,11 @@
+{{ range hugo.Data.catalog.records }}
+  {{ $.AddPage (dict
+    "path" (strings.TrimPrefix "/" .route)
+    "url" (printf "%s/" .route)
+    "kind" .kind
+    "title" .route
+    "layout" "record"
+    "params" (dict "record_route" .route "family" .family)
+  ) }}
+{{ end }}
+{{ .AddPage (dict "path" "references" "title" "References" "layout" "references") }}

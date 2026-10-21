@@ -1,0 +1,5 @@
+<ul>
+  {{ range . }}
+    <li id="reference-{{ .key }}">{{ .authors }}. <a href="{{ .url }}">{{ .title }}</a>. {{ .venue }}</li>
+  {{ end }}
+</ul>

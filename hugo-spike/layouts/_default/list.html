@@ -1,0 +1,7 @@
+{{ define "main" }}
+  {{ range .Pages.GroupByParam "family" }}
+    <h2>{{ .Key }}</h2>
+    <ul>{{ range .Pages }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul>
+  {{ end }}
+  {{ range where .Pages "Params.family" nil }}<p><a href="{{ .RelPermalink }}">{{ .Title }}</a></p>{{ end }}
+{{ end }}

@@ -1,0 +1,4 @@
+baseURL = "https://www.grassmannian.info/"
+title = "Grassmannian.info — Hugo feasibility prototype"
+disablePathToLower = true
+disableKinds = ["taxonomy", "term", "RSS", "sitemap"]

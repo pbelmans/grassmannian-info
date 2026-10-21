@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ .Title }} — Hugo feasibility prototype</title>
+  <style>
+    body { max-width: 65rem; margin: 2rem auto; padding: 0 1rem; font: 1rem/1.5 system-ui; }
+    a { color: #164b9d; } dt { font-weight: bold; } dd { margin: 0 0 1rem; overflow-wrap: anywhere; }
+    .notice { background: #fff5d6; padding: 1rem; } section { border-top: 1px solid #bbb; margin-top: 2rem; }
+    code { overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <nav><a href="/">Prototype index</a> · <a href="/references/">References</a></nav>
+  <p class="notice">Build feasibility prototype. This tests data, arithmetic, and URLs; it is not a replacement for the current interface.</p>
+  <h1>{{ .Title }}</h1>
+  {{ block "main" . }}{{ end }}
+</body>
+</html>
