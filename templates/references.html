@@ -1,0 +1,40 @@
+{% extends "page.html" %}
+{% import "macros.html" as macros %}
+{% block title %}References{% endblock %}
+{% block content %}
+<h2>References</h2>
+<p>The literature behind the exceptional collections, quantum cohomology, Lefschetz collections, homological projective duality, and higher Fano properties recorded on this site.
+Individual Grassmannian pages cite the results that apply to them.
+Published versions are linked where available; arXiv links are retained for access.</p>
+<p>The bibliography is chronological, using publication years for published work and first submission years for preprints.
+Checked against the literature on 21 October 2026.</p>
+
+<div class="reference-overview">
+  <p><strong>Exceptional collections.</strong>
+  The constructions of Beilinson and Kapranov were followed by explicit collections in other types.
+  Samokhin–van der Kallen now give full exceptional collections for every split flag variety.
+  This existence statement does not imply that every previously proposed collection is full, rectangular, or Lefschetz.
+  {{ macros.cite("samokhin-vdk") }}</p>
+  <p><strong>Quantum cohomology.</strong>
+  Big quantum cohomology is now known to be generically semisimple for every flag variety.
+  Small quantum cohomology can still fail to be semisimple; the index-and-Betti-number criterion gives further obstructions.
+  The exceptional cases $\mathrm E_7/\mathrm P_2$, $\mathrm E_7/\mathrm P_4$, $\mathrm E_7/\mathrm P_5$, and $\mathrm E_8/\mathrm P_6$ remain unresolved in the cited literature.
+  {{ macros.cite("big-qh") }} {{ macros.cite("graded-qh", "Section 2.3") }}</p>
+</div>
+
+<label for="reference-topic">Show references for</label>
+<select id="reference-topic" class="form-control mb-4" style="max-width: 24rem">
+  <option value="">all topics</option>
+  {% for topic in references | map(attribute="topic") | unique | sort %}
+  <option>{{ topic }}</option>
+  {% endfor %}
+</select>
+{{ macros.bibliography(references) }}
+<script>
+document.getElementById("reference-topic").addEventListener("change", function () {
+  document.querySelectorAll(".bibliography li").forEach(function (entry) {
+    entry.hidden = !!this.value && entry.dataset.topic !== this.value;
+  }, this);
+});
+</script>
+{% endblock %}

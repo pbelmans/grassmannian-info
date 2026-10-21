@@ -293,3 +293,41 @@ svg.dynkin {
   position: relative;
   top: 5px;
 }
+
+.citation {
+  font-size: .88em;
+}
+
+.bibliography {
+  padding-left: 1.5rem;
+  li {
+    margin-bottom: 1.1rem;
+    overflow-wrap: anywhere;
+    scroll-margin-top: 1rem;
+  }
+  li:target {
+    background: #fff4d6;
+    outline: 5px solid #fff4d6;
+  }
+  cite { font-style: normal; }
+}
+
+.reference-summary {
+  color: #555;
+  font-size: .9em;
+  margin-top: .2rem;
+}
+
+.lefschetz-collection {
+  border-left: 3px solid #d9e1e5;
+  padding-left: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.lefschetz-diagram, .lefschetz-shape {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.lefschetz-diagram svg { max-width: 100%; }
+.reference-overview { margin: 1.5rem 0; }

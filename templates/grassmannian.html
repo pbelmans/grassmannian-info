@@ -49,27 +49,23 @@
 {% endmacro %}
 
 
-{% macro exceptional_sequence(G, sequence) %}
-<li>{{ sequence[0] | safe }} constructed a full exceptional sequence in {{ sequence[1] }}, see {{ macros.reference_link(sequence[2]) }}.
-{% endmacro %}
-
-
 {% macro exceptional_sequences(G) %}
-{% if G.exceptional_sequences() | length == 0 %}
-  <p>No full exceptional collection is known for $\mathbf{D}^{\mathrm{b}}({{ G.latex() }})$. Will you be the first to construct one? Let us know if you do!
-
-  {% if G.D.T in ["A", "B", "C", "D"] %}
-    <p>Kuznetsov&ndash;Polishchuk have constructed an exceptional collection of maximal length in <a href="https://mathscinet.ams.org/mathscinet-getitem?mr=3463417">MR3463417</a>. Can you prove it's full?
-  {% endif %}
-{% else %}
+  <p>The bounded derived category $\mathbf D^{\mathrm b}({{ G.latex() }})$ has a <strong>full exceptional collection</strong>.
+  Samokhin–van der Kallen's construction applies to every split flag variety $G/P$.
+  {{ macros.cite("samokhin-vdk") }}</p>
+  <p>Constructions applicable to this variety, in chronological order:</p>
   <ul>
-  {% for sequence in G.exceptional_sequences() %}
-    {{ exceptional_sequence(G, sequence) }}
+  {% for ref in G.exceptional_sequences() %}
+    <li>{{ ref.label }} ({{ ref.year }}). {{ ref.summary }} {{ macros.cite(ref.key) }}</li>
   {% endfor %}
   </ul>
-{% endif %}
 {% endmacro %}
 
+{% macro references(G) %}
+<p>Sources for exceptional collections, quantum cohomology, HPD and Lefschetz collections, and $k$-Fanoness on this page.
+See also the <a href="/references">chronological bibliography</a>.</p>
+{{ macros.bibliography(G.references()) }}
+{% endmacro %}
 
 {% block content %}
 <header class="text-center">
@@ -110,6 +106,8 @@
     {{ macros.component("Homological projective duality", macros.hpd(G)) }}
 
     {{ macros.component("$k$-Fanoness", macros.kfano(G)) }}
+
+    {{ macros.component("References", references(G), id="references") }}
   </div>
 </div>
 

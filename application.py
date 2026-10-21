@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.static_folder = "static"
 
 import eigenvalues
+import literature
 
 
 # Exact polynomial arithmetic on ascending-coefficient integer lists.
@@ -335,52 +336,24 @@ class Grassmannian:
         return False
 
 
+    def small_quantum_result(self):
+        return literature.small_quantum(self)
+
     def small_qh_not_semisimple(self):
-        # these are the 'no's in the table of page 33 of [MR2821244], Chaput--Perrin, On the quantum cohomology of adjoint varieties
-        if self.D.T == "B" and self.k in range(2, self.D.n) and self.k % 2 == 1: return True
-        if self.D.T == "C" and self.k in range(2, self.D.n) and self.k % 2 == 0: return True
-        if self.D.T == "D" and self.k in range(2, self.D.n - 1) and self.k % 2 == 0: return True
-        if self.D.T == "E" and self.D.n == 6 and self.k in [2, 4]: return True
-        if self.D.T == "E" and self.D.n == 7 and self.k in [1, 3, 6]: return True
-        if self.D.T == "E" and self.D.n == 8 and self.k in [1, 2, 3, 4, 5, 7, 8]: return True
-        if self.D.T == "F" and self.k in [3, 4]: return True
-
-        # this means that either it _is_ semisimple, or it's not known
-        return False
-
+        return self.small_quantum_result()["status"] == "non-semisimple"
 
     def small_qh_semisimple(self):
-        # these are the 'yes's in the table of page 33 of [MR2821244], Chaput--Perrin, On the quantum cohomology of adjoint varieties
-        if self.D.T == "A": return True
-        if self.D.T == "B" and self.k in [1, 2, self.D.n]: return True # table contains a typo (?): OGr(2,2n+1) is adjoint non-coadjoint
-        if self.D.T == "C" and self.k in [1, self.D.n]: return True
-        if self.D.T == "D" and self.k in [1, self.D.n - 1, self.D.n]: return True
-        if self.D.T == "E" and self.D.n == 6 and self.k in [1, 6]: return True
-        if self.D.T == "E" and self.D.n == 7 and self.k == 7: return True
-        if self.D.T == "F" and self.k == 1: return True
-        if self.D.T == "G": return True
-
-        # if all eigenvalues are distinct then we also have semisimplicity
-        if self.eigenvalues():
-            return len(set(self.eigenvalues())) == self.rank()
-
-        # this means that either it is _not_ semisimple, or it's not known
-        return False
-
+        return self.small_quantum_result()["status"] == "semisimple"
 
     def big_qh_semisimple(self):
-        # small semisimplicity implies big semisimplicity
-        if self.small_qh_semisimple(): return True
+        # Li–Liu–Yu–Zhang, arXiv:2610.28418, for every G/P.
+        return True
 
-        # works of Perrin, Mellit--Perrin--Smirnov, Galkin--Mellit--Smirnov
-        if self.D.T == "C" and self.k == 2: return True
-        # work of Perrin, see Theorem 4 in [1405.5914], Perrin: Semisimple quantum cohomology of some Fano varieties
-        if self.D.T == "F" and self.k == 4: return True
-        # work of Perrin--Smirnov (in progress)
-        if self.is_coadjoint(): return True
-        # by page 3 of 2307.03696
-        if self.D.T == "C" and self.k >= 3: return True
+    def references(self):
+        return literature.page_references(self)
 
+    def hpd_results(self):
+        return literature.hpd_results(self)
 
     def latex(self):
         # TODO eventually the latex function just come here?
@@ -417,7 +390,7 @@ class Grassmannian:
             if self.D.n == self.k: result.extend([("D" + str(self.D.n + 1), self.D.n), ("D" + str(self.D.n + 1), self.D.n + 1)])
         if self.D.T == "C":
             if self.k == 1: result.extend([("A" + str(2*self.D.n - 1), 1), ("A" + str(2*self.D.n - 1), 2*self.D.n - 1)])
-            if self.D.n == 2 and self.k == 1: result.extend([("B2", 2), ("D3", 1), ("D3", 3)])
+            if self.D.n == 2 and self.k == 1: result.extend([("B2", 2), ("D3", 2), ("D3", 3)])
         if self.D.T == "D":
             if self.D.n == 3 and self.k in [2, 3]: result.extend([("A3", 1), ("A3", 3), ("C2", 1)])
             if self.D.n == 3 and self.k == 1: result.append(("A3", 2),)
@@ -456,12 +429,10 @@ class Grassmannian:
             return False
 
     def lefschetz(self):
-        global grassmannians
-
-        return grassmannians[self.D.T][self.D.n][self.k]["lefschetz"]
+        return literature.lefschetz_collections(self)
 
     def exceptional_sequences(self):
-        return sorted(list(set([sequence for (T, k) in self.isomorphisms() for sequence in exceptional(T, k)])))#, key=lambda sequence: sequence[1])
+        return literature.exceptional_references(self)
 
     def eigenvalues(self):
         try:
@@ -817,48 +788,6 @@ def name(T, n, k):
     return "generalised Grassmannian of type {}<sub>{}</sub>/P<sub>{}</sub>".format(T, n, k)
 
 
-def exceptional(D, k):
-    T = D[0]
-    n = int(D[1:])
-
-    results = []
-    if T == "A":
-        if k in [1, n]: results.append(("Beilinson", 1978, "MR0509388"),)
-
-        results.append(("Kapranov", 1988, "MR0939472"),)
-
-    if T == "B":
-        if k == 1: results.append(("Kapranov", 1988, "MR0939472"),)
-        if k == 2: results.append(("Kuznetsov", 2008, "MR2434094"),)
-        if k == 4 and n == 4: results.append(("Kuznetsov", 2006, "MR2238172"),)
-
-    if T == "C":
-        if k == 2: results.append(("Kuznetsov", 2008, "MR2434094"),)
-        if k == 3 and n == 3: results.append(("Samokhin", 2001, "MR1859740"),)
-        if k == 3 and n == 4: results.append(("Guseva", 2018, "1810.07777"),)
-        if k == 3 and n == 5: results.append(("Novikov", 2020, ""),)
-        if k == 4 and n == 4: results.append(("Polishchuk&ndash;Samokhin", 2011, "MR2822466"),)
-        if k == n: results.append(("Fonarev", 2019, "1911.08968"),)
-
-    if T == "D":
-        if k == 1: results.append(("Kapranov", 1988, "MR0939472"),)
-        if k == 2: results.append(("Kuznetsov&ndash;Smirnov", 2020, "2001.04148"),)
-        if k == 4 and n == 5: results.append(("Kuznetsov", 2008, "MR2238172"),)
-        if k == 5 and n == 6: results.append(("Benedetti&ndash;Faenzi&ndash;Smirnov", 2023, "2310.01090"))
-
-    if T == "E":
-        if k == 1 and n == 6: results.append(("Faenzi&ndash;Manivel", 2013, "MR3293722"),)
-
-    if T == "F":
-        if k == 1: results.append(("Smirnov", 2021, "2107.07814"),)
-        if k == 4: results.append(("Belmans&ndash;Kuznetsov&ndash;Smirnov", 2020, "2005.01989"),)
-
-    if T == "G":
-        if k == 2: results.append(("Kuznetsov", 2008, "MR2238172"),)
-
-    return results
-
-
 grassmannians = {letter : {} for letter in "ABCDEFG"}
 
 # load the Sage-generated JSON file
@@ -871,54 +800,10 @@ with open(os.path.join(os.path.realpath(os.path.dirname(__file__)), "grassmannia
         k = G["parabolic"]
 
 
-        G["lefschetz"] = []
-        if T == "A":
-            # Beilinson
-            if k in [1, n]:
-                G["lefschetz"].append({"support" : [1]*(n + 1)})
-            # Kuznetsov (cfr. example 1.7 of http://www.mi-ras.ru/~akuznet/publications/1802.08097%5BOn%20residual%20categories%20for%20Grassmannians%5D.pdf)
-            if k == 2:
-                m = (n + 1) // 2
-                if n % 2 == 0:
-                    G["lefschetz"].append({"support" : [m]*(2*m+1)})
-                else:
-                    G["lefschetz"].append({"support" : [m]*m + [m-1]*m})
-
-            # Kapranov, non-minimal
-
-        if T == "B":
-            if k == 1:
-                G["lefschetz"].append({"support" : [2] + [1]*(2*n-2)})
-
-        if T == "D":
-            if k == 1 or (n == 4 and k in [3, 4]):
-                G["lefschetz"].append({"support" : [2, 2] + [1]*(2*n-4)})
-
-        if T == "E":
-            # Faenzi--Manivel
-            if n == 6 and k in [1, 6]:
-                G["lefschetz"].append({"support" : [3]*3 + [2]*9})
-        if T == "F":
-            # Belmans--Kuznetsov--Smirnov
-            if k == 4:
-                G["lefschetz"].append({"support" : [3]*2 + [2]*8})
-
-
         # assigning the Grassmannian to the dictionary
         if n not in grassmannians[T]:
             grassmannians[T][n] = {}
         grassmannians[T][n][k] = G
-
-
-"""
-Idea: maybe it would be better to move this to a template?
-
-+ easier to add descriptions
-+ every Lefschetz collection is a macro that can be called?
-
-- less convenient for MathSciNet / arXiv integration?
-- even further separation of content
-"""
 
 
 # slightly different indexing scheme: just use the plaintext X1(n), X2, X3(n,m), X4, X5
@@ -934,6 +819,17 @@ horospherical_varieties = dict({X.plaintext() : X for X in horospherical_varieti
 @app.route("/")
 def show_table():
     return render_template("table.html", grassmannians=grassmannians)
+
+
+@app.route("/references")
+def show_references():
+    return render_template("references.html", references=literature.ordered_references(literature.REFERENCES))
+
+
+@app.route("/references/quantum-certificates.json")
+def quantum_certificates():
+    from flask import send_from_directory
+    return send_from_directory(os.path.join(app.root_path, "references"), "quantum-certificates.json")
 
 
 @app.route("/about")
@@ -1018,3 +914,8 @@ def show_grassmannian_from_plaintext(plaintext):
     # if that also fails: error
     # TODO
 """
+
+app.jinja_env.globals["reference_catalog"] = literature.REFERENCES
+app.jinja_env.globals["reference_aliases"] = {
+    alias: key for key, ref in literature.REFERENCES.items() for alias in ref.get("aliases", [])
+}

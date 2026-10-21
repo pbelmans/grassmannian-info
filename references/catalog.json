@@ -1,0 +1,547 @@
+{
+  "beilinson": {
+    "label": "Beilinson",
+    "authors": "Beilinson, Alexander",
+    "title": "Coherent sheaves on $𝐏^n$ and problems in linear algebra",
+    "year": 1978,
+    "venue": "Funct. Anal. Appl. 12 (1978), 214–216",
+    "url": "https://doi.org/10.1007/BF01681436",
+    "topic": "Exceptional collections",
+    "summary": "Full collections on projective spaces.",
+    "mr": "509388",
+    "aliases": [
+      "MR0509388"
+    ]
+  },
+  "kapranov": {
+    "label": "Kapranov",
+    "authors": "Kapranov, M. M.",
+    "title": "On the derived categories of coherent sheaves on some homogeneous spaces",
+    "year": 1988,
+    "venue": "Invent. Math. 92 (1988), 479–508",
+    "url": "https://doi.org/10.1007/BF01393744",
+    "topic": "Exceptional collections",
+    "summary": "Schur-bundle collections on ordinary Grassmannians; spinor collections on quadrics.",
+    "mr": "939472",
+    "aliases": [
+      "MR0939472"
+    ]
+  },
+  "samokhin-lg3": {
+    "label": "Samokhin",
+    "authors": "Samokhin, A. V.",
+    "title": "The derived category of coherent sheaves on $LG_3^{\\mathbb C}$",
+    "year": 2001,
+    "venue": "Russian Math. Surveys 56 (2001), 592–594",
+    "url": "https://doi.org/10.1070/RM2001v056n03ABEH000410",
+    "topic": "Exceptional collections",
+    "summary": "A full collection on the Lagrangian Grassmannian LG(3,6).",
+    "mr": "1859740",
+    "aliases": [
+      "MR1859740"
+    ]
+  },
+  "kuznetsov-hyperplanes": {
+    "label": "Kuznetsov",
+    "authors": "Kuznetsov, A. G.",
+    "title": "Hyperplane sections and derived categories",
+    "year": 2006,
+    "venue": "Izv. Math. 70 (2006), 447–547",
+    "url": "https://doi.org/10.1070/IM2006v070n03ABEH002318",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "Linear sections, the spinor tenfold, and the G₂ Grassmannian.",
+    "mr": "2238172",
+    "aliases": [
+      "MR2238172"
+    ]
+  },
+  "kuznetsov-lines": {
+    "label": "Kuznetsov",
+    "authors": "Kuznetsov, Alexander",
+    "title": "Exceptional collections for Grassmannians of isotropic lines",
+    "year": 2008,
+    "venue": "Proc. Lond. Math. Soc. (3) 97 (2008), 155–182",
+    "url": "https://doi.org/10.1112/plms/pdm056",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "Lefschetz collections for ordinary and isotropic two-plane Grassmannians.",
+    "mr": "2434094",
+    "aliases": [
+      "MR2434094"
+    ]
+  },
+  "polishchuk-samokhin": {
+    "label": "Polishchuk–Samokhin",
+    "authors": "Polishchuk, Alexander; Samokhin, Alexander",
+    "title": "Full exceptional collections on the Lagrangian Grassmannians $LG(4,8)$ and $LG(5,10)$",
+    "year": 2011,
+    "venue": "J. Geom. Phys. 61 (2011), 1996–2014",
+    "url": "https://doi.org/10.1016/j.geomphys.2011.05.011",
+    "topic": "Exceptional collections",
+    "summary": "Full collections on LG(4,8) and LG(5,10).",
+    "mr": "2822466",
+    "aliases": [
+      "MR2822466"
+    ]
+  },
+  "faenzi-manivel": {
+    "label": "Faenzi–Manivel",
+    "authors": "Faenzi, Daniele; Manivel, Laurent",
+    "title": "On the derived category of the Cayley plane II",
+    "year": 2015,
+    "venue": "Proc. Amer. Math. Soc. 143 (2015), 1057–1074",
+    "url": "https://doi.org/10.1090/S0002-9939-2014-12312-4",
+    "topic": "Exceptional collections",
+    "summary": "Fullness of a Lefschetz collection on the Cayley plane.",
+    "mr": "3293722",
+    "aliases": [
+      "MR3293722"
+    ]
+  },
+  "adjoint-qh": {
+    "label": "Chaput–Perrin",
+    "authors": "Chaput, P. E.; Perrin, N.",
+    "title": "On the quantum cohomology of adjoint varieties",
+    "year": 2011,
+    "venue": "Proc. Lond. Math. Soc. (3) 103 (2011), 294–330",
+    "url": "https://doi.org/10.1112/plms/pdq052",
+    "topic": "Quantum cohomology",
+    "summary": "Semisimplicity for adjoint non-coadjoint varieties; table of small quantum cohomology on p. 326.",
+    "mr": "2821244",
+    "aliases": [
+      "MR2821244",
+      "0904.4824"
+    ],
+    "arxiv": "0904.4824"
+  },
+  "kuznetsov-polishchuk": {
+    "label": "Kuznetsov–Polishchuk",
+    "authors": "Kuznetsov, Alexander; Polishchuk, Alexander",
+    "title": "Exceptional collections on isotropic Grassmannians",
+    "year": 2016,
+    "venue": "J. Eur. Math. Soc. (JEMS) 18 (2016), 507–574",
+    "url": "https://doi.org/10.4171/JEMS/596",
+    "topic": "Exceptional collections",
+    "summary": "Exceptional blocks and collections of maximal length in the classical types.",
+    "mr": "3463417",
+    "aliases": [
+      "MR3463417"
+    ]
+  },
+  "guseva-38": {
+    "label": "Guseva",
+    "authors": "Lyalya Guseva",
+    "title": "On the derived category of $IGr(3,8)$",
+    "year": 2020,
+    "venue": "Sb. Math. 211 (2020), 922–955",
+    "url": "https://doi.org/10.1070/SM9292",
+    "topic": "Exceptional collections",
+    "summary": "A full Lefschetz collection on IGr(3,8).",
+    "arxiv": "1810.07777",
+    "aliases": [
+      "1810.07777"
+    ]
+  },
+  "fonarev-lagrangian": {
+    "label": "Fonarev",
+    "authors": "Anton Fonarev",
+    "title": "Full exceptional collections on Lagrangian Grassmannians",
+    "year": 2022,
+    "venue": "Int. Math. Res. Not. 2022 (2), 1081–1122",
+    "url": "https://doi.org/10.1093/imrn/rnaa098",
+    "topic": "Exceptional collections",
+    "summary": "Fullness of the Kuznetsov–Polishchuk collections on all Lagrangian Grassmannians.",
+    "arxiv": "1911.08968",
+    "aliases": [
+      "1911.08968"
+    ]
+  },
+  "kuznetsov-smirnov-d": {
+    "label": "Kuznetsov–Smirnov",
+    "authors": "Alexander Kuznetsov; Maxim Smirnov",
+    "title": "Residual categories for (co)adjoint Grassmannians in classical types",
+    "year": 2021,
+    "venue": "Compos. Math. 157 (2021), 1172–1206",
+    "url": "https://doi.org/10.1112/S0010437X21007090",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "Full collections and residual categories for OGr(2,2n).",
+    "arxiv": "2001.04148",
+    "aliases": [
+      "2001.04148"
+    ]
+  },
+  "spinor15": {
+    "label": "Benedetti–Faenzi–Smirnov",
+    "authors": "Vladimiro Benedetti; Daniele Faenzi; Maxim Smirnov",
+    "title": "Derived category of the spinor 15-fold",
+    "year": 2025,
+    "venue": "J. Algebra 677 (2025), 460–496",
+    "url": "https://doi.org/10.1016/j.jalgebra.2025.04.019",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "A full collection on the spinor 15-fold; a proposed analogue for the Freudenthal variety.",
+    "arxiv": "2310.01090",
+    "aliases": [
+      "2310.01090"
+    ]
+  },
+  "smirnov-f4": {
+    "label": "Smirnov",
+    "authors": "Maxim Smirnov",
+    "title": "On the derived category of the adjoint Grassmannian of type F",
+    "year": 2021,
+    "venue": "Accepted for Algebraic Geometry and Physics (volume in honour of Yuri I. Manin); preprint revised 2026",
+    "url": "https://arxiv.org/abs/2107.07814",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "A full rectangular collection on F₄/P₁.",
+    "arxiv": "2107.07814",
+    "aliases": [
+      "2107.07814"
+    ]
+  },
+  "belmans-kuznetsov-smirnov": {
+    "label": "Belmans–Kuznetsov–Smirnov",
+    "authors": "Pieter Belmans; Alexander Kuznetsov; Maxim Smirnov",
+    "title": "Derived categories of the Cayley plane and the coadjoint Grassmannian of type F",
+    "year": 2023,
+    "venue": "Transform. Groups 28 (2023), 9–34",
+    "url": "https://doi.org/10.1007/s00031-021-09657-w",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "A full Lefschetz collection on F₄/P₄ and the residual categories of F₄/P₄ and the Cayley plane.",
+    "arxiv": "2005.01989",
+    "aliases": [
+      "2005.01989"
+    ]
+  },
+  "samokhin-vdk": {
+    "label": "Samokhin–van der Kallen",
+    "authors": "Alexander Samokhin; Wilberd van der Kallen",
+    "title": "Highest weight category structures on $\\operatorname{rep}(B)$ and full exceptional collections on generalized flag varieties over $\\mathbb Z$",
+    "year": 2024,
+    "venue": "Preprint",
+    "url": "https://arxiv.org/abs/2407.13653",
+    "topic": "Exceptional collections",
+    "summary": "Full exceptional collections on all split flag schemes G/P, including every Grassmannian in the table.",
+    "arxiv": "2407.13653",
+    "aliases": [
+      "2407.13653"
+    ]
+  },
+  "big-qh": {
+    "label": "Li–Liu–Yu–Zhang",
+    "authors": "Changzheng Li; Zhaoyang Liu; Tony Yue Yu; Chi Zhang",
+    "title": "Convergence and semisimplicity of big quantum cohomology of flag varieties",
+    "year": 2026,
+    "venue": "Preprint",
+    "url": "https://arxiv.org/abs/2610.28418",
+    "topic": "Quantum cohomology",
+    "summary": "Convergence near the large-radius limit and generic semisimplicity of big quantum cohomology for every G/P.",
+    "arxiv": "2610.28418",
+    "aliases": [
+      "2610.28418"
+    ]
+  },
+  "graded-qh": {
+    "label": "Galkin–Leung–Li–Xiong",
+    "authors": "Sergey Galkin; Naichung Conan Leung; Changzheng Li; Rui Xiong; appendix by Pieter Belmans and Markus Reineke",
+    "title": "A-D-E diagrams, Hodge–Tate hyperplane sections and semisimple quantum cohomology",
+    "year": 2025,
+    "venue": "Preprint",
+    "url": "https://arxiv.org/abs/2509.01101",
+    "topic": "Quantum cohomology",
+    "summary": "Theorem 1.2 gives an obstruction from the Fano index and Betti numbers. Appendix A is by Belmans–Reineke.",
+    "arxiv": "2509.01101",
+    "aliases": [
+      "2509.01101"
+    ]
+  },
+  "higher-fano": {
+    "label": "Araujo et al.",
+    "authors": "Carolina Araujo; Roya Beheshti; Ana-Maria Castravet; Kelly Jabbusch; Svetlana Makarova; Enrica Mazzon; Libby Taylor; Nivedita Viswanathan",
+    "title": "Higher Fano Manifolds",
+    "year": 2022,
+    "venue": "Rev. Un. Mat. Argentina 64 (2022), 103–125",
+    "url": "https://doi.org/10.33044/revuma.2921",
+    "topic": "k-Fanoness",
+    "summary": "Theorems 1.3 and 1.4 classify 2-Fano and 3-Fano homogeneous spaces of Picard rank one.",
+    "arxiv": "2110.02339",
+    "aliases": [
+      "2110.02339"
+    ]
+  },
+  "guseva-novikov": {
+    "label": "Guseva–Novikov",
+    "authors": "Lyalya Guseva; Alexander Novikov",
+    "title": "Full exceptional collections on the symplectic isotropic Grassmannians",
+    "year": 2026,
+    "venue": "Advances in Mathematics (2026), article 111211",
+    "url": "https://doi.org/10.1016/j.aim.2026.111211",
+    "topic": "Exceptional collections",
+    "summary": "The Kuznetsov–Polishchuk collections on all symplectic isotropic Grassmannians are full and consist of vector bundles.",
+    "arxiv": "2505.13005",
+    "aliases": [
+      "2505.13005"
+    ]
+  },
+  "fonarev-survey": {
+    "label": "Fonarev (survey)",
+    "authors": "Anton Fonarev",
+    "title": "Derived Categories of Grassmannians: a Survey",
+    "year": 2024,
+    "venue": "Russian Math. Surveys 79 (2024), 807–845",
+    "url": "https://doi.org/10.4213/rm10188e",
+    "topic": "Exceptional collections",
+    "summary": "An overview of constructions and explicit Lefschetz shapes through 2024.",
+    "arxiv": "2407.07455",
+    "aliases": [
+      "2407.07455"
+    ]
+  },
+  "doyle-hpd": {
+    "label": "Doyle",
+    "authors": "Bradley Doyle",
+    "title": "Homological Projective Duality for the Plücker embedding of the Grassmannian",
+    "year": 2021,
+    "venue": "Preprint",
+    "url": "https://arxiv.org/abs/2110.10589",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "A matrix-factorization HPD for Gr(k,N) when gcd(k,N)=1.",
+    "arxiv": "2110.10589",
+    "aliases": [
+      "2110.10589"
+    ]
+  },
+  "pirozhkov-hpd": {
+    "label": "Pirozhkov",
+    "authors": "Pirozhkov, Dmitrii",
+    "title": "Towards homological projective duality for $Gr(2, 2n)$",
+    "year": 2024,
+    "venue": "Preprint",
+    "url": "https://arxiv.org/abs/2402.14754",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "A candidate HPD construction for Gr(2,2n); the equivalence is conjectural.",
+    "arxiv": "2402.14754",
+    "aliases": [
+      "2402.14754"
+    ]
+  },
+  "novikov-3": {
+    "label": "Novikov",
+    "authors": "Novikov, A. A.",
+    "title": "Minimal Lefschetz collections on isotropic Grassmannians $IGr(3,2n)$",
+    "year": 2025,
+    "venue": "Russian Math. Surveys 80 (2025), 543–545",
+    "url": "https://doi.org/10.4213/rm10250e",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "Full minimal Lefschetz collections on every IGr(3,2n), rectangular for n congruent to 0 or 2 modulo 3.",
+    "mr": "4961293",
+    "aliases": [
+      "MR4961293"
+    ]
+  },
+  "hpd": {
+    "label": "Kuznetsov (HPD)",
+    "authors": "Alexander Kuznetsov",
+    "title": "Homological Projective Duality",
+    "year": 2007,
+    "venue": "Publ. Math. IHÉS 105 (2007), 157–220",
+    "url": "https://doi.org/10.1007/s10240-007-0006-8",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "The general theory of homological projective duality and linear embeddings.",
+    "arxiv": "math/0507292",
+    "aliases": [
+      "math/0507292"
+    ]
+  },
+  "grassmannian-hpd": {
+    "label": "Kuznetsov (Grassmannian HPD)",
+    "authors": "Alexander Kuznetsov",
+    "title": "Homological projective duality for Grassmannians of lines",
+    "year": 2006,
+    "venue": "Preprint",
+    "url": "https://arxiv.org/abs/math/0610957",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "Noncommutative Pfaffian HP duals of Gr(2,6) and Gr(2,7).",
+    "arxiv": "math/0610957",
+    "aliases": [
+      "math/0610957"
+    ]
+  },
+  "quadric-hpd": {
+    "label": "Kuznetsov–Perry",
+    "authors": "Alexander Kuznetsov; Alexander Perry",
+    "title": "Homological projective duality for quadrics",
+    "year": 2021,
+    "venue": "J. Algebraic Geom. 30 (2021), 457–476",
+    "url": "https://doi.org/10.1090/jag/767",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "HPD for smooth quadrics with their spinor Lefschetz structures.",
+    "arxiv": "1902.09832",
+    "aliases": [
+      "1902.09832"
+    ]
+  },
+  "hori-hpd": {
+    "label": "Rennemo–Segal",
+    "authors": "Jørgen Vold Rennemo; Ed Segal",
+    "title": "Hori-mological projective duality",
+    "year": 2019,
+    "venue": "Duke Math. J. 168 (2019), 2127–2205",
+    "url": "https://doi.org/10.1215/00127094-2019-0014",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "Pfaffian HPD in odd ambient dimension.",
+    "arxiv": "1609.04045",
+    "aliases": [
+      "1609.04045"
+    ]
+  },
+  "fonarev-minimal": {
+    "label": "Fonarev (Lefschetz)",
+    "authors": "Anton Fonarev",
+    "title": "On minimal Lefschetz decompositions for Grassmannians",
+    "year": 2013,
+    "venue": "Izv. Math. 77 (2013), 1044–1065",
+    "url": "https://doi.org/10.1070/IM2013v077n05ABEH002669",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "Full rectangular Lefschetz collections in the coprime case, and further constructions.",
+    "arxiv": "1108.2292",
+    "aliases": [
+      "1108.2292"
+    ]
+  },
+  "residual-grassmannians": {
+    "label": "Kuznetsov–Smirnov (residual)",
+    "authors": "Alexander Kuznetsov; Maxim Smirnov",
+    "title": "On residual categories for Grassmannians",
+    "year": 2020,
+    "venue": "Proc. Lond. Math. Soc. 120 (2020), 617–641",
+    "url": "https://doi.org/10.1112/plms.12294",
+    "topic": "HPD and Lefschetz collections",
+    "summary": "Residual categories and the relation with quantum cohomology.",
+    "arxiv": "1802.08097",
+    "aliases": [
+      "1802.08097"
+    ]
+  },
+  "coadjoint-qh": {
+    "label": "Perrin–Smirnov",
+    "authors": "Nicolas Perrin; Maxim Smirnov",
+    "title": "On the big quantum cohomology of coadjoint varieties",
+    "year": 2025,
+    "venue": "Selecta Math. 31 (2025), article 30",
+    "url": "https://doi.org/10.1007/s00029-025-01017-w",
+    "topic": "Quantum cohomology",
+    "summary": "Generic semisimplicity of big quantum cohomology of coadjoint varieties.",
+    "arxiv": "2112.12436",
+    "aliases": [
+      "2112.12436"
+    ]
+  },
+  "minuscule-qh": {
+    "label": "Chaput–Manivel–Perrin",
+    "authors": "Pierre-Emmanuel Chaput; Laurent Manivel; Nicolas Perrin",
+    "title": "Quantum cohomology of minuscule homogeneous spaces III : semi-simplicity and consequences",
+    "year": 2010,
+    "venue": "Canad. J. Math. 62 (2010), 1246–1263",
+    "url": "https://doi.org/10.4153/CJM-2010-050-9",
+    "topic": "Quantum cohomology",
+    "summary": "Semisimplicity at q=1 for minuscule and cominuscule homogeneous spaces.",
+    "arxiv": "0710.1224",
+    "aliases": [
+      "0710.1224"
+    ]
+  },
+  "isotropic-qh": {
+    "label": "Cruz Morales et al.",
+    "authors": "John Alexander Cruz Morales; Alexander Kuznetsov; Anton Mellit; Nicolas Perrin; Maxim Smirnov",
+    "title": "On quantum cohomology of Grassmannians of isotropic lines, unfoldings of $A_n$-singularities, and Lefschetz exceptional collections",
+    "year": 2019,
+    "venue": "Ann. Inst. Fourier 69 (2019), 955–991",
+    "url": "https://doi.org/10.5802/aif.3263",
+    "topic": "Quantum cohomology",
+    "summary": "Big quantum cohomology, singularities, and Lefschetz collections for IGr(2,2n).",
+    "arxiv": "1705.01819",
+    "aliases": [
+      "1705.01819"
+    ]
+  },
+  "projective-bundle-qh": {
+    "label": "Iritani–Koto",
+    "authors": "Hiroshi Iritani; Yuki Koto",
+    "title": "Quantum cohomology of projective bundles",
+    "year": 2023,
+    "venue": "Preprint",
+    "url": "https://arxiv.org/abs/2307.03696",
+    "topic": "Quantum cohomology",
+    "summary": "A projective-bundle decomposition theorem, with applications to big quantum cohomology.",
+    "arxiv": "2307.03696",
+    "aliases": [
+      "2307.03696"
+    ]
+  },
+  "quantum-computation": {
+    "label": "Belmans (quantum spectra)",
+    "authors": "Pieter Belmans",
+    "title": "An update for Grassmannian.info: quantum spectra for horospherical varieties",
+    "year": 2021,
+    "venue": "Research note, 24 February 2021",
+    "url": "https://pbelmans.ncag.info/blog/2021/02/24/horospherical-quantum-spectra/",
+    "topic": "Quantum cohomology",
+    "summary": "Additional semisimple cases detected by quantum multiplication. Exact certificates for the cases used here are included with the site.",
+    "aliases": []
+  },
+  "quantum-chevalley": {
+    "label": "Fulton–Woodward",
+    "authors": "W. Fulton; C. Woodward",
+    "title": "On the quantum product of Schubert classes",
+    "year": 2004,
+    "topic": "Quantum cohomology",
+    "summary": "The quantum Chevalley formula used for the exact small-quantum certificates (Theorem 10.1).",
+    "venue": "J. Algebraic Geom. 13 (2004), 641–661",
+    "url": "https://doi.org/10.1090/S1056-3911-04-00365-0",
+    "arxiv": "math/0112183",
+    "aliases": [
+      "math/0112183"
+    ]
+  },
+  "horospherical": {
+    "label": "Gonzales–Pech–Perrin–Samokhin",
+    "authors": "Gonzales, Richard; Pech, Clélia; Perrin, Nicolas; Samokhin, Alexander",
+    "title": "Geometry of horospherical varieties of Picard rank one",
+    "year": 2022,
+    "topic": "Exceptional collections",
+    "summary": "Quantum cohomology and exceptional collections on horospherical varieties of Picard rank one.",
+    "venue": "Int. Math. Res. Not. 2022 (12), 8916–9012",
+    "url": "https://doi.org/10.1093/imrn/rnaa331",
+    "arxiv": "1803.05063",
+    "aliases": [
+      "1803.05063"
+    ]
+  },
+  "fonarev-37": {
+    "label": "Fonarev",
+    "authors": "Anton Fonarev",
+    "title": "On the bounded derived category of $𝖨𝖦𝗋(3, 7)$",
+    "year": 2022,
+    "topic": "Exceptional collections",
+    "summary": "A full minimal Lefschetz collection on the odd symplectic Grassmannian IGr(3,7).",
+    "venue": "Transform. Groups 27 (2022), 89–112",
+    "url": "https://doi.org/10.1007/s00031-020-09614-z",
+    "arxiv": "1804.06946",
+    "aliases": [
+      "1804.06946"
+    ]
+  },
+  "cattani-39": {
+    "label": "Cattani",
+    "authors": "Warren Cattani",
+    "title": "On the derived category of IGr(3, 9)",
+    "year": 2023,
+    "topic": "Exceptional collections",
+    "summary": "A minimal Lefschetz collection on the odd symplectic Grassmannian IGr(3,9).",
+    "venue": "Preprint",
+    "url": "https://arxiv.org/abs/2305.06867",
+    "arxiv": "2305.06867",
+    "aliases": [
+      "2305.06867"
+    ]
+  }
+}
