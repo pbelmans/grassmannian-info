@@ -331,3 +331,23 @@ svg.dynkin {
 
 .lefschetz-diagram svg { max-width: 100%; }
 .reference-overview { margin: 1.5rem 0; }
+
+.projective-duality {
+  font-size: 0.9rem;
+  th, td { vertical-align: middle; }
+  tbody th {
+    font-weight: normal;
+    white-space: nowrap;
+  }
+  .rank-start > * { border-top: 2px solid #aaa; }
+  tr:target { background: #fff4d6; }
+}
+
+.projective-duality .dual-degree {
+  max-width: 24rem;
+}
+
+.dual-degree {
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}

@@ -12,8 +12,13 @@ Among the Grassmannians with nonempty dual, the only defective cases are $\Gr(2,
 The self-dual cases are quadrics, $\Gr(2,5)$ and the spinor tenfold.
 {{ macros.cite("tevelev", "Theorems 1.12, 9.19 and 10.22; Examples 2.20–2.21 (arXiv version)") }}</p>
 <p>The tables cover Dynkin types of rank at most 8.
-An empty dual has no codimension or degree listed; “not recorded” means that a degree has not yet been entered here.
-For a self-dual variety, the degree is that of the Grassmannian itself.</p>
+An empty dual has no codimension or degree listed.
+The degrees are computed in Oscar's IntersectionTheory using the first jet bundle:
+\begin{equation}
+  \deg X^\vee=\int_X c_{d-\delta}\bigl(J_1(\mathcal O_X(1))\bigr)H^\delta,
+  \qquad d=\dim X,\quad H=c_1(\mathcal O_X(1)).
+\end{equation}
+{{ macros.cite("tevelev", "Theorems 7.1–7.2 (arXiv version)") }}</p>
 
 <p>Types:
 {% for T in grassmannians %}<a class="mr-3" href="#type-{{ T }}">{{ T }}</a>{% endfor %}
@@ -49,9 +54,9 @@ For a self-dual variety, the degree is that of the Grassmannian itself.</p>
           <td><a href="/{{ G.url() }}">{{ G.html() | safe }}</a></td>
           <td class="text-right">{{ G.embedding() }}</td>
           <td class="text-right">{{ "—" if dual.empty else dual.codimension }}</td>
-          <td class="text-right">{{ "—" if dual.empty else dual.degree if dual.degree else "not recorded" }}</td>
+          <td class="text-right dual-degree">{{ "—" if dual.empty else dual.degree }}</td>
           <td>{{ "no" if dual.empty else "yes" if dual.self_dual else "no" }}</td>
-          <td>{{ dual.label }}{% if dual.degree_reference %} {{ macros.cite(dual.degree_reference, dual.degree_locator) }}{% endif %}</td>
+          <td>{{ dual.label }}{% if dual.degree_reference and not dual.degree_computed %} {{ macros.cite(dual.degree_reference, dual.degree_locator) }}{% endif %}</td>
         </tr>
       {% endfor %}
       {% endfor %}

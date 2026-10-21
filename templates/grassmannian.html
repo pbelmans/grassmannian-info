@@ -57,7 +57,7 @@
   <dt class="col-sm-4">codimension of the dual</dt>
   <dd class="col-sm-8">{{ dual.codimension }}</dd>
   <dt class="col-sm-4">degree of the dual</dt>
-  <dd class="col-sm-8">{{ dual.degree if dual.degree else "not recorded here" }}</dd>
+  <dd class="col-sm-8 dual-degree">{{ dual.degree if dual.degree else "not recorded here" }}</dd>
   <dt class="col-sm-4">projectively self-dual</dt>
   <dd class="col-sm-8">{{ "yes" if dual.self_dual else "no" }}</dd>
 </dl>

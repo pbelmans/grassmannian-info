@@ -137,6 +137,36 @@ class LiteratureTests(unittest.TestCase):
         self.assertEqual(Grassmannian('C', 6, 3).projective_duality()['codimension'], 1)
         self.assertEqual(Grassmannian('E', 7, 7).projective_duality()['degree'], 4)
 
+    def test_computed_dual_degrees(self):
+        covered = [G for G in varieties() if G.D.n <= 8]
+        self.assertEqual(set(literature.DUAL_DEGREES), {G.url() for G in covered})
+        for G in covered:
+            with self.subTest(variety=G.url()):
+                record = literature.DUAL_DEGREES[G.url()]
+                cited = literature._projective_duality(G)
+                dual = G.projective_duality()
+                self.assertEqual(record['dimension'], G.dimension())
+                self.assertEqual(record['fixed_points'], G.rank())
+                self.assertEqual(record['degree_of_grassmannian'], G.degree())
+                if cited.get('empty'):
+                    self.assertIsNone(record['degree'])
+                    self.assertIsNone(record['codimension'])
+                    self.assertEqual(record['jet_integrals'], [0])
+                else:
+                    self.assertEqual(record['codimension'], cited['codimension'])
+                    self.assertGreater(record['degree'], 0)
+                    self.assertEqual(record['jet_integrals'],
+                                     [0] * (record['codimension'] - 1) + [record['degree']])
+                    self.assertEqual(dual['degree'], record['degree'])
+                    if cited.get('degree') is not None:
+                        self.assertEqual(record['degree'], cited['degree'])
+        for (T, n, k), degree in {
+            ('A', 7, 3): 16, ('A', 7, 4): 126, ('C', 6, 3): 102720,
+            ('E', 6, 2): 72, ('E', 7, 1): 126, ('E', 8, 8): 240,
+            ('F', 4, 1): 24, ('F', 4, 4): 6,
+        }.items():
+            self.assertEqual(Grassmannian(T, n, k).projective_duality()['degree'], degree)
+
     def test_projective_duality_table_covers_rank_eight(self):
         response = app.test_client().get('/projective-duality')
         self.assertEqual(response.status_code, 200)
@@ -150,12 +180,14 @@ class LiteratureTests(unittest.TestCase):
             'A3-1': ['3', '—', '—', 'no'],
             'A4-2': ['9', '3', '5', 'yes'],
             'A5-2': ['14', '1', '3', 'no'],
-            'A6-2': ['20', '3', 'not recorded', 'no'],
+            'A6-2': ['20', '3', '14', 'no'],
             'C3-3': ['13', '1', '4', 'no'],
+            'C6-3': ['207', '1', '102720', 'no'],
             'D5-5': ['15', '5', '12', 'yes'],
             'E7-7': ['55', '1', '4', 'no'],
         }.items():
             self.assertEqual(rows[key][2:6], values, key)
+        self.assertTrue(all(row[4] == '—' or row[4].isdigit() for row in rows.values()))
         links = Links(html)
         self.assertFalse(links.citations - links.ids)
         self.assertTrue({f'type-{T}' for T in 'ABCDEFG'} <= links.ids)

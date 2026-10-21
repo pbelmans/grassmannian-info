@@ -11,6 +11,7 @@ from pathlib import Path
 
 
 REFERENCES = json.loads((Path(__file__).parent / "references/catalog.json").read_text())
+DUAL_DEGREES = json.loads((Path(__file__).parent / "references/projective-duality.json").read_text())
 
 
 def ordered_references(keys):
@@ -241,6 +242,18 @@ def page_references(G):
 
 
 def projective_duality(G):
+    """Cited descriptions, with exact Chern-number computations through rank 8."""
+    result = _projective_duality(G)
+    computed = DUAL_DEGREES.get(G.url())
+    if computed and not result.get("empty"):
+        if result.get("degree") is None:
+            result.update(degree_computed=True, degree_reference="tevelev",
+                          degree_locator="Theorems 7.1–7.2 (arXiv version)")
+        result["degree"] = computed["degree"]
+    return result
+
+
+def _projective_duality(G):
     """Classical duality for the minimal ample-generator embedding, not an adjoint re-embedding."""
     T, n, k = presentation(G)
     result = {"reference": "tevelev", "locator": "Theorems 9.19 and 10.22 (arXiv version)"}
