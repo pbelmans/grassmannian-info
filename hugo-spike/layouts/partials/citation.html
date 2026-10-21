@@ -1,4 +1,0 @@
-{{- with .reference -}}
-  {{- $ref := index (where hugo.Data.catalog.references "key" .) 0 -}}
-  <a class="citation" href="#reference-{{ . }}">[{{ $ref.label }}{{ with $.locator }}, {{ . }}{{ end }}]</a>
-{{- end -}}

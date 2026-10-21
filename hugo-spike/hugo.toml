@@ -6,3 +6,11 @@ disableKinds = ["taxonomy", "term", "RSS", "sitemap"]
 [[module.mounts]]
 source = "../static"
 target = "static/static"
+
+[[module.mounts]]
+source = "../references/quantum-certificates.json"
+target = "static/references/quantum-certificates.json"
+
+[[module.mounts]]
+source = "static"
+target = "static"

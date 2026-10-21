@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT))
 
 from application import Dynkin, Grassmannian, data, horospherical_varieties
 import literature
+from presentation import render_pages, type_templates
 
 
 def exact_json(value):
@@ -116,6 +117,8 @@ def main():
     target = Path(__file__).parent / "data"
     target.mkdir(exist_ok=True)
     payload = {"records": {row["route"]: row for row in exported},
+               "pages": render_pages(exported),
+               "type_templates": type_templates(),
                "references": exact_json(literature.ordered_references(literature.REFERENCES))}
     path = target / "catalog.json"
     path.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":"), allow_nan=False) + "\n")

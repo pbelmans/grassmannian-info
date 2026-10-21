@@ -1,6 +1,8 @@
 {{ range hugo.Data.catalog.records }}
   {{ $title := .name | default (strings.TrimPrefix "/" .route) }}
   {{ $weight := 0 }}
+  {{ $aliases := slice }}
+  {{ if eq .route "/A1/1" }}{{ $aliases = slice "/B1/1/" "/C1/1/" }}{{ end }}
   {{ if eq .family "Dynkin type" }}{{ $weight = int .invariants.rank }}{{ end }}
   {{ $.AddPage (dict
     "path" (strings.TrimPrefix "/" .route)
@@ -8,9 +10,12 @@
     "kind" .kind
     "title" $title
     "weight" $weight
+    "aliases" $aliases
     "layout" "record"
     "params" (dict "record_route" .route "family" .family)
   ) }}
 {{ end }}
-{{ .AddPage (dict "path" "horospherical" "kind" "section" "title" "Horospherical varieties") }}
-{{ .AddPage (dict "path" "references" "title" "References" "layout" "references") }}
+{{ .AddPage (dict "path" "horospherical" "kind" "section" "title" "Horospherical varieties" "layout" "record" "params" (dict "record_route" "/horospherical")) }}
+{{ range $route, $title := dict "freudenthal" "The Freudenthal magic square" "references" "References" "about" "About" "explained" "Explained" }}
+  {{ $.AddPage (dict "path" $route "title" $title "layout" "record" "params" (dict "record_route" (printf "/%s" $route))) }}
+{{ end }}
