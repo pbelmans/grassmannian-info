@@ -74,11 +74,52 @@ class LiteratureTests(unittest.TestCase):
                 self.assertIsNone(literature.quantum_obstruction(G.index(), tuple(G.betti())), (G.D.D, G.k))
             if G.D.T in 'EFG' and G.small_quantum_result()['status'] == 'unknown':
                 unknown_exceptional.add((G.D.D, G.k))
-        self.assertEqual(unknown_exceptional, {('E7', 2), ('E7', 4), ('E7', 5), ('E8', 6)})
+        self.assertEqual(unknown_exceptional, set())
         for T, n, k in [('B', 9, 8), ('C', 8, 7), ('D', 9, 7)]:
             self.assertEqual(Grassmannian(T, n, k).small_quantum_result()['reference'], 'graded-qh')
         # A passing obstruction is not a semisimplicity certificate.
-        self.assertEqual(Grassmannian('E', 7, 4).small_quantum_result()['status'], 'unknown')
+        G = Grassmannian('B', 5, 4)
+        self.assertIsNone(literature.quantum_obstruction(G.index(), tuple(G.betti())))
+        self.assertEqual(G.small_quantum_result()['status'], 'unknown')
+
+    def test_holmes_muratore_semisimplicity(self):
+        cases = {(7, 2): (42, 576), (7, 4): (53, 10080),
+                 (7, 5): (50, 4032), (8, 6): (97, 60480)}
+        cited = {(G.D.n, G.k) for G in varieties()
+                 if G.small_quantum_result().get('reference') == 'holmes-muratore'}
+        self.assertEqual(cited, set(cases))
+        client = app.test_client()
+        for (n, k), (dimension, euler) in cases.items():
+            G = Grassmannian('E', n, k)
+            with self.subTest(variety=G.url()):
+                # Match the paper's Table 6.1, including its node numbering.
+                self.assertEqual((G.dimension(), G.rank()), (dimension, euler))
+                result = G.small_quantum_result()
+                self.assertEqual(result['status'], 'semisimple')
+                self.assertIn('Theorems 1.2 and 6.2; Remark 6.3', result['locator'])
+                if (n, k) in {(7, 2), (7, 5)}:
+                    multiplicity = 2 if k == 2 else 12
+                    self.assertIn(f'algebraic multiplicity {multiplicity}.', result['text'])
+                    self.assertNotIn('distinct, nonzero', result['text'])
+                else:
+                    self.assertIn('distinct, nonzero eigenvalues', result['text'])
+                html = client.get('/' + G.url()).get_data(as_text=True)
+                links = Links(html)
+                self.assertIn('reference-holmes-muratore', links.citations & links.ids)
+                self.assertIn('https://arxiv.org/abs/2610.37273', html)
+                self.assertIn('<strong>generically semisimple</strong>', html)
+                self.assertNotIn('not known to be (non-)semisimple', html)
+
+        # Table 1.1 together with Theorem 1.2 gives the complete type-E answer.
+        for n, positive in {6: {1, 3, 5, 6}, 7: {2, 4, 5, 7}, 8: {6}}.items():
+            for k in range(1, n + 1):
+                self.assertEqual(Grassmannian('E', n, k).small_quantum_result()['status'],
+                                 'semisimple' if k in positive else 'non-semisimple')
+
+        overview = client.get('/references').get_data(as_text=True)
+        self.assertIn('settle the remaining exceptional cases', overview)
+        self.assertNotIn('remain unresolved', overview)
+        self.assertIn('reference-holmes-muratore', Links(overview).citations)
 
     def test_certificates_match_varieties(self):
         certificates = json.loads(Path('references/quantum-certificates.json').read_text())
@@ -104,6 +145,9 @@ class LiteratureTests(unittest.TestCase):
         links = Links(response.get_data(as_text=True))
         self.assertTrue(links.entries)
         self.assertTrue(all(e['data-exceptional'] == 'known' and e['data-big'] == 'semisimple' for e in links.entries))
+        entries = {e['data-label']: e for e in links.entries}
+        for label in ['E7-2', 'E7-4', 'E7-5', 'E8-6']:
+            self.assertEqual(entries[label]['data-small'], 'semisimple')
         self.assertFalse(links.citations)
 
     def test_all_homogeneous_pages_and_citation_targets(self):
