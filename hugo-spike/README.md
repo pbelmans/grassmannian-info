@@ -66,14 +66,34 @@ with `BigInt` for Weyl orders. It retains diagrams, Cartan matrices and rank
 navigation. Ordinary catalogue pages do not need this calculation.
 
 Static hosting must serve `404.html` for otherwise unmatched URLs for this
-fallback to run, or rewrite classical type URLs to that document with status
-200. The preview uses Hugo's 404 handling. Production routing must be checked
-before switching hosts.
+fallback to run. GitHub Pages does this automatically, retaining HTTP 404
+even when JavaScript renders a valid root-system page; it offers no HTTP 200
+rewrite. Unknown routes still show the ordinary not-found message.
 
 The old site also links to Grassmannians outside its stored projective data
 (for example A21/1 and D21/21); these already fail in Flask. They are separate
 from the working root-system URLs above. The comparison is a regression check,
 not a claim that all historical mathematical data and links are correct.
+
+## GitHub Pages preview
+
+`.github/workflows/pages.yml` builds and deploys pushes to `hugo-feasibility`.
+The repository's Pages source must be **GitHub Actions**, with that branch
+allowed to deploy to the `github-pages` environment. The existing Flask
+deployment workflow and production domain are independent of this preview.
+
+The workflow runs the tests, exports Python/Jinja data, builds with Hugo
+0.161.1, checks every page against Flask, and uploads the site to Pages.
+The Pages URL supplies the base path, so links, SVG and MathJax links, assets,
+and browser-generated root-system pages work under `/grassmannian-info/`.
+No Python or Sage server runs on GitHub Pages.
+
+To check a project-path build locally:
+
+```sh
+hugo --source hugo-spike --baseURL https://pbelmans.github.io/grassmannian-info/
+.venv/bin/python hugo-spike/verify.py --base-url https://pbelmans.github.io/grassmannian-info/
+```
 
 ## Finishing the native Hugo conversion
 
@@ -87,4 +107,4 @@ stored Sage results. Only then remove the corresponding Jinja content templates.
 This resembles the hyperkaehler.info rewrite's data preparation step more than
 Fanography's use of Go template helpers for enrichment. The content adapter
 provides the Hugo routes; the substantial arithmetic should not be ported to Go
-templates. Production deployment and CI have not been switched.
+templates. The Flask production deployment has not been switched.
