@@ -48,6 +48,16 @@ def small_quantum(G):
     if G.is_adjoint() and not G.is_coadjoint():
         return dict(fact("This is an adjoint, non-coadjoint variety.",
                          "adjoint-qh"), status="semisimple")
+    if T == "E" and (n, k) in {(7, 2), (7, 4), (7, 5), (8, 6)}:
+        text = "Semisimple at $q=1$; "
+        if (n, k) in {(7, 4), (8, 6)}:
+            text += r"$c_1\star$ has distinct, nonzero eigenvalues."
+        else:
+            multiplicity = 2 if k == 2 else 12
+            text += (r"$c_1\star$ has the eigenvalue $0$ "
+                     f"with algebraic multiplicity {multiplicity}.")
+        return dict(fact(text, "holmes-muratore", "Theorems 1.2 and 6.2; Remark 6.3"),
+                    status="semisimple")
     obstruction = quantum_obstruction(G.index(), tuple(G.betti()))
     if obstruction:
         return dict(fact("The index and Betti numbers violate the necessary graded-dimension inequality.",

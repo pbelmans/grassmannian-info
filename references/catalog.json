@@ -239,6 +239,20 @@
       "2610.28418"
     ]
   },
+  "holmes-muratore": {
+    "label": "Holmes–Muratore",
+    "authors": "Daniel Holmes; Giosuè Muratore",
+    "title": "Effective Gromov–Witten computations for GKM spaces and a semisimple application",
+    "year": 2026,
+    "venue": "Preprint",
+    "url": "https://arxiv.org/abs/2610.37273",
+    "topic": "Quantum cohomology",
+    "summary": "Semisimplicity of small quantum cohomology for E₇/P₂, E₇/P₄, E₇/P₅ and E₈/P₆ (Theorem 1.2), completing the exceptional cases.",
+    "arxiv": "2610.37273",
+    "aliases": [
+      "2610.37273"
+    ]
+  },
   "graded-qh": {
     "label": "Galkin–Leung–Li–Xiong",
     "authors": "Sergey Galkin; Naichung Conan Leung; Changzheng Li; Rui Xiong; appendix by Pieter Belmans and Markus Reineke",
