@@ -108,7 +108,7 @@ end
 function main(args)
     @assert args in (String[], ["--check"]) || (length(args) == 2 && args[1] == "--case") "Use --check or --case C6/3"
     selected = length(args) == 2 ? args[2] : nothing
-    rows = JSON.parsefile(joinpath(ROOT, "grassmannians.json"))
+    rows = JSON.parsefile(joinpath(ROOT, "data", "grassmannians.json"))
     results = Dict{String, Any}()
     for row in rows
         parse(Int, row["type"][2:end]) > 8 && continue

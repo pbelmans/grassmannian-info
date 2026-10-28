@@ -1,17 +1,15 @@
 from flask import Flask
 from flask import render_template, redirect
 
-import os
+from pathlib import Path
 import json
 import math
 from datetime import datetime
 
-app = Flask(__name__)
+ROOT = Path(__file__).resolve().parents[1]
+app = Flask(__name__, static_folder=str(ROOT / "static"))
 
-app.static_folder = "static"
-
-import eigenvalues
-import literature
+from scripts import eigenvalues, literature
 
 
 # Exact polynomial arithmetic on ascending-coefficient integer lists.
@@ -794,7 +792,7 @@ def name(T, n, k):
 grassmannians = {letter : {} for letter in "ABCDEFG"}
 
 # load the Sage-generated JSON file
-with open(os.path.join(os.path.realpath(os.path.dirname(__file__)), "grassmannians.json"), "r", encoding="utf8") as f:
+with (ROOT / "data/grassmannians.json").open(encoding="utf8") as f:
     data = json.load(f)
 
     for G in data:
@@ -838,7 +836,7 @@ def show_references():
 @app.route("/references/quantum-certificates.json")
 def quantum_certificates():
     from flask import send_from_directory
-    return send_from_directory(os.path.join(app.root_path, "references"), "quantum-certificates.json")
+    return send_from_directory(ROOT / "references", "quantum-certificates.json")
 
 
 @app.route("/about")

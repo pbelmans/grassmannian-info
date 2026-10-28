@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 R.<t> = PolynomialRing(QQ)
 
@@ -79,6 +80,6 @@ for (D, k) in types:
     G = grassmannian(D, k)
     grassmannians.append(G)
 
-with open("grassmannians.json", "w") as f:
+with (Path(__file__).resolve().parents[1] / "data/grassmannians.json").open("w") as f:
     json.dump(grassmannians, f, indent=4)
 

@@ -3,7 +3,7 @@
 from html.parser import HTMLParser
 import unittest
 
-from application import app
+from scripts.application import app
 
 
 class Varieties(HTMLParser):

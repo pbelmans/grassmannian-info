@@ -2,8 +2,54 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21296785.svg)](https://doi.org/10.5281/zenodo.21296785)
 
-`main` builds the static website with Python/Jinja and Hugo. The legacy Flask
-version is preserved on `flask` and is no longer maintained.
+A periodic table of (generalised) Grassmannians: [grassmannian.info](https://grassmannian.info).
+
+A static Hugo site, with mathematical computations and Jinja rendering in Python
+at build time. The legacy `flask` branch is no longer maintained.
+
+## Structure
+
+- `hugo.toml` — Hugo configuration.
+- `content/` — the content adapter generates the pages from the catalogue.
+- `layouts/` — Hugo templates.
+- `data/` — Sage source data and the generated catalogue.
+- `static/` — CSS, JavaScript and images, published under `/static/`.
+- `scripts/` — computations, export, verification and Jinja content templates.
+- `references/` — bibliography and stored mathematical results.
+
+## Building
+
+Install Hugo 0.161.1 and Python, then:
+
+```shell
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python scripts/export.py
+hugo server --port 1317
+```
+
+Regenerate the export after changing Python, Jinja or source data. To build and
+verify the production output (Node is required for the browser checks):
+
+```shell
+.venv/bin/python -m unittest discover -s tests -v
+hugo
+.venv/bin/python scripts/verify.py
+```
+
+After changing Sass, rebuild the stylesheet:
+
+```shell
+sass --no-source-map assets/style.scss static/style.css
+```
+
+See [research data](docs/research.md) for Sage and Oscar computations, and
+[build notes](docs/build.md) for verification and the 404 fallback.
+
+## Deployment
+
+Pushes to `main` build, verify and deploy `public/` to GitHub Pages through
+`.github/workflows/pages.yml`.
 
 ## How to cite
 
@@ -19,91 +65,4 @@ release, use the concept DOI
   doi    = {10.5281/zenodo.21296785},
   year   = {2026},
 }
-```
-
-## How to deploy the website
-
-Pushes to `main` build, verify and deploy the static site to GitHub Pages.
-To rebuild manually:
-
-```shell
-gh workflow run pages.yml --ref main
-```
-
-## Local development
-
-```shell
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python hugo/export.py
-hugo server --source hugo --port 1317
-```
-
-See [the Hugo build notes](hugo/README.md) for verification and browser
-fallback details. Regenerate the export after changing Python, Jinja or data.
-
-The compiled stylesheet is included for deployment. After changing Sass, rebuild it with:
-
-```shell
-sass --no-source-map assets/style.scss static/style.css
-```
-
-## Research references and checks
-
-`references/catalog.json` contains the bibliography used by `/references` and
-the individual Grassmannian pages. Its primary links point to published
-versions where available, with arXiv and MathSciNet identifiers retained.
-Retrieve new bibliographical metadata with `bibgetter pull arXiv:...` or
-`bibgetter pull MR...`, then update the catalog's publication details and
-summary. The mathematical hypotheses and applicability rules live in
-`literature.py`; unknown results must remain distinct from negative results.
-
-Run the page, citation, and mathematical consistency checks with:
-
-```shell
-.venv/bin/python -m unittest discover -s tests -v
-```
-
-The additional small-quantum semisimplicity cases have exact characteristic
-polynomials in `references/quantum-certificates.json`. Coefficients are in
-ascending order, for multiplication by the ample generator at `q=1` over `QQ`.
-SageMath can verify the stored square-free polynomials and independent known
-examples, or regenerate the matrices and certificates:
-
-```shell
-sage scripts/quantum_semisimplicity.sage --check
-sage scripts/quantum_semisimplicity.sage
-```
-
-Generated intermediates and local research drafts are ignored.
-
-Projective-dual degrees through Dynkin rank 8 are stored in
-`references/projective-duality.json`. The Julia generator uses **Oscar's
-IntersectionTheory** (`tn_variety`, `tn_bundle`, `chern_class`, and `integral`)
-to evaluate Tevelev's Theorems 7.1–7.2 (arXiv version). It computes the Taylor
-expansion at `q = 1` of `q ∫ c_top(Ω_X ⊗ O_X(q))`; the first nonconstant
-coefficient is the degree of the dual, and its exponent is the codimension.
-Truncated power series keep the computation practical even for `E8/4`.
-
-The generator uses exact rational arithmetic, verifies the degree of the
-original Grassmannian, and repeats each computation with two regular
-cocharacters. For defective varieties it also checks the vanishing of the
-higher jet Chern numbers. The values use the ample generator, including for
-spinor varieties. Empty duals have null degree and codimension.
-
-The isolated Julia environment pins Oscar 1.8.2 and does not require Julia
-at runtime, either for Flask or for the Hugo export.
-
-```shell
-julia --project=scripts -e 'using Pkg; Pkg.instantiate()'
-julia --project=scripts scripts/projective_duality.jl
-julia --project=scripts scripts/projective_duality.jl --check
-julia --project=scripts scripts/projective_duality.jl --case C6/3
-```
-
-An independent Sage implementation checks the same numbers by directly
-expanding the jet-bundle Chern polynomial, using integer arithmetic:
-
-```shell
-sage -python scripts/projective_duality.py --check
 ```

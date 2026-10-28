@@ -10,8 +10,8 @@ from functools import lru_cache
 from pathlib import Path
 
 
-REFERENCES = json.loads((Path(__file__).parent / "references/catalog.json").read_text())
-DUAL_DEGREES = json.loads((Path(__file__).parent / "references/projective-duality.json").read_text())
+REFERENCES = json.loads((Path(__file__).resolve().parents[1] / "references/catalog.json").read_text())
+DUAL_DEGREES = json.loads((Path(__file__).resolve().parents[1] / "references/projective-duality.json").read_text())
 
 
 def ordered_references(keys):

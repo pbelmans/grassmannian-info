@@ -7,6 +7,12 @@ __pycache__/
 node_modules/
 package-lock.json
 
+# Hugo output and generated catalogue.
+/data/catalog.json
+/public/
+/resources/
+/.hugo_build.lock
+
 # Reproducible Sage/Sass intermediates (static/style.css is shipped).
 *.sage.py
 *.css.map

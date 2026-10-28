@@ -6,10 +6,14 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 from urllib.parse import urlsplit
 
-from export import exact_json, records
-from application import app, Dynkin
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from scripts.export import exact_json, records
+from scripts.application import app, Dynkin
 
 
 class Page(HTMLParser):
@@ -83,7 +87,7 @@ def verify_dynamic_types():
              for n in (*range(minimum, 22), 37, 100)]
     script = """
       const fs = require('node:fs');
-      const {model} = require('./hugo/static/static/dynkin-page.js');
+      const {model} = require('./static/dynkin-page.js');
       const cases = JSON.parse(fs.readFileSync(0, 'utf8'));
       process.stdout.write(JSON.stringify(cases.map(([T, n]) => model(T, n))));
     """
@@ -145,7 +149,7 @@ def verify_fallback(public, site_root):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--public-dir", type=Path, default=Path(__file__).parent / "public")
+    parser.add_argument("--public-dir", type=Path, default=ROOT / "public")
     parser.add_argument("--base-url", default="/")
     args = parser.parse_args()
     public = args.public_dir

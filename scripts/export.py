@@ -11,9 +11,9 @@ from time import perf_counter
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from application import Dynkin, Grassmannian, data, horospherical_varieties
-import literature
-from presentation import render_pages, type_templates
+from scripts.application import Dynkin, Grassmannian, data, horospherical_varieties
+from scripts import literature
+from scripts.presentation import render_pages, type_templates
 
 
 def exact_json(value):
@@ -115,7 +115,7 @@ def records():
 def main():
     started = perf_counter()
     exported = exact_json(list(records()))
-    target = Path(__file__).parent / "data"
+    target = ROOT / "data"
     target.mkdir(exist_ok=True)
     payload = {"records": {row["route"]: row for row in exported},
                "pages": render_pages(exported),

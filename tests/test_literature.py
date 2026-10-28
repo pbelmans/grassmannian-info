@@ -4,8 +4,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 import unittest
 
-from application import app, data, Grassmannian
-import literature
+from scripts.application import app, data, Grassmannian
+from scripts import literature
 
 
 class Links(HTMLParser):

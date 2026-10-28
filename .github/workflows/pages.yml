@@ -50,13 +50,13 @@ jobs:
         env:
           PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
         run: |
-          python hugo/export.py
-          hugo --source hugo --baseURL "${PAGES_BASE_URL}/" --cacheDir "$RUNNER_TEMP/hugo-cache"
-          python hugo/verify.py --base-url "${PAGES_BASE_URL}/"
+          python scripts/export.py
+          hugo --baseURL "${PAGES_BASE_URL}/" --cacheDir "$RUNNER_TEMP/hugo-cache"
+          python scripts/verify.py --base-url "${PAGES_BASE_URL}/"
       - name: Upload site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: hugo/public
+          path: public
 
   deploy:
     if: github.ref == 'refs/heads/main'

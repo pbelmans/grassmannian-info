@@ -10,8 +10,8 @@ from types import SimpleNamespace
 
 from jinja2 import ChoiceLoader, DictLoader
 
-from application import app, Dynkin, Grassmannian, grassmannians, horospherical_varieties
-import literature
+from scripts.application import app, Dynkin, Grassmannian, grassmannians, horospherical_varieties
+from scripts import literature
 
 
 def environment():

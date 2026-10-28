@@ -133,7 +133,7 @@ def main():
     parser.add_argument('--check', action='store_true', help='recompute and compare with the stored values')
     parser.add_argument('--case', help='compute a single case, e.g. E8/4, without changing the data file')
     args = parser.parse_args()
-    data = json.loads((ROOT / 'grassmannians.json').read_text())
+    data = json.loads((ROOT / 'data/grassmannians.json').read_text())
     rows = [row for row in data if int(row['type'][1:]) <= 8]
     results = {}
     for row in rows:
