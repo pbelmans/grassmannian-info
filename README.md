@@ -23,7 +23,7 @@ release, use the concept DOI
 With GitHub CLI installed and configured, simply run
 
 ```shell
-gh workflow run deploy
+gh workflow run deploy.yml --ref flask
 ```
 
 ## Local development

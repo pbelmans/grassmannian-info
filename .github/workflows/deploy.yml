@@ -1,7 +1,8 @@
-name: deploy
+name: Deploy Flask
 on: workflow_dispatch
 jobs:
   update:
+    if: github.ref == 'refs/heads/flask'
     name: Update repository
     runs-on: ubuntu-latest
     steps:
@@ -12,7 +13,12 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        script: cd grassmannian-info && git pull
+        script: |
+          set -e
+          cd grassmannian-info
+          git fetch origin
+          git switch flask
+          git pull --ff-only origin flask
 
   reload:
     name: Reload website
