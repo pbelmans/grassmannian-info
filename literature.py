@@ -77,7 +77,7 @@ def small_quantum(G):
     if (T, n, k) in {("B", 6, 4), ("B", 7, 4), ("B", 7, 6),
                      ("C", 5, 3), ("C", 6, 3), ("C", 6, 5),
                      ("E", 6, 3), ("E", 6, 5), ("F", 4, 2)}:
-        return dict(fact(r"Hyperplane multiplication has square-free characteristic polynomial over $\mathbb Q$ at $q=1$.",
+        return dict(fact("",
                          "quantum-computation"), status="semisimple")
     return {"status": "unknown", "text": ""}
 
@@ -245,7 +245,6 @@ def page_references(G):
     keys.update({"big-qh", "higher-fano"})
     small = small_quantum(G)
     if "reference" in small: keys.add(small["reference"])
-    if small.get("reference") == "quantum-computation": keys.add("quantum-chevalley")
     if G.is_coadjoint(): keys.add("coadjoint-qh")
     for result in lefschetz_collections(G) + hpd_results(G):
         keys.add(result["reference"])

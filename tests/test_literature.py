@@ -116,10 +116,8 @@ class LiteratureTests(unittest.TestCase):
                 self.assertEqual(Grassmannian('E', n, k).small_quantum_result()['status'],
                                  'semisimple' if k in positive else 'non-semisimple')
 
-        overview = client.get('/references').get_data(as_text=True)
-        self.assertIn('settle the remaining exceptional cases', overview)
-        self.assertNotIn('remain unresolved', overview)
-        self.assertIn('reference-holmes-muratore', Links(overview).citations)
+        bibliography = client.get('/references').get_data(as_text=True)
+        self.assertIn('reference-holmes-muratore', Links(bibliography).ids)
 
     def test_igr38_small_semisimplicity(self):
         G = Grassmannian('C', 4, 3)

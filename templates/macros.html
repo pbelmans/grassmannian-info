@@ -157,12 +157,6 @@ data-dimension="{{ G.dimension() }}" data-index="{{ G.index() }}" data-euler="{{
 $\widetilde b_{ {{ w.i }} }={{ w.left }}&gt;{{ w.right }}=\widetilde b_{ {{ w.j }} }$,
 where&nbsp;${{ w.j }}\equiv {{ w.d }}\cdot {{ w.i }}\pmod{ {{ X.index() }} }$.</p>
 {% endif %}
-{% if result.reference == "quantum-computation" %}
-<p><a href="/references/quantum-certificates.json">Exact characteristic polynomials</a>;
-<a href="https://github.com/pbelmans/grassmannian-info/blob/main/scripts/quantum_semisimplicity.sage">Sage computation</a>
-using the quantum Chevalley formula.
-{{ cite("quantum-chevalley", "Theorem 10.1") }}</p>
-{% endif %}
 {% endif %}
 </dd>
 
