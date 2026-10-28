@@ -2,7 +2,7 @@ name: Hugo Pages
 
 on:
   push:
-    branches: [hugo-feasibility]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -59,7 +59,7 @@ jobs:
           path: hugo-spike/public
 
   deploy:
-    if: github.ref == 'refs/heads/hugo-feasibility'
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     permissions:

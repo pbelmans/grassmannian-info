@@ -2,6 +2,9 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21296785.svg)](https://doi.org/10.5281/zenodo.21296785)
 
+`main` builds the static website with Python/Jinja and Hugo. The Flask version
+is preserved on `flask`.
+
 ## How to cite
 
 The website is archived on Zenodo. To cite the version-independent latest
@@ -20,19 +23,27 @@ release, use the concept DOI
 
 ## How to deploy the website
 
-With GitHub CLI installed and configured, simply run
+Pushes to `main` build, verify and deploy the static site to GitHub Pages.
+To rebuild manually:
 
 ```shell
-gh workflow run deploy
+gh workflow run pages.yml --ref main
 ```
+
+The legacy Flask deployment is available with
+`gh workflow run deploy.yml --ref flask`.
 
 ## Local development
 
 ```shell
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
-sh script
+.venv/bin/python hugo-spike/export.py
+hugo server --source hugo-spike --port 1317
 ```
+
+See [the Hugo build notes](hugo-spike/README.md) for verification and browser
+fallback details. Regenerate the export after changing Python, Jinja or data.
 
 The compiled stylesheet is included for deployment. After changing Sass, rebuild it with:
 

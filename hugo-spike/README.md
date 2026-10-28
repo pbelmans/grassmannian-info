@@ -1,4 +1,4 @@
-# Hugo migration experiment
+# Hugo build
 
 The existing site can be served statically. Python computes the catalogue at
 build time; Sage is only needed to regenerate the stored research data. There
@@ -77,7 +77,7 @@ not a claim that all historical mathematical data and links are correct.
 
 ## GitHub Pages preview
 
-`.github/workflows/pages.yml` builds and deploys pushes to `hugo-feasibility`.
+`.github/workflows/pages.yml` builds and deploys pushes to `main`.
 The repository's Pages source must be **GitHub Actions**, with that branch
 allowed to deploy to the `github-pages` environment. The existing Flask
 deployment workflow and production domain are independent of this preview.
