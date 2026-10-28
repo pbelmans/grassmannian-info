@@ -1,0 +1,14 @@
+{{- $labels := dict -}}
+{{- range $route, $G := merge hugo.Data.catalog.records hugo.Data.catalog.extra -}}
+  {{- if $G.isomorphisms -}}
+    {{- $type := index (split (strings.TrimPrefix "/" $route) "/") 0 -}}
+    {{- if or (in (slice "E" "F" "G") (substr $type 0 1)) (le (int (substr $type 1)) 7) -}}
+      {{- $targets := slice -}}
+      {{- range $G.isomorphisms -}}
+        {{- $targets = $targets | append (printf "%s-%v" (index . 0) (index . 1)) -}}
+      {{- end -}}
+      {{- $labels = merge $labels (dict (replace (strings.TrimPrefix "/" $route) "/" "-") $targets) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $labels -}}

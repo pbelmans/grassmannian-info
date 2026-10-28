@@ -235,14 +235,4 @@
 {{ end }}
 </div>
 
-<script type="text/javascript">
-$(function() {
-  // toggle between no or lots of information by activating a class which triggers the styling
-  $("input#information").change(function() {
-    if ($(this).prop("checked"))
-      $("table").addClass("expanded");
-    else
-      $("table").removeClass("expanded");
-  });
-});
-</script>
+<script src="/static/tables.js"></script>
