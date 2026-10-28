@@ -1,4 +1,4 @@
-"""Compare complete Hugo page content with Flask, not just exported numbers."""
+"""Verify generated pages, mathematical data, assets and browser computations."""
 
 from html.parser import HTMLParser
 import argparse
@@ -13,7 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from scripts.export import exact_json, records
-from scripts.application import app, Dynkin
+from scripts.geometry import Dynkin
+from scripts.presentation import render_pages
 
 
 class Page(HTMLParser):
@@ -67,16 +68,14 @@ def check_site_links(source, site_root):
         assert '"xlink:href", "/"' not in source, "unprefixed Dynkin node links"
 
 
-def compare(route, public, client, site_root):
+def compare(route, public, expected_html, site_root):
     source = (public / route.lstrip("/") / "index.html").read_text()
     check_site_links(source, site_root)
-    response = client.get(route)
-    assert response.status_code == 200, (route, response.status_code)
-    expected = Page(content(response.get_data(as_text=True))).tokens
+    expected = Page(expected_html).tokens
     # Strip only URL prefixes, not the repository name inside external links.
     normalized = re.sub(r'(["{])' + re.escape(site_root), r'\1/', content(source))
     actual = Page(normalized).tokens
-    assert actual == expected, (route, "page content differs from Flask")
+    assert actual == expected, (route, "page content differs from Jinja rendering")
     page = Page(source)
     assert not page.citations - page.ids, (route, page.citations - page.ids)
     return page
@@ -155,9 +154,11 @@ def main():
     public = args.public_dir
     site_root = urlsplit(args.base_url).path.rstrip("/") + "/"
     count, longest, large = 0, 0, 0
-    client = app.test_client()
-    for record in records():
-        page = compare(record["route"], public, client, site_root)
+    models = list(records())
+    expected_pages = render_pages(models)
+    model_routes = {record["route"] for record in models}
+    for record in models:
+        page = compare(record["route"], public, expected_pages[record["route"]], site_root)
         assert json.loads(page.model) == exact_json(record), record["route"]
         for value in record["invariants"].values():
             for number in value if isinstance(value, list) else [value]:
@@ -165,9 +166,14 @@ def main():
                     longest = max(longest, len(str(number)))
                     large += abs(number) > 2**53 - 1
         count += 1
-    for route in ("/", "/horospherical", "/freudenthal", "/vogel", "/projective-duality", "/references", "/about", "/explained"):
-        compare(route, public, client, site_root)
-        count += 1
+    for route, expected_html in expected_pages.items():
+        if route not in model_routes:
+            compare(route, public, expected_html, site_root)
+            count += 1
+    for asset in (ROOT / "static").rglob("*"):
+        if asset.is_file():
+            path = asset.relative_to(ROOT)
+            assert (public / path).read_bytes() == asset.read_bytes(), (path, "asset differs")
     for alias in ("B1/1", "C1/1"):
         source = (public / alias / "index.html").read_text()
         assert 'http-equiv="refresh"' in source and "/A1/1/" in source
@@ -184,8 +190,8 @@ def main():
     assert f'data-site-root="{site_root}"' in fallback
     assert f'src="{site_root}static/dynkin-page.js"' in fallback
     verify_fallback(public, site_root)
-    print(f"Verified {count} complete page bodies against Flask, including diagrams, controls, scripts, and citations.")
-    print(f"Checked model JSON, aliases, {len(point_links)} Vogel point links, and the quantum-certificate download.")
+    print(f"Verified {count} complete page bodies against Jinja content, including diagrams, controls, scripts, and citations.")
+    print(f"Checked model JSON, assets, aliases, {len(point_links)} Vogel point links, and the quantum-certificate download.")
     print(f"Longest integer: {longest} digits; {large} invariant values exceed 2**53 - 1.")
     verify_dynamic_types()
 

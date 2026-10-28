@@ -1,13 +1,10 @@
-from flask import Flask
-from flask import render_template, redirect
+"""Mathematical models and stored data for the static site."""
 
 from pathlib import Path
 import json
 import math
-from datetime import datetime
 
 ROOT = Path(__file__).resolve().parents[1]
-app = Flask(__name__, static_folder=str(ROOT / "static"))
 
 from scripts import eigenvalues, literature
 
@@ -642,12 +639,6 @@ class Horospherical:
 
 
 
-# registering the Dynkin, Grassmannian and Horospherical class so that Jinja2 can use it directly
-app.add_template_global(Dynkin, "Dynkin")
-app.add_template_global(Grassmannian, "Grassmannian")
-app.add_template_global(Horospherical, "Horospherical")
-
-
 def latex(T, n, k):
     if T == "A":
         if k == 1: return "\\mathbb{{P}}^{{{}}}".format(n)
@@ -815,114 +806,3 @@ horospherical_varieties = \
         + [Horospherical("F", 4, 2, 3)] \
         + [Horospherical("G", 2, 1, 2)]
 horospherical_varieties = dict({X.plaintext() : X for X in horospherical_varieties})
-
-
-@app.route("/")
-def show_table():
-    return render_template("table.html", grassmannians=grassmannians)
-
-
-@app.route("/projective-duality")
-def show_projective_duality():
-    return render_template("projective-duality.html", grassmannians=grassmannians,
-                           references=literature.ordered_references(["tevelev", "magic-square", "kuznetsov-hyperplanes"]))
-
-
-@app.route("/references")
-def show_references():
-    return render_template("references.html", references=literature.ordered_references(literature.REFERENCES))
-
-
-@app.route("/references/quantum-certificates.json")
-def quantum_certificates():
-    from flask import send_from_directory
-    return send_from_directory(ROOT / "references", "quantum-certificates.json")
-
-
-@app.route("/about")
-def show_about():
-    return render_template("about.html")
-
-
-@app.route("/explained")
-def show_explained():
-    return render_template("explained.html")
-
-
-@app.route("/freudenthal")
-def show_freudenthal():
-    return render_template("freudenthal.html")
-
-
-@app.route("/vogel")
-def show_vogel():
-    return render_template("vogel.html")
-
-
-@app.route("/<string:route>")
-def show_type(route):
-    # try for Dynkin type
-    try:
-        if route[0] not in ["A", "B", "C", "D", "E", "F", "G"]:
-            raise ValueError
-
-        T = route[0]
-        n = int(route[1:])
-
-        if T in ["B", "C"] and n == 1:
-            (T, n) == ("A", 1)
-
-        return render_template("type.html", D=Dynkin(T, n))
-    except ValueError:
-        pass
-
-
-@app.route("/<string:D>/<int:k>")
-def show_grassmannian(D, k):
-    T = D[0]
-    n = int(D[1:])
-
-    if T in ["B", "C"] and n == 1:
-        return redirect("/A1/1")
-
-    return render_template("grassmannian.html", G=Grassmannian(T, n, k))
-
-
-@app.route("/horospherical")
-def show_horospherical_table():
-    return render_template("horospherical.table.html", horospherical=horospherical_varieties)
-
-
-@app.route("/horospherical/<X>")
-def show_horospherical(X):
-    return render_template("horospherical.html", X=horospherical_varieties[X])
-
-# to make the current year accessible in templates
-@app.context_processor
-def inject_now():
-    return {"now": datetime.utcnow()}
-
-
-"""
-@app.route("/<path:plaintext>")
-def show_grassmannian_from_plaintext(plaintext):
-    # look for exact plaintext match
-    for T in grassmannians:
-        for n in grassmannians[T]:
-            for k in grassmannians[T][n]:
-                G = grassmannians[T][n][k]
-
-                if G["plaintext"] == plaintext:
-                    return render_template("grassmannian.html", G=G)
-
-    # at this point: we should look for alternative interpretations (e.g. OGr(3,7) is Q^6 etc.)
-    # TODO
-
-    # if that also fails: error
-    # TODO
-"""
-
-app.jinja_env.globals["reference_catalog"] = literature.REFERENCES
-app.jinja_env.globals["reference_aliases"] = {
-    alias: key for key, ref in literature.REFERENCES.items() for alias in ref.get("aliases", [])
-}

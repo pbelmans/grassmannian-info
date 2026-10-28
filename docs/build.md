@@ -2,17 +2,18 @@
 
 Python computes the invariants and renders the Jinja content in
 `scripts/templates/` into `data/catalog.json`. Hugo supplies the document shell,
-routes, assets and aliases. Flask is a build dependency; no Python server runs
-on GitHub Pages. Sage and Oscar are only needed to regenerate research data.
+routes, assets and aliases. The mathematical models in `scripts/geometry.py`
+use only the Python standard library; Jinja renders the content. Sage and Oscar
+are only needed to regenerate research data.
 
 The catalogue and Hugo output are generated locally and in CI, and ignored by Git.
 Exact integers are exported as decimal strings to preserve their precision.
 
 ## Verification
 
-`scripts/verify.py` compares all 1,146 generated page bodies with Flask
-responses, including diagrams, controls, scripts and citations. It also checks
-model data, aliases, Vogel point links, certificate downloads, and browser
+`scripts/verify.py` compares all 1,146 generated page bodies with their Jinja
+content, including diagrams, controls, scripts and citations. It also checks
+model data, assets, aliases, Vogel point links, certificate downloads, and browser
 root-system calculations through rank 100.
 
 The workflow runs the unit tests, export, Hugo build and verifier before deployment.

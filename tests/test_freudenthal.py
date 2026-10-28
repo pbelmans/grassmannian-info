@@ -3,7 +3,7 @@
 from html.parser import HTMLParser
 import unittest
 
-from scripts.application import app
+from scripts.presentation import render_template
 
 
 class Varieties(HTMLParser):
@@ -21,9 +21,7 @@ class Varieties(HTMLParser):
 
 class FreudenthalTests(unittest.TestCase):
     def test_information_in_both_squares(self):
-        response = app.test_client().get("/freudenthal")
-        self.assertEqual(response.status_code, 200)
-        values = Varieties(response.get_data(as_text=True)).invariants
+        values = Varieties(render_template("freudenthal.html")).invariants
         self.assertEqual(len(values), 16 + 5 * 9)
         self.assertTrue(all(value > 0 for row in values for value in row))
         self.assertEqual(values[:2], [(1, 2, 2), (3, 2, 6)])

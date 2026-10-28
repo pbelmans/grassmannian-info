@@ -14,7 +14,7 @@ at build time. The legacy `flask` branch is no longer maintained.
 - `layouts/` — Hugo templates.
 - `data/` — Sage source data and the generated catalogue.
 - `static/` — CSS, JavaScript and images, published under `/static/`.
-- `scripts/` — computations, export, verification and Jinja content templates.
+- `scripts/` — mathematical models in `geometry.py`, export, verification and Jinja content templates.
 - `references/` — bibliography and stored mathematical results.
 
 ## Building

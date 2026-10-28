@@ -1,24 +1,35 @@
-"""Preserve the existing presentation while migrating to static hosting.
-
-Jinja runs only during export. Hugo owns the document shell and routes. Keeping
-the content templates shared avoids dropping diagrams, prose, or interactions
-while individual templates are migrated to Hugo in later commits.
-"""
+"""Render page content with Jinja; Hugo supplies the document shell and routes."""
 
 from datetime import datetime, timezone
+from functools import cache
+from pathlib import Path
 from types import SimpleNamespace
 
-from jinja2 import ChoiceLoader, DictLoader
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from scripts.application import app, Dynkin, Grassmannian, grassmannians, horospherical_varieties
+from scripts.geometry import Dynkin, Grassmannian, Horospherical, grassmannians, horospherical_varieties
 from scripts import literature
 
 
+@cache
 def environment():
-    return app.jinja_env.overlay(loader=ChoiceLoader([
-        DictLoader({"page.html": "{% block content %}{% endblock %}"}),
-        app.jinja_loader,
-    ]))
+    env = Environment(
+        loader=FileSystemLoader(Path(__file__).parent / "templates"),
+        autoescape=select_autoescape(),
+    )
+    env.globals.update(
+        Dynkin=Dynkin, Grassmannian=Grassmannian, Horospherical=Horospherical,
+        reference_catalog=literature.REFERENCES,
+        reference_aliases={
+            alias: key for key, ref in literature.REFERENCES.items()
+            for alias in ref.get("aliases", [])
+        },
+    )
+    return env
+
+
+def render_template(template, **context):
+    return environment().get_template(template).render(now=datetime.now(timezone.utc), **context)
 
 
 def page_specs(model_records):
@@ -44,9 +55,7 @@ def page_specs(model_records):
 
 
 def render_pages(model_records):
-    env = environment()
-    now = datetime.now(timezone.utc)
-    return {route: env.get_template(template).render(now=now, **context)
+    return {route: render_template(template, **context)
             for route, template, context in page_specs(model_records)}
 
 

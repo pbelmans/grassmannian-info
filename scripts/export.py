@@ -1,6 +1,6 @@
 """Export the existing mathematical models without porting their arithmetic.
 
-Flask/Jinja render at build time; the deployed website is static.
+Jinja renders at build time; the deployed website is static.
 """
 
 import json
@@ -11,7 +11,7 @@ from time import perf_counter
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from scripts.application import Dynkin, Grassmannian, data, horospherical_varieties
+from scripts.geometry import Dynkin, Grassmannian, data, horospherical_varieties
 from scripts import literature
 from scripts.presentation import render_pages, type_templates
 
