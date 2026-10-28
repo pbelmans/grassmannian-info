@@ -121,6 +121,20 @@ class LiteratureTests(unittest.TestCase):
         self.assertNotIn('remain unresolved', overview)
         self.assertIn('reference-holmes-muratore', Links(overview).citations)
 
+    def test_igr38_small_semisimplicity(self):
+        G = Grassmannian('C', 4, 3)
+        result = G.small_quantum_result()
+        self.assertEqual(result['status'], 'semisimple')
+        self.assertEqual(result['reference'], 'coadjoint-qh')
+        self.assertEqual(result['locator'], 'Remark 1.2')
+        html = app.test_client().get('/C4/3').get_data(as_text=True)
+        links = Links(html)
+        self.assertIn('reference-coadjoint-qh', links.citations & links.ids)
+        self.assertIn('https://doi.org/10.1007/s00029-025-01017-w', html)
+        self.assertNotIn('not known to be (non-)semisimple', html)
+        for T, n, k in [('B', 5, 4), ('C', 7, 3), ('D', 5, 3)]:
+            self.assertEqual(Grassmannian(T, n, k).small_quantum_result()['status'], 'unknown')
+
     def test_certificates_match_varieties(self):
         certificates = json.loads(Path('references/quantum-certificates.json').read_text())
         self.assertEqual(len(certificates), 9)
@@ -146,7 +160,7 @@ class LiteratureTests(unittest.TestCase):
         self.assertTrue(links.entries)
         self.assertTrue(all(e['data-exceptional'] == 'known' and e['data-big'] == 'semisimple' for e in links.entries))
         entries = {e['data-label']: e for e in links.entries}
-        for label in ['E7-2', 'E7-4', 'E7-5', 'E8-6']:
+        for label in ['C4-3', 'E7-2', 'E7-4', 'E7-5', 'E8-6']:
             self.assertEqual(entries[label]['data-small'], 'semisimple')
         self.assertFalse(links.citations)
 

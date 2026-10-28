@@ -48,6 +48,8 @@ def small_quantum(G):
     if G.is_adjoint() and not G.is_coadjoint():
         return dict(fact("This is an adjoint, non-coadjoint variety.",
                          "adjoint-qh"), status="semisimple")
+    if (T, n, k) == ("C", 4, 3):
+        return dict(fact("", "coadjoint-qh", "Remark 1.2"), status="semisimple")
     if T == "E" and (n, k) in {(7, 2), (7, 4), (7, 5), (8, 6)}:
         text = "Semisimple at $q=1$; "
         if (n, k) in {(7, 4), (8, 6)}:
