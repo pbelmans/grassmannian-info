@@ -23,9 +23,9 @@
     };
   }
 
-  function diagram(T, n) {
+  function diagram(T, n, siteRoot) {
     const line = points => `<polyline points="${points}" />`;
-    const node = (i, x, y) => `<a href="/${T}${n}/${i}"><circle cx="${x}" cy="${y}" r="5" data-label="${T}${n}-${i}" /></a>`;
+    const node = (i, x, y) => `<a href="${siteRoot}${T}${n}/${i}"><circle cx="${x}" cy="${y}" r="5" data-label="${T}${n}-${i}" /></a>`;
     let drawing = "";
     if (T === "D") {
       drawing += line(`0,10 ${(n - 3) * 20},10`);
@@ -45,7 +45,7 @@
     return `<svg class="dynkin" height="100" viewBox="-10 -10 ${20 * (T === "D" ? n - 1 : n)} 40"><g style="stroke-width:1;stroke:black;fill:white">${drawing}</g></svg>`;
   }
 
-  function render(T, n, templates) {
+  function render(T, n, templates, siteRoot = "/") {
     const D = model(T, n);
     const values = {
       RANK: n, RANK_PLUS_1: n + 1, RANK_MINUS_1: n - 1,
@@ -56,8 +56,8 @@
     const fill = text => text.replace(/__([A-Z_0-9]+)__/g, (_, key) => String(values[key]));
     const card = (title, body) => `<div class="card mb-4"><div class="card-header">${title}</div><div class="card-body">${fill(body)}</div></div>`;
     return `<header class="text-center"><h2 class="mt-3">Dynkin type $\\mathrm{${T}}_{${n}}$</h2>
-      <div class="row"><div class="col-2"><a class="h4" href="/${T}${n - 1}">&laquo;$\\mathrm{${T}}_{${n - 1}}$</a></div>
-      <div class="col-8">${diagram(T, n)}</div><div class="col-2"><a class="h4" href="/${T}${n + 1}">$\\mathrm{${T}}_{${n + 1}}$&raquo;</a></div></div></header>
+      <div class="row"><div class="col-2"><a class="h4" href="${siteRoot}${T}${n - 1}">&laquo;$\\mathrm{${T}}_{${n - 1}}$</a></div>
+      <div class="col-8">${diagram(T, n, siteRoot)}</div><div class="col-2"><a class="h4" href="${siteRoot}${T}${n + 1}">$\\mathrm{${T}}_{${n + 1}}$&raquo;</a></div></div></header>
       <div class="row" id="type-information"><div class="col-12">
       ${card("Basic information", templates.basic)}${card("Description of the root system", templates.roots)}${card("Cartan matrix", templates.cartan)}</div></div>`;
   }
@@ -65,13 +65,16 @@
   // Export the arithmetic for comparison with Python's exact models.
   if (typeof module !== "undefined") module.exports = {model, render};
   if (typeof document === "undefined") return;
-  const match = location.pathname.match(/^\/([ABCD])([1-9][0-9]*)\/?$/);
+  const siteRoot = document.documentElement.dataset.siteRoot || "/";
+  if (!location.pathname.startsWith(siteRoot)) return;
+  const route = "/" + location.pathname.slice(siteRoot.length);
+  const match = route.match(/^\/([ABCD])([1-9][0-9]*)\/?$/);
   if (!match) return;
   const T = match[1], n = Number(match[2]);
   if (!Number.isSafeInteger(n) || n < 21) return;
   const templates = JSON.parse(document.getElementById("type-templates").textContent);
   const target = document.getElementById("dynamic-type");
-  target.innerHTML = render(T, n, templates[T]);
+  target.innerHTML = render(T, n, templates[T], siteRoot);
   document.title = `Dynkin type ${T}${n}—grassmannian.info`;
   MathJax.Hub.Config({displayAlign: "left", "HTML-CSS": {linebreaks: {automatic: true}}});
   MathJax.Hub.Queue(["Typeset", MathJax.Hub, target]);

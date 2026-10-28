@@ -16769,4 +16769,4 @@ MathJax.Hub.Register.StartupHook("SVG Xy-pic Require",function () {
   MathJax.Hub.Startup.signal.Post("SVG Xy-pic Ready");
 });
 
-MathJax.Ajax.loadComplete("/static/xypic.js");
+MathJax.Ajax.loadComplete((document.documentElement.getAttribute("data-site-root") || "/") + "static/xypic.js");

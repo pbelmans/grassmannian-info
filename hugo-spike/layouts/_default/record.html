@@ -1,5 +1,5 @@
 {{ define "main" }}
-{{ index hugo.Data.catalog.pages .Params.record_route | safeHTML }}
+{{ partial "site-content.html" (index hugo.Data.catalog.pages .Params.record_route) }}
 {{ with index hugo.Data.catalog.records .Params.record_route }}
 <script type="application/json" id="model-data">{{ . | jsonify | safeJS }}</script>
 {{ end }}

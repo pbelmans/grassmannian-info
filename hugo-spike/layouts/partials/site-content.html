@@ -1,0 +1,9 @@
+{{- /* Adapt the shared Flask content to the deployment path. */ -}}
+{{- $html := . -}}
+{{- $root := site.Home.RelPermalink -}}
+{{- if ne $root "/" -}}
+  {{- $html = replaceRE `(href|src)="/([^/])` (printf `${1}="%s${2}` $root) $html -}}
+  {{- $html = replace $html `\href{/` (printf `\href{%s` $root) -}}
+  {{- $html = replace $html `"xlink:href", "/"` (printf `"xlink:href", "%s"` $root) -}}
+{{- end -}}
+{{- return ($html | safeHTML) -}}

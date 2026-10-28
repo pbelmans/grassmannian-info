@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-site-root="{{ site.Home.RelPermalink }}">
   <head>
     <script defer data-domain="grassmannian.info" src="https://plausible.io/js/script.js"></script>
 
     <meta charset="utf-8">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
-    <link rel="manifest" href="/static/site.webmanifest">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ "static/apple-touch-icon.png" | relURL }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ "static/favicon-32x32.png" | relURL }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ "static/favicon-16x16.png" | relURL }}">
+    <link rel="manifest" href="{{ "static/site.webmanifest" | relURL }}">
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@pbelmans">
@@ -30,11 +30,11 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ "static/style.css" | relURL }}">
 
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
-        extensions: ['tex2jax.js', '/static/xypic.js'],
+        extensions: ['tex2jax.js', {{ "static/xypic.js" | relURL | jsonify | safeHTML }}],
         jax: ['input/TeX','output/HTML-CSS'],
         TeX: {
           extensions: ['AMSmath.js', 'AMSsymbols.js'],
@@ -84,27 +84,27 @@
 
   <div class="collapse navbar-collapse w-100" id="navbarSupportedContent">
     <ul class="navbar-nav mx-auto">
-      <li class="nav-item ml-3 ml-md-0"><a class="nav-link py-2" href="/freudenthal">Freudenthal magic square</a></li>
-      <li class="nav-item ml-3 ml-md-0"><a class="nav-link py-2" href="/vogel">Vogel plane</a></li>
-      <li class="nav-item ml-3 ml-md-0"><a class="nav-link py-2" href="/horospherical">horospherical varieties</a></li>
-      <li class="nav-item ml-3 ml-md-0"><a class="nav-link py-2" href="/explained">explanation</a></li>
-      <li class="nav-item ml-3 ml-md-0"><a class="nav-link py-2" href="/about">about</a></li>
-      <li class="nav-item ml-3 ml-md-0"><a class="nav-link py-2" href="/references">references</a></li>
+      <li class="nav-item ml-3 ml-md-0"><a class="nav-link py-2" href="{{ "freudenthal" | relURL }}">Freudenthal magic square</a></li>
+      <li class="nav-item ml-3 ml-md-0"><a class="nav-link py-2" href="{{ "vogel" | relURL }}">Vogel plane</a></li>
+      <li class="nav-item ml-3 ml-md-0"><a class="nav-link py-2" href="{{ "horospherical" | relURL }}">horospherical varieties</a></li>
+      <li class="nav-item ml-3 ml-md-0"><a class="nav-link py-2" href="{{ "explained" | relURL }}">explanation</a></li>
+      <li class="nav-item ml-3 ml-md-0"><a class="nav-link py-2" href="{{ "about" | relURL }}">about</a></li>
+      <li class="nav-item ml-3 ml-md-0"><a class="nav-link py-2" href="{{ "references" | relURL }}">references</a></li>
 
       <li class="nav-item d-md-none ml-3 mt-2 text-white">other:</li>
-      <li class="nav-item ml-3 d-md-none"><a class="nav-link pt-2 pb-0" href="https://www.fanography.info"><img src="/static/fanography.png" alt="" width="20" height="20" class="mr-3">Fanography</a></li>
+      <li class="nav-item ml-3 d-md-none"><a class="nav-link pt-2 pb-0" href="https://www.fanography.info"><img src="{{ "static/fanography.png" | relURL }}" alt="" width="20" height="20" class="mr-3">Fanography</a></li>
       <li class="nav-item ml-3 d-md-none"><a class="nav-link py-2" href="https://superficie.info/"><img src="https://superficie.info/favicon.ico" height="20" class="mr-3">le superficie algebriche</a></li>
     </ul>
   </div>
 
   <ul style="list-style-type: none; position: absolute; right: 0" class="list-group list-group-horizontal d-none d-lg-block">
-    <li class="mr-4" style="display: inline-block;"><a href="https://www.fanography.info"><img src="/static/fanography.png" alt="" width="20" height="20" class="mr-1">Fanography</a></li>
+    <li class="mr-4" style="display: inline-block;"><a href="https://www.fanography.info"><img src="{{ "static/fanography.png" | relURL }}" alt="" width="20" height="20" class="mr-1">Fanography</a></li>
     <li class="mr-4" style="display: inline-block;"><a href="https://superficie.info/"><img src="https://superficie.info/favicon.ico" height="20" class="mr-1"><span class="d-none d-xl-inline">le </span>superficie<span class="d-none d-xl-inline"> algebriche</span></a></li>
   </ul>
 </nav>
 
 <div id="title">
-  <h1><a href="/"><span class="first-letters">Gr</span>assmannian.info</a></h1>
+  <h1><a href="{{ site.Home.RelPermalink }}"><span class="first-letters">Gr</span>assmannian.info</a></h1>
   <p id="slogan">A periodic table of (generalised) Grassmannians.</p>
 </div>
 

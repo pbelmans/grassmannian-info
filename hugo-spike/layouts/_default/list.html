@@ -1,5 +1,5 @@
 {{ define "main" }}
 {{ if .IsHome }}
-  {{ index hugo.Data.catalog.pages "/" | safeHTML }}
+  {{ partial "site-content.html" (index hugo.Data.catalog.pages "/") }}
 {{ end }}
 {{ end }}
