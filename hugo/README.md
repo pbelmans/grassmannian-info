@@ -75,12 +75,12 @@ The old site also links to Grassmannians outside its stored projective data
 from the working root-system URLs above. The comparison is a regression check,
 not a claim that all historical mathematical data and links are correct.
 
-## GitHub Pages preview
+## GitHub Pages
 
 `.github/workflows/pages.yml` builds and deploys pushes to `main`.
 The repository's Pages source must be **GitHub Actions**, with that branch
-allowed to deploy to the `github-pages` environment. The existing Flask
-deployment workflow and production domain are independent of this preview.
+allowed to deploy to the `github-pages` environment. The legacy `flask` branch
+is no longer maintained.
 
 The workflow runs the tests, exports Python/Jinja data, builds with Hugo
 0.161.1, checks every page against Flask, and uploads the site to Pages.
@@ -107,4 +107,4 @@ stored Sage results. Only then remove the corresponding Jinja content templates.
 This resembles the hyperkaehler.info rewrite's data preparation step more than
 Fanography's use of Go template helpers for enrichment. The content adapter
 provides the Hugo routes; the substantial arithmetic should not be ported to Go
-templates. The Flask production deployment has not been switched.
+templates. The public website is served by GitHub Pages.

@@ -2,8 +2,8 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21296785.svg)](https://doi.org/10.5281/zenodo.21296785)
 
-`main` builds the static website with Python/Jinja and Hugo. The Flask version
-is preserved on `flask`.
+`main` builds the static website with Python/Jinja and Hugo. The legacy Flask
+version is preserved on `flask` and is no longer maintained.
 
 ## How to cite
 
@@ -29,9 +29,6 @@ To rebuild manually:
 ```shell
 gh workflow run pages.yml --ref main
 ```
-
-The legacy Flask deployment is available with
-`gh workflow run deploy.yml --ref flask`.
 
 ## Local development
 
