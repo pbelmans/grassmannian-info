@@ -256,7 +256,7 @@ svg.dynkin {
   padding-left: 1.5rem;
 }
 .bibliography li {
-  margin-bottom: 1.1rem;
+  margin-bottom: 0.75rem;
   overflow-wrap: anywhere;
   scroll-margin-top: 1rem;
 }
@@ -274,12 +274,6 @@ svg.dynkin {
   margin-top: 0.2rem;
 }
 
-.lefschetz-collection {
-  border-left: 3px solid #d9e1e5;
-  padding-left: 1rem;
-  margin-bottom: 1.5rem;
-}
-
 .lefschetz-diagram, .lefschetz-shape {
   max-width: 100%;
   overflow-x: auto;
@@ -287,10 +281,6 @@ svg.dynkin {
 
 .lefschetz-diagram svg {
   max-width: 100%;
-}
-
-.reference-overview {
-  margin: 1.5rem 0;
 }
 
 .projective-duality {

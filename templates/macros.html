@@ -126,7 +126,7 @@ data-dimension="{{ G.dimension() }}" data-index="{{ G.index() }}" data-euler="{{
 {%- endmacro %}
 
 
-{% macro bibliography(references) %}
+{% macro bibliography(references, summaries=false) %}
 <ol class="bibliography">
 {% for ref in references %}
   <li id="reference-{{ ref.key }}" data-topic="{{ ref.topic }}">
@@ -135,7 +135,7 @@ data-dimension="{{ G.dimension() }}" data-index="{{ G.index() }}" data-euler="{{
     <span class="reference-venue">{{ ref.venue }}{% if ref.venue == "Preprint" %} ({{ ref.year }}){% endif %}</span>.
     {% if ref.arxiv %}<a class="reference-identifier" href="https://arxiv.org/abs/{{ ref.arxiv }}">arXiv:{{ ref.arxiv }}</a>.{% endif %}
     {% if ref.mr %}<a class="reference-identifier" href="https://mathscinet.ams.org/mathscinet-getitem?mr={{ ref.mr }}">MR{{ ref.mr }}</a>.{% endif %}
-    <div class="reference-summary">{{ ref.summary }}</div>
+    {% if summaries %}<div class="reference-summary">{{ ref.summary }}</div>{% endif %}
   </li>
 {% endfor %}
 </ol>
@@ -143,38 +143,44 @@ data-dimension="{{ G.dimension() }}" data-index="{{ G.index() }}" data-euler="{{
 
 
 {% macro QH(X) %}
-<p>The <em>small</em> quantum cohomology is <strong>{% if X.small_qh_semisimple() %}generically semisimple{% elif X.small_qh_not_semisimple() %}not generically semisimple{% else %}not known to be (non-)semisimple{% endif %}</strong>.
+<dl class="row">
+<dt class="col-3 text-right">small</dt>
+<dd class="col-9">
+<strong>{% if X.small_qh_semisimple() %}generically semisimple{% elif X.small_qh_not_semisimple() %}not generically semisimple{% else %}semisimplicity unknown{% endif %}</strong>
 {% if X.small_quantum_result is defined %}
 {% set result = X.small_quantum_result() %}
-{{ result.text }}
 {% if result.reference is defined %}{{ cite(result.reference, result.locator) }}{% endif %}
+{% if result.text %}<p>{{ result.text }}</p>{% endif %}
 {% if result.witness is defined %}
 {% set w = result.witness %}
-<p>In complex degree modulo the index ${{ X.index() }}$, the graded dimensions satisfy
+<p>Graded dimensions modulo the index&nbsp;${{ X.index() }}$:
 $\widetilde b_{ {{ w.i }} }={{ w.left }}&gt;{{ w.right }}=\widetilde b_{ {{ w.j }} }$,
-where ${{ w.j }}\equiv {{ w.d }}\cdot {{ w.i }}\pmod{ {{ X.index() }} }$.
-These are exact sums of the Betti numbers.</p>
+where&nbsp;${{ w.j }}\equiv {{ w.d }}\cdot {{ w.i }}\pmod{ {{ X.index() }} }$.</p>
 {% endif %}
 {% if result.reference == "quantum-computation" %}
-<p>The <a href="/references/quantum-certificates.json">exact characteristic polynomials</a>
-and <a href="https://github.com/pbelmans/grassmannian-info/blob/main/scripts/quantum_semisimplicity.sage">Sage computation</a>
-verify the square-free criterion over $\mathbb Q$, using the quantum Chevalley formula.
+<p><a href="/references/quantum-certificates.json">Exact characteristic polynomials</a>;
+<a href="https://github.com/pbelmans/grassmannian-info/blob/main/scripts/quantum_semisimplicity.sage">Sage computation</a>
+using the quantum Chevalley formula.
 {{ cite("quantum-chevalley", "Theorem 10.1") }}</p>
 {% endif %}
 {% endif %}
+</dd>
 
-<p>The <em>big</em> quantum cohomology is <strong>{% if X.big_qh_semisimple()%}generically semisimple{% else %}not known yet to be generically semisimple{% endif %}</strong>.
+<dt class="col-3 text-right">big</dt>
+<dd class="col-9">
+<strong>{% if X.big_qh_semisimple()%}generically semisimple{% else %}semisimplicity unknown{% endif %}</strong>
 {% if X.small_quantum_result is defined %}
-It is also convergent near the large-radius limit, by Li–Liu–Yu–Zhang for every flag variety $G/P$.
 {{ cite("big-qh", "Theorems 1.2 and 1.4") }}
+<p>Convergent near the large-radius limit.</p>
 {% if X.is_coadjoint() %}
-The coadjoint case was established earlier by Perrin–Smirnov.
-{{ cite("coadjoint-qh") }}
+<p>Earlier proof for coadjoint varieties: {{ cite("coadjoint-qh") }}.</p>
 {% endif %}
 {% endif %}
+</dd>
+</dl>
 
 {% if X.eigenvalues() %}
-<p>The eigenvalues of quantum multiplication by $\mathrm{c}_1({{ X.latex() }})$ are given by:
+<p>Eigenvalues of quantum multiplication by&nbsp;$\mathrm{c}_1({{ X.latex() }})$:</p>
 
 <div id="eigenvalues"></div>
 
@@ -272,28 +278,25 @@ var multiplicities = svg.append("g")
 {% macro hpd(G) %}
 {% if G.hpd_results is defined %}
 {% for c in G.lefschetz() %}
-<div class="mb-4">
+<div>
   <p>{% if c.full %}Full{% else %}Proposed{% endif %} {% if c.minimal == true %}minimal {% endif %}{% if c.rectangular %}rectangular{% else %}nonrectangular{% endif %} Lefschetz collection.
   {% if c.minimal == false %}Not minimal.{% endif %}
-  {% if c.minimal is none %}Minimality is not recorded here.{% endif %}
   {{ cite(c.reference, c.locator) }}</p>
   {{ partition(c, G.embedding() + 1, "lefschetz-" ~ loop.index) }}
-  <p class="lefschetz-shape">Block sizes: $({{ c.support | join(', ') }})$.
-  Total: {{ c.support | sum }} objects.</p>
+  <p class="lefschetz-shape">Block sizes&nbsp;$({{ c.support | join(', ') }})$; {{ c.support | sum }} objects.</p>
   <p>{{ c.text }}</p>
 </div>
 {% else %}
-<p>No explicit Lefschetz shape is recorded here.
+<p>No Lefschetz decomposition recorded.
 {% if G.D.T == "C" %}
-The Kuznetsov–Polishchuk collection is full by Guseva–Novikov, but these exceptional blocks are not automatically a Lefschetz decomposition.
+Fullness of the Kuznetsov–Polishchuk collection does not give a Lefschetz decomposition.
 {{ cite("kuznetsov-polishchuk") }} {{ cite("guseva-novikov", "Theorem 1.2") }}
 {% endif %}</p>
 {% endfor %}
 {% for result in G.hpd_results() %}
 <p>{{ result.text }} {{ cite(result.reference, result.locator) }}</p>
 {% else %}
-<p>No explicit HP-dual model is recorded here.
-Existence of a full exceptional collection alone does not specify an HP dual.</p>
+<p>No HP-dual model recorded.</p>
 {% endfor %}
 {% else %}
 {% for c in G.lefschetz() %}{{ partition(c, identifier="lefschetz-" ~ loop.index) }}{% endfor %}
@@ -302,16 +305,18 @@ Existence of a full exceptional collection alone does not specify an HP dual.</p
 
 
 {% macro kfano(G) %}
+<p>
 {% if G.fano() > 1 %}
-  <p>This generalised Grassmannian is {{ G.fano() }}-Fano:
+  {{ G.fano() }}-Fano:
   $\mathrm{ch}_i(\mathrm{T}_{ {{ G.latex() }} })\cdot Z&gt;0$
-  for every nonzero effective $i$-dimensional cycle $Z$ and $1\leq i\leq {{ G.fano() }}$.</p>
+  for every nonzero effective $i$-dimensional cycle $Z$ and $1\leq i\leq {{ G.fano() }}$.
 {% else %}
-  <p>This generalised Grassmannian is Fano but not 2-Fano.</p>
+  Fano but not 2-Fano.
 {% endif %}
-<p>{% if G.references is defined %}{{ cite("higher-fano", "Theorems 1.3 and 1.4") }}
+{% if G.references is defined %}{{ cite("higher-fano", "Theorems 1.3 and 1.4") }}
 {% else %}<a href="{{ reference_catalog['higher-fano'].url }}">Araujo et al., Higher Fano Manifolds (2022)</a>{% endif %}
-The table records positivity only up to $k=3$.</p>
+</p>
+{% if G.fano() == 3 %}<p>Higher&nbsp;$k$ not recorded.</p>{% endif %}
 {% endmacro %}
 
 
