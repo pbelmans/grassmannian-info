@@ -43,10 +43,10 @@ def small_quantum(G):
     T, n, k = G.D.T, G.D.n, G.k
     if (G.is_minuscule() or G.is_cominuscule()
             or (T == "G" and k == 1)):
-        return dict(fact("The minuscule/cominuscule theorem applies, also through the quadric realisation.",
+        return dict(fact("Minuscule/cominuscule case, including quadric realisations.",
                          "minuscule-qh"), status="semisimple")
     if G.is_adjoint() and not G.is_coadjoint():
-        return dict(fact("This is an adjoint, non-coadjoint variety.",
+        return dict(fact("Adjoint, non-coadjoint case.",
                          "adjoint-qh"), status="semisimple")
     if (T, n, k) == ("C", 4, 3):
         return dict(fact("", "coadjoint-qh", "Remark 1.2"), status="semisimple")
@@ -62,7 +62,7 @@ def small_quantum(G):
                     status="semisimple")
     obstruction = quantum_obstruction(G.index(), tuple(G.betti()))
     if obstruction:
-        return dict(fact("The index and Betti numbers violate the necessary graded-dimension inequality.",
+        return dict(fact("",
                          "graded-qh", "Theorem 1.2"), status="non-semisimple", witness=obstruction)
     old_negative = (
         (T == "B" and 2 <= k < n and k % 2 == 1)
@@ -72,14 +72,14 @@ def small_quantum(G):
                                                     (8, 1), (8, 2), (8, 3), (8, 4), (8, 5), (8, 7), (8, 8)})
         or (T == "F" and k in {3, 4}))
     if old_negative:
-        return dict(fact("Non-semisimplicity is recorded in the classification table.",
+        return dict(fact("",
                          "adjoint-qh", "table on p. 326"), status="non-semisimple")
     if (T, n, k) in {("B", 6, 4), ("B", 7, 4), ("B", 7, 6),
                      ("C", 5, 3), ("C", 6, 3), ("C", 6, 5),
                      ("E", 6, 3), ("E", 6, 5), ("F", 4, 2)}:
-        return dict(fact("Quantum multiplication by the hyperplane class has square-free characteristic polynomial at q = 1; see the exact computation linked below.",
+        return dict(fact(r"Hyperplane multiplication has square-free characteristic polynomial over $\mathbb Q$ at $q=1$.",
                          "quantum-computation"), status="semisimple")
-    return {"status": "unknown", "text": "No conclusion is recorded here. Passing the graded-dimension test does not establish semisimplicity."}
+    return {"status": "unknown", "text": ""}
 
 
 def exceptional_references(G):
@@ -143,7 +143,7 @@ def lefschetz_collections(G):
     if T == "quadric":
         support = [2] + [1] * (n - 1) if n % 2 else [2, 2] + [1] * (n - 2)
         return [collection(support, "quadric-hpd",
-                           "A chosen spinor bundle and the structure sheaf form the Lefschetz centre; this is the structure used for the HP dual below.",
+                           "Lefschetz centre: a spinor bundle and the structure sheaf.",
                            "Lemma 2.4", minimal=True)]
     if T == "A":
         N = n + 1
@@ -196,7 +196,7 @@ def lefschetz_collections(G):
                            "Three homogeneous bundles in the first three blocks; two in the remaining blocks.", "Theorem 1", minimal=True)]
     if T == "E" and n == 7 and k == 7:
         return [collection([4, 4] + [3] * 16, "spinor15",
-                           "The proposed Freudenthal collection has maximal length. Its fullness is conjectural; the general existence theorem does not prove fullness of this particular collection.", "Section 5", full=False)]
+                           "Maximal length; fullness conjectural.", "Section 5", full=False)]
     if T == "F" and k == 1:
         return [collection([3] * 8, "smirnov-f4",
                            "The structure sheaf, a homogeneous bundle, and the extension of the tangent bundle by the structure sheaf.", "Theorem 1.1", minimal=True)]
@@ -212,31 +212,31 @@ def lefschetz_collections(G):
 def hpd_results(G):
     T, n, k = presentation(G)
     if T == "projective":
-        return [fact("For the full linear embedding and the standard Beilinson decomposition the HP dual category is zero.", "hpd", "Section 8")]
+        return [fact("HP dual: the zero category, for the full linear embedding and Beilinson decomposition.", "hpd", "Section 8")]
     if T == "quadric":
-        text = ("For the spinor Lefschetz structure, the HP dual is the classical dual quadric."
+        text = ("HP dual: the classical dual quadric, for the spinor Lefschetz structure."
                 if n % 2 == 0 else
-                "For the spinor Lefschetz structure, the HP dual is the double cover of the dual projective space branched over the classical dual quadric.")
+                "HP dual: the double cover of the dual projective space branched over the dual quadric, for the spinor Lefschetz structure.")
         return [fact(text, "quadric-hpd", "Theorem 1.1")]
     if T == "spinor" and n == 5:
-        return [fact("The HP dual of the spinor tenfold is the other spinor tenfold in the dual half-spin representation, for its rectangular decomposition.", "kuznetsov-hyperplanes", "Section 6.2")]
+        return [fact("HP dual: the other spinor tenfold in the dual half-spin representation, for the rectangular decomposition.", "kuznetsov-hyperplanes", "Section 6.2")]
     if T == "C" and n == k == 3:
-        return [fact("Over the complement of the singular locus of the dual quartic, Kuznetsov's HP-dual model is the quartic itself with a sheaf of Azumaya algebras. The construction is over this open subset of the dual projective space.", "kuznetsov-hyperplanes", "Section 6.3")]
+        return [fact("HP dual: the quartic itself with an Azumaya algebra, over the complement of its singular locus in the dual projective space.", "kuznetsov-hyperplanes", "Section 6.3")]
     if T == "G" and k == 2:
-        return [fact("Kuznetsov constructs the HP-dual model over an open subset of the dual projective space as a double cover branched along the dual sextic, with an Azumaya algebra.", "kuznetsov-hyperplanes", "Section 6.4")]
+        return [fact("HP dual: a double cover branched along the dual sextic, with an Azumaya algebra, over an open subset of the dual projective space.", "kuznetsov-hyperplanes", "Section 6.4")]
     if T == "A":
         N = n + 1
         k = min(k, N - k)
         if k == 2 and N == 5:
-            return [fact("The HP dual is the Grassmannian of two-planes in the dual five-dimensional vector space.", "kuznetsov-hyperplanes", "Section 6.1")]
+            return [fact("HP dual: the Grassmannian of two-planes in the dual five-dimensional vector space.", "kuznetsov-hyperplanes", "Section 6.1")]
         if k == 2 and N in {6, 7}:
-            return [fact("The HP dual is a noncommutative resolution of the Pfaffian variety of skew forms of rank at most four.", "grassmannian-hpd", "Theorem 1")]
+            return [fact("HP dual: a noncommutative resolution of the Pfaffian variety of skew forms of rank at most four.", "grassmannian-hpd", "Theorem 1")]
         if k == 2 and N % 2:
-            return [fact("Rennemo–Segal prove Pfaffian–Grassmannian HPD via a noncommutative resolution of the dual Pfaffian variety.", "hori-hpd", "Theorem 4.33")]
+            return [fact("HP dual: a noncommutative resolution of the dual Pfaffian variety.", "hori-hpd", "Theorem 4.33")]
         if k == 2:
-            return [fact("Pirozhkov constructs a candidate using pairs consisting of a degenerate skew form and a line in its kernel. The identification with the HP-dual category is conjectural.", "pirozhkov-hpd")]
+            return [fact("Conjectural HP dual: Pirozhkov's construction from pairs of a degenerate skew form and a line in its kernel.", "pirozhkov-hpd")]
         if math.gcd(k, N) == 1:
-            return [fact("For the rectangular Fonarev decomposition, Doyle constructs the HP dual as a category of matrix factorizations on a noncommutative crepant resolution.", "doyle-hpd", "Theorem 5.13 (coprime case)")]
+            return [fact("HP dual: matrix factorizations on a noncommutative crepant resolution, for Fonarev's rectangular decomposition.", "doyle-hpd", "Theorem 5.13 (coprime case)")]
     return []
 
 

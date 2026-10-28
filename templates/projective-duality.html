@@ -3,22 +3,8 @@
 {% block title %}Projective duality{% endblock %}
 {% block content %}
 <h2 class="mt-3">Projective duality</h2>
-<p>For each Grassmannian $X\subset\mathbb P^N$, the table gives the codimension and degree of $X^\vee\subset(\mathbb P^N)^\vee$,
-and whether $X$ and $X^\vee$ are projectively isomorphic.
-The embedding is given by the ample generator of $\operatorname{Pic}(X)$.</p>
-<p>The dual defect is $\delta=\operatorname{codim}(X^\vee)-1$.
-A general tangent hyperplane is tangent along a linear space $\mathbb P^\delta$.
-Among the Grassmannians with nonempty dual, the only defective cases are $\Gr(2,2m+1)$ for $m\geq2$, with $\delta=2$, and the spinor tenfold, with $\delta=4$.
-The self-dual cases are quadrics, $\Gr(2,5)$ and the spinor tenfold.
-{{ macros.cite("tevelev", "Theorems 1.12, 9.19 and 10.22; Examples 2.20–2.21 (arXiv version)") }}</p>
-<p>The tables cover Dynkin types of rank at most 8.
-An empty dual has no codimension or degree listed.
-The degrees are computed in Oscar's IntersectionTheory using the first jet bundle:
-\begin{equation}
-  \deg X^\vee=\int_X c_{d-\delta}\bigl(J_1(\mathcal O_X(1))\bigr)H^\delta,
-  \qquad d=\dim X,\quad H=c_1(\mathcal O_X(1)).
-\end{equation}
-{{ macros.cite("tevelev", "Theorems 7.1–7.2 (arXiv version)") }}</p>
+<p>Dual varieties for Grassmannians of rank at most 8, embedded by the ample generator of&nbsp;$\operatorname{Pic}(X)$.
+Self-dual means&nbsp;$X\cong X^\vee$ projectively; a dash denotes an empty dual.</p>
 
 <p>Types:
 {% for T in grassmannians %}<a class="mr-3" href="#type-{{ T }}">{{ T }}</a>{% endfor %}
@@ -66,6 +52,20 @@ The degrees are computed in Oscar's IntersectionTheory using the first jet bundl
 </section>
 {% endfor %}
 <p id="duality-no-results" hidden>No matching Grassmannians.</p>
+
+<h3 class="mt-4">Dual defect</h3>
+<p>A general tangent hyperplane is tangent along&nbsp;$\mathbb P^\delta$, where&nbsp;$\delta=\operatorname{codim}(X^\vee)-1$.
+The defective cases with nonempty dual are&nbsp;$\Gr(2,2m+1)$ for&nbsp;$m\geq2$ ($\delta=2$) and the spinor tenfold ($\delta=4$).
+The self-dual cases are quadrics, $\Gr(2,5)$ and the spinor tenfold.
+{{ macros.cite("tevelev", "Theorems 1.12, 9.19 and 10.22; Examples 2.20–2.21 (arXiv version)") }}</p>
+
+<h3 class="mt-4">Degrees</h3>
+<p>Computed with Oscar's IntersectionTheory from the first jet bundle:
+\begin{equation}
+  \deg X^\vee=\int_X c_{d-\delta}\bigl(J_1(\mathcal O_X(1))\bigr)H^\delta,
+  \qquad d=\dim X,\quad H=c_1(\mathcal O_X(1)).
+\end{equation}
+{{ macros.cite("tevelev", "Theorems 7.1–7.2 (arXiv version)") }}</p>
 
 <h3 class="mt-4">References</h3>
 {{ macros.bibliography(references) }}

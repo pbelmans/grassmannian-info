@@ -54,39 +54,34 @@
 <p>{{ dual.description }}</p>
 {% if not dual.empty %}
 <dl class="row">
-  <dt class="col-sm-4">codimension of the dual</dt>
-  <dd class="col-sm-8">{{ dual.codimension }}</dd>
-  <dt class="col-sm-4">degree of the dual</dt>
-  <dd class="col-sm-8 dual-degree">{{ dual.degree if dual.degree else "not recorded here" }}</dd>
-  <dt class="col-sm-4">projectively self-dual</dt>
-  <dd class="col-sm-8">{{ "yes" if dual.self_dual else "no" }}</dd>
+  <dt class="col-3 text-right">codimension</dt>
+  <dd class="col-9">{{ dual.codimension }}</dd>
+  <dt class="col-3 text-right">degree</dt>
+  <dd class="col-9 dual-degree">{{ dual.degree if dual.degree else "not recorded" }}</dd>
+  <dt class="col-3 text-right">self-dual</dt>
+  <dd class="col-9">{{ "yes" if dual.self_dual else "no" }}</dd>
 </dl>
 {% endif %}
-<p><a href="{{ reference_catalog[dual.reference].url }}">{{ reference_catalog[dual.reference].label }}, <cite>{{ reference_catalog[dual.reference].title }}</cite></a>
-({{ dual.locator }}).
+<p><a class="citation" href="{{ reference_catalog[dual.reference].url }}" title="{{ reference_catalog[dual.reference].title }}">[{{ reference_catalog[dual.reference].label }}, {{ dual.locator }}]</a>
 {% if dual.degree_reference %}
-<a href="{{ reference_catalog[dual.degree_reference].url }}">{{ reference_catalog[dual.degree_reference].label }}, {{ dual.degree_locator }}</a>.
-{% endif %}</p>
-<p><a href="/projective-duality#{% if G.D.n <= 8 %}{{ G.D.T }}{{ G.D.n }}-{{ G.k }}{% else %}type-{{ G.D.T }}{% endif %}">Projective duality tables</a>.</p>
+<a class="citation" href="{{ reference_catalog[dual.degree_reference].url }}">[{{ reference_catalog[dual.degree_reference].label }}, {{ dual.degree_locator }}]</a>
+{% endif %}
+<a href="/projective-duality#{% if G.D.n <= 8 %}{{ G.D.T }}{{ G.D.n }}-{{ G.k }}{% else %}type-{{ G.D.T }}{% endif %}">All Grassmannians</a>.</p>
 {% endmacro %}
 
 
 {% macro exceptional_sequences(G) %}
-  <p>The bounded derived category $\mathbf D^{\mathrm b}({{ G.latex() }})$ has a <strong>full exceptional collection</strong>.
-  Samokhin–van der Kallen's construction applies to every split flag variety $G/P$.
-  {{ macros.cite("samokhin-vdk") }}</p>
-  <p>Constructions applicable to this variety, in chronological order:</p>
+  <p>Full exceptional collections in&nbsp;$\mathbf D^{\mathrm b}({{ G.latex() }})$:</p>
   <ul>
   {% for ref in G.exceptional_sequences() %}
-    <li>{{ ref.label }} ({{ ref.year }}). {{ ref.summary }} {{ macros.cite(ref.key) }}</li>
+    <li><a href="#reference-{{ ref.key }}">{{ ref.label }} ({{ ref.year }})</a></li>
   {% endfor %}
   </ul>
 {% endmacro %}
 
 {% macro references(G) %}
-<p>Sources for exceptional collections, quantum cohomology, HPD and Lefschetz collections, and $k$-Fanoness on this page.
-See also the <a href="/references">chronological bibliography</a>.</p>
 {{ macros.bibliography(G.references()) }}
+<p><a href="/references">All references</a>.</p>
 {% endmacro %}
 
 {% block content %}
