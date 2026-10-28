@@ -1,0 +1,12 @@
+{{- $G := .G -}}
+<dl class="row">
+  <dt class="col-3 text-right">minimal embedding
+  <dd class="col-9"><p>${{ $G.latex }}\hookrightarrow\mathbb{P}^{ {{ (index $G.invariants "embedding dimension") }} }$</p>
+  {{ if (and (eq (index hugo.Data.catalog.types $G.type).T "C") (eq (int $G.k) 1)) }}<p>More appropriately in this particular presentation as a quotient of the symplectic group is to consider the Grassmannian as the <em>adjoint</em> variety of type $\mathrm{C}_{ {{ (index hugo.Data.catalog.types $G.type).n }} }$, where the embedding is the second Veronese embedding into $\mathbb{P}(\mathrm{V}_{2\omega_1})=\mathbb{P}^{ {{ (int (div (int (mul (int (index $G.invariants "embedding dimension")) (int (add (int (index $G.invariants "embedding dimension")) 3)))) 2)) }} }$.{{ end }}
+  <dt class="col-3 text-right">degree
+  <dd class="col-9">{{ (index $G.invariants "degree") }}
+
+  <dt class="col-3 text-right">Hilbert series
+  <dd class="col-9">
+    {{ $items1 := (index $G.invariants "Hilbert values") }}{{ range $i1, $dimension := $items1 }}{{ $dimension }}{{ if (not (eq $i1 (sub (len $items1) 1))) }}, {{ end }}{{ end }}, ...
+</dl>

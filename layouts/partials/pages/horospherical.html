@@ -1,0 +1,31 @@
+{{- $X := .X -}}
+<header class="text-center">
+  <h2 class="mt-3">{{ (upper (substr $X.heading 0 1)) }}{{ (safeHTML (string (substr $X.heading 1))) }} ${{ if (eq (index hugo.Data.catalog.types $X.type).T "C") }}\operatorname{SGr}({{ $X.y }},{{ (add (int (mul 2 (int (index hugo.Data.catalog.types $X.type).n))) 1) }})={{ end }}{{ $X.latex }}$</h2>
+
+  {{ (partial "components/dynkin.html" (dict "T" (index hugo.Data.catalog.types $X.type).T "n" (index hugo.Data.catalog.types $X.type).n "height" 100 "k" (slice))) }}
+</header>
+
+<div class="row">
+  <div class="col-2 d-none d-lg-block">
+    {{ (partial "components/component.html" (dict "title" "Betti numbers" "content" (partial "components/betti-vertical.html" (dict "X" $X)) "id" "")) }}
+  </div>
+
+  <div class="col-12 col-lg-10" style="overflow-x: hidden">
+    {{ (partial "components/component.html" (dict "title" "Basic information" "content" (partial "horospherical/basic.html" (dict "X" $X)) "id" "")) }}
+
+    {{ (partial "components/component.html" (dict "title" "Blowups and projections" "content" (partial "horospherical/description.html" (dict "X" $X)) "id" "")) }}
+
+    {{ (partial "components/component.html" (dict "title" "Exceptional collections" "content" (partial "horospherical/exceptional-sequences.html" (dict "X" $X)) "id" "")) }}
+
+    {{ (partial "components/component.html" (dict "title" "Quantum cohomology" "content" (partial "components/qh.html" (dict "X" $X)) "id" "")) }}
+
+    {{ (partial "components/component.html" (dict "title" "Homological projective duality" "content" (partial "components/hpd.html" (dict "G" $X)) "id" "")) }}
+  </div>
+</div>
+
+<script type="text/javascript">
+$("header circle[data-label='{{ (safeJS (printf "%v" (index hugo.Data.catalog.types $X.type).type)) }}-{{ (safeJS (printf "%v" $X.y)) }}']").addClass("active");
+$("header circle[data-label='{{ (safeJS (printf "%v" (index hugo.Data.catalog.types $X.type).type)) }}-{{ (safeJS (printf "%v" $X.z)) }}']").addClass("active");
+$("header text[data-label='{{ (safeJS (printf "%v" (index hugo.Data.catalog.types $X.type).type)) }}-{{ (safeJS (printf "%v" $X.y)) }}-y']").addClass("active");
+$("header text[data-label='{{ (safeJS (printf "%v" (index hugo.Data.catalog.types $X.type).type)) }}-{{ (safeJS (printf "%v" $X.z)) }}-z']").addClass("active");
+</script>

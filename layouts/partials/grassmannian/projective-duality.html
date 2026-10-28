@@ -1,0 +1,19 @@
+{{- $G := .G -}}
+{{- $dual := false -}}
+{{ $dual = $G.projective_duality }}
+<p>{{ $dual.description }}</p>
+{{ if (not $dual.empty) }}
+<dl class="row">
+  <dt class="col-3 text-right">codimension</dt>
+  <dd class="col-9">{{ $dual.codimension }}</dd>
+  <dt class="col-3 text-right">degree</dt>
+  <dd class="col-9 dual-degree">{{ (cond $dual.degree $dual.degree "not recorded") }}</dd>
+  <dt class="col-3 text-right">self-dual</dt>
+  <dd class="col-9">{{ (cond $dual.self_dual "yes" "no") }}</dd>
+</dl>
+{{ end }}
+<p><a class="citation" href="{{ (index hugo.Data.references $dual.reference).url }}" title="{{ (index hugo.Data.references $dual.reference).title }}">[{{ (index hugo.Data.references $dual.reference).label }}, {{ $dual.locator }}]</a>
+{{ if $dual.degree_reference }}
+<a class="citation" href="{{ (index hugo.Data.references $dual.degree_reference).url }}">[{{ (index hugo.Data.references $dual.degree_reference).label }}, {{ $dual.degree_locator }}]</a>
+{{ end }}
+<a href="/projective-duality#{{ if (le (int (index hugo.Data.catalog.types $G.type).n) 8) }}{{ (index hugo.Data.catalog.types $G.type).T }}{{ (index hugo.Data.catalog.types $G.type).n }}-{{ $G.k }}{{ else }}type-{{ (index hugo.Data.catalog.types $G.type).T }}{{ end }}">All Grassmannians</a>.</p>

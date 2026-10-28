@@ -1,0 +1,10 @@
+{{- $title := .title -}}
+{{- $content := .content -}}
+{{- $id := .id -}}
+<div id="{{ $id }}" class="card mb-4">
+  <div class="card-header">{{ $title }}</div>
+
+  <div class="card-body">
+    {{ $content }}
+  </div>
+</div>

@@ -1,0 +1,5 @@
+{{- $aliases := dict -}}
+{{- range $key, $ref := hugo.Data.references -}}
+  {{- range $ref.aliases -}}{{- $aliases = merge $aliases (dict . $key) -}}{{- end -}}
+{{- end -}}
+{{- return $aliases -}}

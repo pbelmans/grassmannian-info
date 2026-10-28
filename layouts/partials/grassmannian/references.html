@@ -1,0 +1,3 @@
+{{- $G := .G -}}
+{{ (partial "components/bibliography.html" (dict "references" $G.references "summaries" false)) }}
+<p><a href="/references">All references</a>.</p>

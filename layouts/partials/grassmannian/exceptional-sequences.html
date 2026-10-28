@@ -1,0 +1,7 @@
+{{- $G := .G -}}
+<p>Full exceptional collections in&nbsp;$\mathbf D^{\mathrm b}({{ $G.latex }})$:</p>
+  <ul>
+  {{ $items1 := $G.exceptional }}{{ range $i1, $ref := $items1 }}
+    <li><a href="#reference-{{ $ref.key }}">{{ $ref.label }} ({{ $ref.year }})</a></li>
+  {{ end }}
+  </ul>

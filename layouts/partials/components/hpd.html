@@ -1,0 +1,26 @@
+{{- $G := .G -}}
+{{ if (eq $G.family "Grassmannian") }}
+{{ $items1 := $G.lefschetz }}{{ range $i1, $c := $items1 }}
+<div>
+  <p>{{ if $c.full }}Full{{ else }}Proposed{{ end }} {{ if (eq $c.minimal true) }}minimal {{ end }}{{ if $c.rectangular }}rectangular{{ else }}nonrectangular{{ end }} Lefschetz collection.
+  {{ if (eq $c.minimal false) }}Not minimal.{{ end }}
+  {{ (partial "components/cite.html" (dict "key" $c.reference "locator" $c.locator)) }}</p>
+  {{ (partial "components/partition.html" (dict "lefschetz" $c "embedding" (add (int (index $G.invariants "embedding dimension")) 1) "identifier" (print "lefschetz-" (add $i1 1)))) }}
+  <p class="lefschetz-shape">Block sizes&nbsp;$({{ (delimit $c.support ", ") }})$; {{ (partial "lib/sum.html" $c.support) }} objects.</p>
+  <p>{{ $c.text }}</p>
+</div>
+{{ else }}
+<p>No Lefschetz decomposition recorded.
+{{ if (eq (index hugo.Data.catalog.types $G.type).T "C") }}
+Fullness of the Kuznetsov–Polishchuk collection does not give a Lefschetz decomposition.
+{{ (partial "components/cite.html" (dict "key" "kuznetsov-polishchuk" "locator" "")) }} {{ (partial "components/cite.html" (dict "key" "guseva-novikov" "locator" "Theorem 1.2")) }}
+{{ end }}</p>
+{{ end }}
+{{ $items2 := $G.hpd }}{{ range $i2, $result := $items2 }}
+<p>{{ $result.text }} {{ (partial "components/cite.html" (dict "key" $result.reference "locator" $result.locator)) }}</p>
+{{ else }}
+<p>No HP-dual model recorded.</p>
+{{ end }}
+{{ else }}
+{{ $items3 := $G.lefschetz }}{{ range $i3, $c := $items3 }}{{ (partial "components/partition.html" (dict "lefschetz" $c "embedding" 0 "identifier" (print "lefschetz-" (add $i3 1)))) }}{{ end }}
+{{ end }}

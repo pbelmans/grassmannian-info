@@ -4,8 +4,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 import unittest
 
-from scripts.geometry import data, Grassmannian, grassmannians
-from scripts.presentation import render_template
+from scripts.geometry import data, Grassmannian
+from tests.support import page
 from scripts import literature
 
 
@@ -103,7 +103,7 @@ class LiteratureTests(unittest.TestCase):
                     self.assertNotIn('distinct, nonzero', result['text'])
                 else:
                     self.assertIn('distinct, nonzero eigenvalues', result['text'])
-                html = render_template("grassmannian.html", G=G)
+                html = page("/" + G.url())
                 links = Links(html)
                 self.assertIn('reference-holmes-muratore', links.citations & links.ids)
                 self.assertIn('https://arxiv.org/abs/2610.37273', html)
@@ -116,7 +116,7 @@ class LiteratureTests(unittest.TestCase):
                 self.assertEqual(Grassmannian('E', n, k).small_quantum_result()['status'],
                                  'semisimple' if k in positive else 'non-semisimple')
 
-        bibliography = render_template("references.html", references=literature.ordered_references(literature.REFERENCES))
+        bibliography = page("/references")
         self.assertIn('reference-holmes-muratore', Links(bibliography).ids)
 
     def test_igr38_small_semisimplicity(self):
@@ -125,7 +125,7 @@ class LiteratureTests(unittest.TestCase):
         self.assertEqual(result['status'], 'semisimple')
         self.assertEqual(result['reference'], 'coadjoint-qh')
         self.assertEqual(result['locator'], 'Remark 1.2')
-        html = render_template("grassmannian.html", G=G)
+        html = page("/" + G.url())
         links = Links(html)
         self.assertIn('reference-coadjoint-qh', links.citations & links.ids)
         self.assertIn('https://doi.org/10.1007/s00029-025-01017-w', html)
@@ -152,7 +152,7 @@ class LiteratureTests(unittest.TestCase):
         self.assertIn('quartic itself', Grassmannian('C', 3, 3).hpd_results()[0]['text'])
 
     def test_front_page_is_uniform_without_result_citations(self):
-        links = Links(render_template("table.html", grassmannians=grassmannians))
+        links = Links(page("/"))
         self.assertTrue(links.entries)
         self.assertTrue(all(e['data-exceptional'] == 'known' and e['data-big'] == 'semisimple' for e in links.entries))
         entries = {e['data-label']: e for e in links.entries}
@@ -164,7 +164,7 @@ class LiteratureTests(unittest.TestCase):
         for G in varieties():
             path = f'/{G.D.D}/{G.k}'
             with self.subTest(path=path):
-                html = render_template("grassmannian.html", G=G)
+                html = page("/" + G.url())
                 links = Links(html)
                 self.assertFalse(links.citations - links.ids)
                 self.assertIn('References', html)
@@ -172,7 +172,7 @@ class LiteratureTests(unittest.TestCase):
                 self.assertNotIn('reference-magic-square', links.ids)
 
     def test_reference_citations(self):
-        html = render_template("references.html", references=literature.ordered_references(literature.REFERENCES))
+        html = page("/references")
         links = Links(html)
         self.assertFalse(links.citations - links.ids)
 
@@ -216,8 +216,7 @@ class LiteratureTests(unittest.TestCase):
             self.assertEqual(Grassmannian(T, n, k).projective_duality()['degree'], degree)
 
     def test_projective_duality_table_covers_rank_eight(self):
-        html = render_template("projective-duality.html", grassmannians=grassmannians,
-                               references=literature.ordered_references(["tevelev", "magic-square", "kuznetsov-hyperplanes"]))
+        html = page("/projective-duality")
         rows = DualityTable(html).rows
         expected = sorted((G.D.T, G.D.n, G.k) for G in varieties() if G.D.n <= 8)
         self.assertEqual(list(rows), [f'{T}{n}-{k}' for T, n, k in expected])

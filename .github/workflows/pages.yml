@@ -27,7 +27,6 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-          cache: pip
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
@@ -42,10 +41,6 @@ jobs:
             --output "$RUNNER_TEMP/hugo.tar.gz"
           tar -xzf "$RUNNER_TEMP/hugo.tar.gz" -C "$RUNNER_TEMP/hugo-bin" hugo
           echo "$RUNNER_TEMP/hugo-bin" >> "$GITHUB_PATH"
-      - name: Install Python dependencies
-        run: python -m pip install -r requirements.txt
-      - name: Check mathematical results
-        run: python -m unittest discover -s tests -v
       - name: Export and build
         env:
           PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
@@ -53,6 +48,8 @@ jobs:
           python scripts/export.py
           hugo --baseURL "${PAGES_BASE_URL}/" --cacheDir "$RUNNER_TEMP/hugo-cache"
           python scripts/verify.py --base-url "${PAGES_BASE_URL}/"
+      - name: Check mathematical results and pages
+        run: python -m unittest discover -s tests -v
       - name: Upload site
         uses: actions/upload-pages-artifact@v4
         with:

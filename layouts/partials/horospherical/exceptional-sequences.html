@@ -1,0 +1,10 @@
+{{- $X := .X -}}
+{{ if (eq (int (len $X.exceptional)) 0) }}
+  <p>No full exceptional collection is known for $\mathbf{D}^{\mathrm{b}}({{ $X.latex }})$. Will you be the first to construct one? Let us know if you do!
+{{ else }}
+  <ul>
+  {{ $items1 := $X.exceptional }}{{ range $i1, $sequence := $items1 }}
+    {{ (partial "horospherical/exceptional-sequence.html" (dict "X" $X "sequence" $sequence)) }}
+  {{ end }}
+  </ul>
+{{ end }}

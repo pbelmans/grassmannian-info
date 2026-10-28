@@ -1,27 +1,28 @@
 # Build notes
 
-Python computes the invariants and renders the Jinja content in
-`scripts/templates/` into `data/catalog.json`. Hugo supplies the document shell,
-routes, assets and aliases. The mathematical models in `scripts/geometry.py`
-use only the Python standard library; Jinja renders the content. Sage and Oscar
-are only needed to regenerate research data.
+Python exports the mathematical data to `data/catalog.json`; Hugo renders the
+pages, SVG diagrams and the root-system fallback from `layouts/`. The exporter
+uses only the Python standard library. Sage and Oscar are needed only to
+regenerate research data.
 
 The catalogue and Hugo output are generated locally and in CI, and ignored by Git.
-Exact integers are exported as decimal strings to preserve their precision.
+Exact invariants are exported as decimal strings; small ranks and node indices
+remain JSON numbers.
 
 ## Verification
 
-`scripts/verify.py` compares all 1,146 generated page bodies with their Jinja
-content, including diagrams, controls, scripts and citations. It also checks
-model data, assets, aliases, Vogel point links, certificate downloads, and browser
-root-system calculations through rank 100.
+Build the site before running the tests. `scripts/verify.py` checks all 1,146
+pages, exported invariants, citation targets, assets, aliases, Vogel point links,
+certificate downloads and browser root-system calculations through rank 100.
+The tests check the mathematical classifications and their presentation in the
+built pages. Set `GRASSMANNIAN_PUBLIC_DIR` when testing a different output directory.
 
-The workflow runs the unit tests, export, Hugo build and verifier before deployment.
+The workflow exports the data, builds Hugo, runs the verifier and tests, then deploys.
 For a project-path build:
 
 ```shell
 hugo --baseURL https://pbelmans.github.io/grassmannian-info/
-.venv/bin/python scripts/verify.py --base-url https://pbelmans.github.io/grassmannian-info/
+python3 scripts/verify.py --base-url https://pbelmans.github.io/grassmannian-info/
 ```
 
 ## Root-system fallback

@@ -1,0 +1,95 @@
+{{- $references := .references -}}
+{{- $G := false -}}
+{{- $dual := false -}}
+<h2 class="mt-3">Projective duality</h2>
+<p>Dual varieties for Grassmannians of rank at most 8, embedded by the ample generator of&nbsp;$\operatorname{Pic}(X)$.
+Self-dual means&nbsp;$X\cong X^\vee$ projectively; a dash denotes an empty dual.</p>
+
+<p>Types:
+{{ $items1 := hugo.Data.catalog.ranks }}{{ range $T, $_ := $items1 }}<a class="mr-3" href="#type-{{ $T }}">{{ $T }}</a>{{ end }}
+</p>
+<div class="form-group">
+  <label for="duality-search">Find a Grassmannian</label>
+  <input type="search" id="duality-search" class="form-control" style="max-width: 24rem" placeholder="e.g. C6/3, Gr(2,7), spinor">
+</div>
+
+{{ $items2 := hugo.Data.catalog.ranks }}{{ range $T, $ranks := $items2 }}
+<section class="duality-type" id="type-{{ $T }}">
+  <h3 class="mt-4">Type {{ $T }}</h3>
+  <div class="table-responsive">
+    <table class="table table-sm projective-duality">
+      <thead>
+        <tr>
+          <th scope="col">$G/P$</th>
+          <th scope="col">Grassmannian</th>
+          <th scope="col" class="text-right">$N$</th>
+          <th scope="col" class="text-right">codimension</th>
+          <th scope="col" class="text-right">degree</th>
+          <th scope="col">self-dual</th>
+          <th scope="col">dual variety</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{ $items3 := (partial "lib/ranks.html" $ranks) }}{{ range $i3, $item3 := $items3 }}{{ $n := $item3.Key }}{{ $parabolics := $item3.Value }}{{ if (le (int $n) 8) }}
+      {{ $items4 := (sort $parabolics) }}{{ range $i4, $k := $items4 }}
+      {{ $G = (partial "lib/grassmannian.html" (slice $T $n $k)) }}
+      {{ $dual = $G.projective_duality }}
+        <tr id="{{ $T }}{{ $n }}-{{ $k }}" data-duality-row data-search="{{ (strings.TrimPrefix "/" $G.route) }} {{ $G.name }} {{ $dual.label }}"{{ if (eq (int $k) (int (partial "lib/min.html" $parabolics))) }} class="rank-start"{{ end }}>
+          <th scope="row"><a href="/{{ (strings.TrimPrefix "/" $G.route) }}">{{ $T }}<sub>{{ $n }}</sub>/P<sub>{{ $k }}</sub></a></th>
+          <td><a href="/{{ (strings.TrimPrefix "/" $G.route) }}">{{ (safeHTML (string $G.html)) }}</a></td>
+          <td class="text-right">{{ (index $G.invariants "embedding dimension") }}</td>
+          <td class="text-right">{{ (cond $dual.empty "—" $dual.codimension) }}</td>
+          <td class="text-right dual-degree">{{ (cond $dual.empty "—" $dual.degree) }}</td>
+          <td>{{ (cond $dual.empty "no" (cond $dual.self_dual "yes" "no")) }}</td>
+          <td>{{ $dual.label }}{{ if (and $dual.degree_reference (not $dual.degree_computed)) }} {{ (partial "components/cite.html" (dict "key" $dual.degree_reference "locator" $dual.degree_locator)) }}{{ end }}</td>
+        </tr>
+      {{ end }}
+      {{ end }}{{ end }}
+      </tbody>
+    </table>
+  </div>
+</section>
+{{ end }}
+<p id="duality-no-results" hidden>No matching Grassmannians.</p>
+
+<h3 class="mt-4">Dual defect</h3>
+<p>A general tangent hyperplane is tangent along&nbsp;$\mathbb P^\delta$, where&nbsp;$\delta=\operatorname{codim}(X^\vee)-1$.
+The defective cases with nonempty dual are&nbsp;$\Gr(2,2m+1)$ for&nbsp;$m\geq2$ ($\delta=2$) and the spinor tenfold ($\delta=4$).
+The self-dual cases are quadrics, $\Gr(2,5)$ and the spinor tenfold.
+{{ (partial "components/cite.html" (dict "key" "tevelev" "locator" "Theorems 1.12, 9.19 and 10.22; Examples 2.20–2.21 (arXiv version)")) }}</p>
+
+<h3 class="mt-4">Degrees</h3>
+<p>Computed with Oscar's IntersectionTheory from the first jet bundle:
+\begin{equation}
+  \deg X^\vee=\int_X c_{d-\delta}\bigl(J_1(\mathcal O_X(1))\bigr)H^\delta,
+  \qquad d=\dim X,\quad H=c_1(\mathcal O_X(1)).
+\end{equation}
+{{ (partial "components/cite.html" (dict "key" "tevelev" "locator" "Theorems 7.1–7.2 (arXiv version)")) }}</p>
+
+<h3 class="mt-4">References</h3>
+{{ (partial "components/bibliography.html" (dict "references" $references "summaries" false)) }}
+
+<script>
+const dualitySearch = document.getElementById("duality-search");
+function filterDuality() {
+  const query = dualitySearch.value.toLowerCase().replace(/\s/g, "");
+  let matches = 0;
+  document.querySelectorAll(".duality-type").forEach(function (section) {
+    let visible = 0;
+    section.querySelectorAll("[data-duality-row]").forEach(function (row) {
+      row.hidden = !row.dataset.search.toLowerCase().replace(/\s/g, "").includes(query);
+      if (!row.hidden) visible++;
+    });
+    section.hidden = visible === 0;
+    matches += visible;
+  });
+  document.getElementById("duality-no-results").hidden = matches !== 0;
+}
+dualitySearch.addEventListener("input", filterDuality);
+document.querySelectorAll('a[href^="#type-"]').forEach(function (link) {
+  link.addEventListener("click", function () {
+    dualitySearch.value = "";
+    filterDuality();
+  });
+});
+</script>

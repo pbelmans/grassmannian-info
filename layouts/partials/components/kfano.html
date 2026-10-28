@@ -1,0 +1,12 @@
+{{- $G := .G -}}
+<p>
+{{ if (gt (int $G.fano) 1) }}
+  {{ $G.fano }}-Fano:
+  $\mathrm{ch}_i(\mathrm{T}_{ {{ $G.latex }} })\cdot Z&gt;0$
+  for every nonzero effective $i$-dimensional cycle $Z$ and $1\leq i\leq {{ $G.fano }}$.
+{{ else }}
+  Fano but not 2-Fano.
+{{ end }}
+{{ if (eq $G.family "Grassmannian") }}{{ (partial "components/cite.html" (dict "key" "higher-fano" "locator" "Theorems 1.3 and 1.4")) }}
+{{ else }}<a href="{{ (index hugo.Data.references "higher-fano").url }}">Araujo et al., Higher Fano Manifolds (2022)</a>{{ end }}
+</p>

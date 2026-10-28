@@ -1,0 +1,13 @@
+{{- $templates := dict -}}
+{{- range slice "A" "B" "C" "D" -}}
+  {{- $D := dict "dynamic" true "T" . "n" "__RANK__" "next_rank" "__RANK_PLUS_1__" "previous_rank" "__RANK_MINUS_1__"
+      "invariants" (dict "dimension" "__DIMENSION__" "roots" "__ROOTS__" "Weyl group order" "__WEYL_ORDER__"
+                         "Coxeter number" "__COXETER__" "exponents" (slice "__EXPONENTS__")) -}}
+  {{- $cartan := partial "type/cartan.html" (dict "D" $D) -}}
+  {{- $cartan = replace $cartan `\begin{pmatrix}` `\begin{equation}\begin{pmatrix}__CARTAN__` -}}
+  {{- $cartan = replace $cartan `\end{pmatrix}` `\end{pmatrix}\end{equation}` -}}
+  {{- $templates = merge $templates (dict . (dict
+      "basic" (partial "type/basic.html" (dict "D" $D))
+      "roots" (partial "type/roots.html" (dict "D" $D)) "cartan" $cartan)) -}}
+{{- end -}}
+{{- return $templates -}}

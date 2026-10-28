@@ -1,0 +1,23 @@
+{{- $D := .D -}}
+{{- $beta := .beta -}}
+{{- $gamma := .gamma -}}
+{{- $beta_label := .beta_label -}}
+{{- $gamma_label := .gamma_label -}}
+{{- $X := false -}}
+{{- $Y := false -}}
+{{- $left := false -}}
+{{ $X = (mul 40 (int $beta)) }}
+{{ $Y = (sub 880 (int (mul 40 (int $gamma)))) }}
+
+{{ $left = (eq $D.T "C") }}
+<a class="point" xlink:href="/{{ $D.T }}{{ $D.n }}"
+  data-dynkin="{{ $D.T }}<sub>{{ $D.n }}</sub>"
+  data-lie="{{ $D.lie }}"
+  data-dimension="{{ (index $D.invariants "dimension") }}"
+  data-coxeter="{{ (index $D.invariants "Coxeter number") }}"
+  data-roots="{{ (index $D.invariants "roots") }}"
+  data-beta="{{ (cond (not (eq $beta_label nil)) $beta_label $beta) }}"
+  data-gamma="{{ (cond (not (eq $gamma_label nil)) $gamma_label $gamma) }}">
+  <circle cx="{{ $X }}" cy="{{ $Y }}" r="6" />
+  <text class="algebra-label" x="{{ (add (int $X) (int (cond $left (mul -1 7) 10))) }}" y="{{ (add (int $Y) 5) }}"{{ if $left }} text-anchor="end"{{ end }}>{{ (partial "vogel/lie-svg.html" (dict "D" $D)) }}</text>
+</a>

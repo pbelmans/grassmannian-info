@@ -1,0 +1,21 @@
+{{- $latex := .latex -}}
+{{- $embedding := .embedding -}}
+{{- $dimension := .dimension -}}
+{{- $index := .index -}}
+{{- $rank := .rank -}}
+{{- $link := .link -}}
+<td class="text-center" data-dimension="{{ $dimension }}" data-index="{{ $index }}" data-euler="{{ $rank }}">
+  {{ if (ne $link "") }}<a href="/{{ $link }}">{{ end }}
+  ${{ (safeHTML (string $latex)) }}\hookrightarrow\mathbb{P}^{ {{ $embedding }} }$
+  {{ if (ne $link "") }}</a>{{ end }}
+
+  <div class="information">
+    \begin{equation}
+    \begin{aligned}
+      d&={{ $dimension }} \\
+      i&={{ $index }} \\
+      \chi&={{ $rank }}
+    \end{aligned}
+    \end{equation}
+  </div>
+</td>

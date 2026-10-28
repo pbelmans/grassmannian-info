@@ -1,0 +1,8 @@
+{{- $T := .T -}}
+{{- $n := .n -}}
+<th>
+  <a href="/{{ $T }}{{ $n }}">
+    {{ (partial "components/dynkin.html" (dict "T" $T "n" $n "height" 18 "k" (slice))) }}
+    {{ $T }}<sub>{{ $n }}</sub>
+  </a>
+</th>

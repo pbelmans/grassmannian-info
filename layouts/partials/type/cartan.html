@@ -1,0 +1,27 @@
+{{- $D := .D -}}
+<dl class="row">
+  <dt class="col-3 text-right">Cartan matrix
+  <dd class="col-9">
+\begin{pmatrix}
+{{ if not $D.dynamic }}
+{{ $items1 := (partial "lib/range.html" (slice (int $D.n))) }}{{ range $i1, $i := $items1 }}
+  {{ $items2 := (partial "lib/range.html" (slice (int $D.n))) }}{{ range $i2, $j := $items2 }}
+    {{ (index (index $D.cartan $i) $j) }} {{ if (not (eq $i2 (sub (len $items2) 1))) }}&{{ end }}
+  {{ end }}
+  \\
+{{ end }}
+{{ end }}
+\end{pmatrix}
+
+  <dt class="col-3 text-right">determinant
+  <dd class="col-9">
+    {{ if (eq $D.T "A") }}$n+1={{ $D.next_rank }}${{ end }}
+    {{ if (eq $D.T "B") }}$2${{ end }}
+    {{ if (eq $D.T "C") }}$2${{ end }}
+    {{ if (eq $D.T "D") }}$4${{ end }}
+    {{ if (and (eq $D.T "E") (eq (int $D.n) 6)) }}3{{ end }}
+    {{ if (and (eq $D.T "E") (eq (int $D.n) 7)) }}2{{ end }}
+    {{ if (and (eq $D.T "E") (eq (int $D.n) 8)) }}1{{ end }}
+    {{ if (eq $D.T "F") }}$1${{ end }}
+    {{ if (eq $D.T "G") }}$1${{ end }}
+</dl>

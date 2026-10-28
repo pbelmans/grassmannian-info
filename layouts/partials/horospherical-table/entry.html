@@ -1,0 +1,14 @@
+{{- $X := .X -}}
+<td class="entry" {{ (safeHTMLAttr (string (partial "components/data.html" (dict "G" $X)))) }} data-dynkin="{{ (index hugo.Data.catalog.types $X.type).type }}" data-y="{{ $X.y }}" data-z="{{ $X.z }}">
+  <div class="alpha">
+    <a href="/horospherical/{{ $X.name }}">{{ (safeHTML (string $X.html)) }}</a>
+
+    <div class="information">
+      \begin{align*}
+        d&={{ (index $X.invariants "dimension") }} \\
+        i&={{ (index $X.invariants "index") }} \\
+        \chi&={{ (index $X.invariants "Euler characteristic") }}
+      \end{align*}
+    </div>
+  </div>
+</td>

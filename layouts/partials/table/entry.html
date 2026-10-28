@@ -1,0 +1,14 @@
+{{- $G := .G -}}
+<td class="entry" data-type="{{ (partial "components/type.html" (dict "G" $G)) }}" {{ (safeHTMLAttr (string (partial "components/data.html" (dict "G" $G)))) }} data-label="{{ (index hugo.Data.catalog.types $G.type).T }}{{ (index hugo.Data.catalog.types $G.type).n }}-{{ $G.k }}">
+  <div class="alpha">
+    <a href="/{{ (index hugo.Data.catalog.types $G.type).T }}{{ (index hugo.Data.catalog.types $G.type).n }}/{{ $G.k }}">{{ (safeHTML (string $G.html)) }}</a>
+
+    <div class="information">
+      \begin{align*}
+        d&={{ (index $G.invariants "dimension") }} \\
+        i&={{ (index $G.invariants "index") }} \\
+        \chi&={{ (index $G.invariants "Euler characteristic") }}
+      \end{align*}
+    </div>
+  </div>
+</td>

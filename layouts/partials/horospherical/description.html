@@ -1,0 +1,54 @@
+{{- $X := .X -}}
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th class="text-center">role</th>
+      <th class="text-center">dimension</th>
+      <th class="text-center">codimension</th>
+      <th class="text-center">index</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td class="text-right">
+        <a href="/{{ (strings.TrimPrefix "/" (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 1))).route) }}">$Z={{ (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 1))).latex }}$</a>
+        {{ (partial "components/dynkin.html" (dict "T" (index hugo.Data.catalog.types (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 1))).type).T "n" (index hugo.Data.catalog.types (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 1))).type).n "height" 20 "k" (slice (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 1))).k))) }}</dd>
+      </td>
+      <td class="text-center">unique closed $\mathrm{Aut}({{ $X.latex }})$-orbit</td>
+      <td class="text-center">{{ (index (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 1))).invariants "dimension") }}</td>
+      <td class="text-center">{{ (sub (int (index $X.invariants "dimension")) (int (index (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 1))).invariants "dimension"))) }}</td>
+      <td class="text-center">{{ (index (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 1))).invariants "index") }}</td>
+    </tr>
+
+    <tr>
+      <td class="text-right">
+        <a href="/{{ (strings.TrimPrefix "/" (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 0))).route) }}">$Y={{ (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 0))).latex }}$</a>
+        {{ (partial "components/dynkin.html" (dict "T" (index hugo.Data.catalog.types (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 0))).type).T "n" (index hugo.Data.catalog.types (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 0))).type).n "height" 20 "k" (slice (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 0))).k))) }}
+      </td>
+      <td class="text-center">other closed {{ (partial "components/adjoint-group.html" (dict "D" (index hugo.Data.catalog.types $X.type).type)) }}-orbit</td>
+      <td class="text-center">{{ (index (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 0))).invariants "dimension") }}</td>
+      <td class="text-center">{{ (sub (int (index $X.invariants "dimension")) (int (index (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 0))).invariants "dimension"))) }}</td>
+      <td class="text-center">{{ (index (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 0))).invariants "index") }}</td>
+    </tr>
+  </tbody>
+</table>
+
+{{ (partial "horospherical/blowup.html" (dict "X" $X "Y" (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 0))) "Z" (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 1))))) }}
+{{ (partial "horospherical/blowup.html" (dict "X" $X "Y" (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 1))) "Z" (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 0))))) }}
+
+<div class="text-left">
+  The exceptional divisor is the partial flag variety
+  {{ (partial "components/dynkin.html" (dict "T" (index hugo.Data.catalog.types $X.type).T "n" (index hugo.Data.catalog.types $X.type).n "height" 25 "k" (slice $X.y $X.z))) }}
+  <br>
+  <div class="ml-5 mt-3">
+  $
+    E_{ {{ (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 0))).latex }} }
+    \cong
+    E_{ {{ (index hugo.Data.catalog.records (printf "/%s" (index $X.orbits 1))).latex }} }
+    \cong
+    \mathrm{ {{ (index hugo.Data.catalog.types $X.type).T }} }_{ {{ (index hugo.Data.catalog.types $X.type).n }} } / \mathrm{P}_{ {{ $X.y }}, {{ $X.z }} }
+  $
+  </div>
+</div>

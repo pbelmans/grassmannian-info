@@ -1,0 +1,3 @@
+{{- $values := slice -}}
+{{- range .items -}}{{- $values = $values | append (index . $.key) -}}{{- end -}}
+{{- return $values -}}

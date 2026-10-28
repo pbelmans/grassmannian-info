@@ -1,0 +1,14 @@
+{{- $references := .references -}}
+{{- $summaries := .summaries -}}
+<ol class="bibliography">
+{{ $items1 := $references }}{{ range $i1, $ref := $items1 }}
+  <li id="reference-{{ $ref.key }}" data-topic="{{ $ref.topic }}">
+    <span class="reference-authors">{{ (strings.TrimRight "." $ref.authors) }}</span>.
+    <a href="{{ $ref.url }}"><cite>{{ $ref.title }}</cite></a>.
+    <span class="reference-venue">{{ $ref.venue }}{{ if (eq $ref.venue "Preprint") }} ({{ $ref.year }}){{ end }}</span>.
+    {{ if $ref.arxiv }}<a class="reference-identifier" href="https://arxiv.org/abs/{{ $ref.arxiv }}">arXiv:{{ $ref.arxiv }}</a>.{{ end }}
+    {{ if $ref.mr }}<a class="reference-identifier" href="https://mathscinet.ams.org/mathscinet-getitem?mr={{ $ref.mr }}">MR{{ $ref.mr }}</a>.{{ end }}
+    {{ if $summaries }}<div class="reference-summary">{{ $ref.summary }}</div>{{ end }}
+  </li>
+{{ end }}
+</ol>

@@ -1,0 +1,2 @@
+{{- $route := printf "/%s%d/%d" (index . 0) (int (index . 1)) (int (index . 2)) -}}
+{{- return (or (index hugo.Data.catalog.records $route) (index hugo.Data.catalog.extra $route)) -}}

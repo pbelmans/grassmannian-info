@@ -1,0 +1,19 @@
+{{- $references := .references -}}
+<h2>References</h2>
+<p>Chronological bibliography. Last updated on 28 October 2026.</p>
+
+<p><label for="reference-topic">Topic</label>
+<select id="reference-topic" class="ml-2">
+  <option value="">all topics</option>
+  {{ $items1 := (sort (uniq (partial "lib/pluck.html" (dict "items" $references "key" "topic")))) }}{{ range $i1, $topic := $items1 }}
+  <option>{{ $topic }}</option>
+  {{ end }}
+</select></p>
+{{ (partial "components/bibliography.html" (dict "references" $references "summaries" true)) }}
+<script>
+document.getElementById("reference-topic").addEventListener("change", function () {
+  document.querySelectorAll(".bibliography li").forEach(function (entry) {
+    entry.hidden = !!this.value && entry.dataset.topic !== this.value;
+  }, this);
+});
+</script>

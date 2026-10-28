@@ -1,0 +1,2 @@
+{{- $D := .D -}}
+{{ (safeHTML (string (replace (replace $D.lie "<sub>" "<tspan baseline-shift=\"sub\" style=\"font-size:70%\">") "</sub>" "</tspan>"))) }}

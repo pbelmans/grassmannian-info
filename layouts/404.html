@@ -3,6 +3,6 @@
   <h2>Page not found</h2>
   <p><a href="{{ site.Home.RelPermalink }}">Return to the periodic table.</a></p>
 </div>
-<script type="application/json" id="type-templates">{{ hugo.Data.catalog.type_templates | jsonify | safeJS }}</script>
+<script type="application/json" id="type-templates">{{ (partial "lib/type-templates.html" .) | jsonify | safeJS }}</script>
 <script src="{{ "static/dynkin-page.js" | relURL }}"></script>
 {{ end }}

@@ -10,3 +10,11 @@ target = "static/static"
 [[module.mounts]]
 source = "references/quantum-certificates.json"
 target = "static/references/quantum-certificates.json"
+
+[[module.mounts]]
+source = "references/catalog.json"
+target = "data/references.json"
+
+[[module.mounts]]
+source = "data"
+target = "data"

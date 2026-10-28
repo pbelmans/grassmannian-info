@@ -1,0 +1,3 @@
+{{- $key := .key -}}
+{{- $locator := .locator -}}
+<a class="citation" href="#reference-{{ $key }}">[{{ (index hugo.Data.references $key).label }}{{ if $locator }}, {{ $locator }}{{ end }}]</a>

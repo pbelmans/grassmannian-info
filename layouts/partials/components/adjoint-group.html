@@ -1,0 +1,8 @@
+{{- $D := .D -}}
+{{- $T := false -}}
+{{- $n := false -}}
+{{ $T = (substr $D 0 1) }}
+{{ $n = (int (substr $D 1)) }}
+
+
+{{ if (eq $T "A") }}$\mathrm{PGL}_{ {{ (add (int $n) 1) }} }${{ else if (eq $T "B") }}$\mathrm{SO}_{ {{ (add (int (mul 2 (int $n))) 1) }} }${{ else if (eq $T "C") }}$\mathrm{PSp}_{ {{ (mul 2 (int $n)) }} }${{ else if (eq $T "D") }}$\mathrm{PSO}_{ {{ (mul 2 (int $n)) }} }${{ else if (eq $T "E") }}adjoint group of type $\mathrm{E}_{ {{ $n }} }${{ else if (eq $T "F") }}$\mathrm{F}_4${{ else if (eq $T "G") }}$\mathrm{G}_2${{ end }}

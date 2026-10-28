@@ -1,0 +1,2 @@
+{{- $G := .G -}}
+data-dimension="{{ (index $G.invariants "dimension") }}" data-index="{{ (index $G.invariants "index") }}" data-euler="{{ (index $G.invariants "Euler characteristic") }}" data-name="{{ (safeHTML (string $G.heading)) }}" data-exceptional="{{ if $G.exceptional }}known{{ else }}unknown{{ end }}" data-small="{{ if (eq $G.small_quantum.status "semisimple") }}semisimple{{ else if (eq $G.small_quantum.status "non-semisimple") }}non-semisimple{{ else }}unknown{{ end }}" data-big="{{ if $G.big_quantum }}semisimple{{ else }}unknown{{ end }}" data-fano="{{ $G.fano }}"

@@ -1,0 +1,2 @@
+{{- $G := .G -}}
+{{ (partial "freudenthal/variety-template.html" (dict "latex" $G.latex "embedding" (index $G.invariants "embedding dimension") "dimension" (index $G.invariants "dimension") "index" (index $G.invariants "index") "rank" (index $G.invariants "Euler characteristic") "link" (strings.TrimPrefix "/" $G.route))) }}

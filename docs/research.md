@@ -11,7 +11,7 @@ summary. The mathematical hypotheses and applicability rules live in
 Run the page, citation, and mathematical consistency checks with:
 
 ```shell
-.venv/bin/python -m unittest discover -s tests -v
+python3 -m unittest discover -s tests -v
 ```
 
 The additional small-quantum semisimplicity cases have exact characteristic

@@ -1,0 +1,23 @@
+{{- $G := .G -}}
+<dl class="row">
+  <dt class="col-3 text-right">dimension
+  <dd class="col-9">{{ (index $G.invariants "dimension") }}
+
+  <dt class="col-3 text-right">index
+  <dd class="col-9">{{ (index $G.invariants "index") }}
+
+  <dt class="col-3 text-right">Euler characteristic
+  <dd class="col-9">{{ (index $G.invariants "Euler characteristic") }}
+
+  <dt class="d-lg-none col-3 text-right">Betti numbers
+  <dd class="d-lg-none col-9">{{ (partial "components/betti-horizontal.html" (dict "X" $G)) }}
+
+  <dt class="col-3 text-right">$\mathrm{Aut}^0({{ $G.latex }})$
+  <dd class="col-9">{{ (partial "components/adjoint-group.html" (dict "D" (index hugo.Data.catalog.types $G.automorphisms.type).type)) }}
+
+  <dt class="col-3 text-right">$\pi_0\mathrm{Aut}({{ $G.latex }})$
+  <dd class="col-9">${{ $G.automorphisms.components }}$
+
+  <dt class="col-3 text-right">$\dim\mathrm{Aut}^0({{ $G.latex }})$
+  <dd class="col-9">{{ (index (index hugo.Data.catalog.types $G.automorphisms.type).invariants "dimension") }}
+</dl>

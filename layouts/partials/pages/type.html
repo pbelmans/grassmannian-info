@@ -1,0 +1,54 @@
+{{- $D := .D -}}
+<script>
+  MathJax.Hub.Config({
+    displayAlign: "left",
+    "HTML-CSS" : {
+      linebreaks : {
+        automatic: true,
+      }
+    }
+  });
+</script>
+
+<header class="text-center">
+  <h2 class="mt-3">Dynkin type $\mathrm{ {{ $D.T }} }_{ {{ $D.n }} }$</h2>
+
+  <div class="row">
+    <div class="col-2">
+      {{ if (or (or (or (and (eq $D.T "A") (ge (int $D.n) 2)) (and (in (slice "B" "C") $D.T) (ge (int $D.n) 3))) (and (eq $D.T "D") (ge (int $D.n) 5))) (and (eq $D.T "E") (in (slice 7 8) $D.n))) }}
+        <a class="h4" href="/{{ $D.T }}{{ $D.previous_rank }}">&laquo;$\mathrm{ {{ $D.T }} }_{ {{ $D.previous_rank }} }$</a>
+      {{ end }}
+    </div>
+
+    <div class="col-8">
+      {{ (partial "components/dynkin.html" (dict "T" $D.T "n" $D.n "height" 100 "k" (slice))) }}
+    </div>
+
+    <div class="col-2">
+      {{ if (or (in (slice "A" "B" "C" "D") $D.T) (and (eq $D.T "E") (in (slice 6 7) $D.n))) }}
+        <a class="h4" href="/{{ $D.T }}{{ $D.next_rank }}">$\mathrm{ {{ $D.T }} }_{ {{ $D.next_rank }} }$&raquo;</a>
+      {{ end }}
+    </div>
+  </div>
+</header>
+
+<div class="row" id="type-information">
+  <div class="col-12">
+    {{ (partial "components/component.html" (dict "title" "Basic information" "content" (partial "type/basic.html" (dict "D" $D)) "id" "")) }}
+
+    {{ (partial "components/component.html" (dict "title" "Description of the root system" "content" (partial "type/roots.html" (dict "D" $D)) "id" "")) }}
+
+    {{ (partial "components/component.html" (dict "title" "Cartan matrix" "content" (partial "type/cartan.html" (dict "D" $D)) "id" "")) }}
+  </div>
+</div>
+
+<script type="text/javascript">
+  $("header circle").each(function() {
+    // needs to be done in plain JS, not jQuery
+    var a = document.createElementNS(this.namespaceURI, "a");
+
+    this.parentNode.insertBefore(a, this);
+    a.appendChild(this);
+    a.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "/" + $(this).data("label").replace("-", "/"));
+  });
+</script>

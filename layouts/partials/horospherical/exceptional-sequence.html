@@ -1,0 +1,3 @@
+{{- $X := .X -}}
+{{- $sequence := .sequence -}}
+<li>{{ (safeHTML (string (index $sequence 0))) }} constructed a full exceptional sequence in {{ (index $sequence 1) }}, see {{ (partial "components/reference-link.html" (dict "reference" (index $sequence 2))) }}.

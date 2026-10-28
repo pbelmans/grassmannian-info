@@ -1,0 +1,3 @@
+{{- $refs := slice -}}
+{{- range . -}}{{- $refs = $refs | append (merge (index hugo.Data.references .) (dict "key" .)) -}}{{- end -}}
+{{- return $refs -}}

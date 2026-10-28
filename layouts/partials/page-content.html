@@ -1,0 +1,20 @@
+{{- $route := .Params.record_route | default "/" -}}
+{{- $record := index hugo.Data.catalog.records $route -}}
+{{- $html := "" -}}
+{{- if $record -}}
+  {{- if eq $record.family "Dynkin type" -}}
+    {{- $html = partial "pages/type.html" (dict "D" $record) -}}
+  {{- else if eq $record.family "Grassmannian" -}}
+    {{- $html = partial "pages/grassmannian.html" (dict "G" $record) -}}
+  {{- else -}}
+    {{- $html = partial "pages/horospherical.html" (dict "X" $record) -}}
+  {{- end -}}
+{{- else -}}
+  {{- $page := strings.TrimPrefix "/" $route -}}
+  {{- if eq $page "" -}}{{- $page = "table" -}}{{- end -}}
+  {{- if eq $page "horospherical" -}}{{- $page = "horospherical-table" -}}{{- end -}}
+  {{- $keys := hugo.Data.catalog.reference_order -}}
+  {{- if eq $page "projective-duality" -}}{{- $keys = slice "magic-square" "tevelev" "kuznetsov-hyperplanes" -}}{{- end -}}
+  {{- $html = partial (printf "pages/%s.html" $page) (dict "references" (partial "lib/references.html" $keys)) -}}
+{{- end -}}
+{{- return (partial "site-content.html" (string $html)) -}}

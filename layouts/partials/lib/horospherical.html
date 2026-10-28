@@ -1,0 +1,2 @@
+{{- $key := printf "%s-%d-%d-%d" (index . 0) (int (index . 1)) (int (index . 2)) (int (index . 3)) -}}
+{{- return (index hugo.Data.catalog.records (index hugo.Data.catalog.horospherical_types $key)) -}}

@@ -1,0 +1,2 @@
+{{- $tuples := .tuples -}}
+[{{ $items1 := $tuples }}{{ range $i1, $tuple := $items1 }}"{{ (index $tuple 0) }}-{{ (index $tuple 1) }}"{{ if (not (eq $i1 (sub (len $items1) 1))) }}, {{ end }}{{ end }}]

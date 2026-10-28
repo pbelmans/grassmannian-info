@@ -1,0 +1,8 @@
+{{- $start := 0 -}}
+{{- $end := int (index . 0) -}}
+{{- $step := 1 -}}
+{{- if ge (len .) 2 -}}{{- $start = int (index . 0) -}}{{- $end = int (index . 1) -}}{{- end -}}
+{{- if ge (len .) 3 -}}{{- $step = int (index . 2) -}}{{- end -}}
+{{- $result := slice -}}
+{{- if gt $end $start -}}{{- $result = seq $start $step (sub $end 1) -}}{{- end -}}
+{{- return $result -}}

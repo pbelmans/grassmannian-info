@@ -1,0 +1,12 @@
+{{- $X := .X -}}
+{{- $Y := .Y -}}
+{{- $Z := .Z -}}
+\begin{equation}
+\xymatrix{
+E_{ {{ $Z.latex }} } \ar@{^{(}->}[r] \ar@{->>}[d] &
+\operatorname{Bl}_{ {{ $Z.latex }} } {{ $X.latex }} \ar@{->>}[r]^(.6){\mathbb{P}^{ {{ (sub (int (index $X.invariants "dimension")) (int (index $Y.invariants "dimension"))) }} }} \ar@{->>}[d] &
+\href{/{{ (strings.TrimPrefix "/" $Y.route) }} }{ {{ $Y.latex }} } \\
+\href{/{{ (strings.TrimPrefix "/" $Z.route) }} }{ {{ $Z.latex }} } \ar[r] &
+{{ $X.latex }}
+}
+\end{equation}

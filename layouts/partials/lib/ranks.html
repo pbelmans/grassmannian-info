@@ -1,0 +1,3 @@
+{{- $pairs := slice -}}
+{{- range $key, $value := . -}}{{- $pairs = $pairs | append (dict "Key" (int $key) "Value" $value) -}}{{- end -}}
+{{- return (sort $pairs "Key") -}}

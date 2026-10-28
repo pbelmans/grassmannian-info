@@ -1,6 +1,6 @@
 """Export the existing mathematical models without porting their arithmetic.
 
-Jinja renders at build time; the deployed website is static.
+Hugo renders the exported data; Python performs the mathematical computations.
 """
 
 import json
@@ -11,19 +11,19 @@ from time import perf_counter
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from scripts.geometry import Dynkin, Grassmannian, data, horospherical_varieties
+from scripts.geometry import Dynkin, Grassmannian, data, grassmannians, horospherical_varieties
 from scripts import literature
-from scripts.presentation import render_pages, type_templates
 
 
 def exact_json(value):
-    """All exact integers travel as decimal strings; plot floats stay numeric."""
+    """Keep exact invariants as strings; small node indices and plots stay numeric."""
     if isinstance(value, bool) or value is None:
         return value
     if isinstance(value, int):
         return str(value)
     if isinstance(value, dict):
-        return {key: exact_json(item) for key, item in value.items()}
+        return {key: item if key in ("n", "k", "y", "z") and isinstance(item, int) else exact_json(item)
+                for key, item in value.items()}
     if isinstance(value, (list, tuple)):
         return [exact_json(item) for item in value]
     return value
@@ -32,6 +32,7 @@ def exact_json(value):
 def dynkin_record(D):
     return {
         "route": f"/{D.D}", "kind": "section", "family": "Dynkin type",
+        "T": D.T, "n": D.n, "next_rank": D.n + 1, "previous_rank": D.n - 1, "type": D.D, "lie": D.lie(),
         "invariants": {
             "dimension": D.dimension(), "rank": D.n,
             "Weyl group order": D.weyl_group_cardinality(),
@@ -39,6 +40,7 @@ def dynkin_record(D):
             "exponents": D.exponents(), "roots": D.number_of_roots(),
         },
         "cartan": D.cartan_matrix(),
+        "positive_roots": D.number_of_positive_roots(),
     }
 
 
@@ -58,7 +60,8 @@ def grassmannian_record(G):
     record = common_record(G)
     record.update({
         "route": "/" + G.url(), "family": "Grassmannian",
-        "name": G.plaintext(), "latex": G.latex(),
+        "name": G.plaintext(), "heading": G.name(), "html": G.html(), "latex": G.latex(),
+        "type": G.D.D, "k": G.k,
         "levi": [D.D for D in G.L],
         "automorphisms": {
             "type": G.Aut().D, "dimension": G.Aut().dimension(),
@@ -89,7 +92,8 @@ def horospherical_record(X):
     record.update({
         "route": "/horospherical/" + X.plaintext(),
         "family": "Horospherical variety", "name": X.plaintext(),
-        "latex": X.latex(), "orbits": [X.Y.url(), X.Z.url()],
+        "latex": X.latex(), "heading": X.name(), "html": X.html(),
+        "type": X.D.D, "y": X.y, "z": X.z, "orbits": [X.Y.url(), X.Z.url()],
         "codimensions": [X.codimY(), X.codimZ()],
         "small_quantum": {"status": small},
         "big_quantum": X.big_qh_semisimple(),
@@ -117,10 +121,23 @@ def main():
     exported = exact_json(list(records()))
     target = ROOT / "data"
     target.mkdir(exist_ok=True)
+    type_names = {row["type"] for row in exported if row["family"] == "Dynkin type"}
+    type_names.update(row["automorphisms"]["type"] for row in exported if row["family"] == "Grassmannian")
+    types = {D: dynkin_record(Dynkin(D[0], int(D[1:]))) for D in sorted(type_names)}
+    # Low-rank presentations used by Freudenthal and the table's isomorphisms.
+    extra = {}
+    for T, n, k in (("B", 1, 1), ("C", 1, 1), ("D", 1, 1), ("D", 2, 1), ("D", 2, 2)):
+        G = Grassmannian(T, n, k)
+        row = {"isomorphisms": G.isomorphisms(), "route": "/" + G.url()}
+        if (T, n) != ("D", 1):
+            row.update(latex=G.latex(), invariants={"dimension": G.dimension(), "index": G.index(), "Euler characteristic": G.rank()})
+        extra[row["route"]] = row
     payload = {"records": {row["route"]: row for row in exported},
-               "pages": render_pages(exported),
-               "type_templates": type_templates(),
-               "references": exact_json(literature.ordered_references(literature.REFERENCES))}
+               "types": exact_json(types), "extra": exact_json(extra),
+               "ranks": {T: {str(n): sorted(parabolics) for n, parabolics in ranks.items()}
+                         for T, ranks in grassmannians.items()},
+               "horospherical_types": {f"{X.D.T}-{X.D.n}-{X.y}-{X.z}": "/horospherical/" + X.plaintext() for X in horospherical_varieties.values()},
+               "reference_order": [ref["key"] for ref in literature.ordered_references(literature.REFERENCES)]}
     path = target / "catalog.json"
     path.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":"), allow_nan=False) + "\n")
     counts = {family: sum(row["family"] == family for row in exported)

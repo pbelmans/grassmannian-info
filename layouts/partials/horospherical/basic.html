@@ -1,0 +1,41 @@
+{{- $X := .X -}}
+<dl class="row">
+  <dt class="col-3 text-right">dimension
+  <dd class="col-9">{{ (index $X.invariants "dimension") }}
+
+  <dt class="col-3 text-right">index
+  <dd class="col-9">{{ (index $X.invariants "index") }}
+
+  <dt class="col-3 text-right">Euler characteristic
+  <dd class="col-9">{{ (index $X.invariants "Euler characteristic") }}
+
+  <dt class="d-lg-none col-3 text-right">Betti numbers
+  <dd class="d-lg-none col-9">{{ (partial "components/betti-horizontal.html" (dict "X" $X)) }}
+
+  <dt class="col-3 text-right">$G$
+  <dd class="col-9">{{ (partial "components/adjoint-group.html" (dict "D" (index hugo.Data.catalog.types $X.type).type)) }}
+
+  <dt class="col-3 text-right">$\dim G$
+  <dd class="col-9">{{ (index (index hugo.Data.catalog.types $X.type).invariants "roots") }}
+
+  <dt class="col-3 text-right">$\mathrm{Aut}^0({{ $X.latex }})$
+  <dd class="col-9">$G\ltimes U$
+
+  <dt class="col-3 text-right">$\dim\mathrm{Aut}^0({{ $X.latex }})$
+  <dd class="col-9">{{ (add (int (index (index hugo.Data.catalog.types $X.type).invariants "roots")) (int (index hugo.Data.catalog.types $X.type).positive_roots)) }}
+</dl>
+
+{{ if (and (eq (index hugo.Data.catalog.types $X.type).T "B") (eq (int $X.y) 1)) }}
+<hr>
+<dl class="row">
+  <dt class="col-3 text-right">Geometric description
+  <dd class="col-9">hyperplane section of <a href="/D5/4">$\operatorname{OGr}_+(5,10)$</a>.
+</dl>
+{{ end }}
+{{ if (eq (index hugo.Data.catalog.types $X.type).T "C") }}
+<hr>
+<dl class="row">
+  <dt class="col-3 text-right">Geometric description
+  <dd class="col-9">zero locus of $\bigwedge^2\mathcal{U}^\vee$ in <a href="/A{{ (add (int (mul 2 (int (index hugo.Data.catalog.types $X.type).n))) 1) }}/{{ $X.y }}">$\operatorname{Gr}({{ $X.y }},{{ (add (int (mul 2 (int (index hugo.Data.catalog.types $X.type).n))) 1) }})$</a>.
+</dl>
+{{ end }}

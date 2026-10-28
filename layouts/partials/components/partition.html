@@ -1,0 +1,26 @@
+{{- $lefschetz := .lefschetz -}}
+{{- $embedding := .embedding -}}
+{{- $identifier := .identifier -}}
+{{- $columns := false -}}
+{{- $support := false -}}
+{{ $support = $lefschetz.support }}
+{{ $columns = (cond $embedding $embedding (len $support)) }}
+<div class="lefschetz-diagram">
+<svg class="lefschetz" role="img" aria-label="Lefschetz block sizes: {{ (delimit $support ", ") }}"
+     data-support="{{ (delimit $support ",") }}" data-columns="{{ $columns }}"
+     style="width: {{ (partial "lib/min.html" (slice (mul (int $columns) 40) 800)) }}px"
+     viewBox="-1 -1 {{ (add (int (mul (int $columns) 20)) 2) }} {{ (add (int (mul (int (index $support 0)) 20)) 2) }}">
+  <title>Lefschetz block sizes: {{ (delimit $support ", ") }}</title>
+  <defs>
+
+    <pattern id="{{ $identifier }}-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 H 0 V 20" fill="none" stroke="black" stroke-width="1" />
+    </pattern>
+  </defs>
+  <rect width="{{ (mul (int $columns) 20) }}" height="{{ (mul (int (index $support 0)) 20) }}" class="block" />
+  {{ $items1 := $support }}{{ range $i1, $height := $items1 }}
+    <rect x="{{ (mul (int $i1) 20) }}" y="0" width="20" height="{{ (mul (int $height) 20) }}" class="block original" />
+  {{ end }}
+  <rect width="{{ (mul (int $columns) 20) }}" height="{{ (mul (int (index $support 0)) 20) }}" fill="url(#{{ $identifier }}-grid)" stroke="black" stroke-width="1" />
+</svg>
+</div>
