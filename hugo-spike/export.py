@@ -101,7 +101,9 @@ def horospherical_record(X):
 
 
 def records():
-    types = sorted({row["type"] for row in data}, key=lambda D: (D[0], int(D[1:])))
+    # Vogel also links to low-rank types and A21 outside the Grassmannian data.
+    types = sorted({row["type"] for row in data} | {"A21", "B1", "C1", "D2"},
+                   key=lambda D: (D[0], int(D[1:])))
     for D in types:
         yield dynkin_record(Dynkin(D[0], int(D[1:])))
     for row in data:

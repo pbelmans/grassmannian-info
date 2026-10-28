@@ -16,6 +16,6 @@
   ) }}
 {{ end }}
 {{ .AddPage (dict "path" "horospherical" "kind" "section" "title" "Horospherical varieties" "layout" "record" "params" (dict "record_route" "/horospherical")) }}
-{{ range $route, $title := dict "projective-duality" "Projective duality" "freudenthal" "The Freudenthal magic square" "references" "References" "about" "About" "explained" "Explained" }}
+{{ range $route, $title := dict "projective-duality" "Projective duality" "freudenthal" "The Freudenthal magic square" "vogel" "The Vogel plane" "references" "References" "about" "About" "explained" "Explained" }}
   {{ $.AddPage (dict "path" $route "title" $title "layout" "record" "params" (dict "record_route" (printf "/%s" $route))) }}
 {{ end }}

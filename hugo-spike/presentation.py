@@ -35,6 +35,7 @@ def page_specs(model_records):
     yield "/", "table.html", {"grassmannians": grassmannians}
     yield "/horospherical", "horospherical.table.html", {"horospherical": horospherical_varieties}
     yield "/freudenthal", "freudenthal.html", {}
+    yield "/vogel", "vogel.html", {}
     yield "/about", "about.html", {}
     yield "/explained", "explained.html", {}
     yield "/projective-duality", "projective-duality.html", {"grassmannians": grassmannians,

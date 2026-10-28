@@ -99,7 +99,7 @@ def main():
                     longest = max(longest, len(str(number)))
                     large += abs(number) > 2**53 - 1
         count += 1
-    for route in ("/", "/horospherical", "/freudenthal", "/projective-duality", "/references", "/about", "/explained"):
+    for route in ("/", "/horospherical", "/freudenthal", "/vogel", "/projective-duality", "/references", "/about", "/explained"):
         compare(route, public, client)
         count += 1
     for alias in ("B1/1", "C1/1"):
@@ -107,8 +107,13 @@ def main():
         assert 'http-equiv="refresh"' in source and "/A1/1/" in source
     certificates = "references/quantum-certificates.json"
     assert (public / certificates).read_bytes() == (Path(__file__).parents[1] / certificates).read_bytes()
+    vogel = (public / "vogel/index.html").read_text()
+    point_links = set(re.findall(r'xlink:href="(/[^"#]+)"', vogel))
+    assert point_links
+    for route in point_links:
+        assert (public / route.lstrip("/") / "index.html").is_file(), (route, "missing Vogel point target")
     print(f"Verified {count} complete page bodies against Flask, including diagrams, controls, scripts, and citations.")
-    print(f"Checked model JSON, aliases, and the quantum-certificate download.")
+    print(f"Checked model JSON, aliases, {len(point_links)} Vogel point links, and the quantum-certificate download.")
     print(f"Longest integer: {longest} digits; {large} invariant values exceed 2**53 - 1.")
     verify_dynamic_types()
 

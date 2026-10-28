@@ -9,7 +9,7 @@ omitted substantial parts of the site and have been replaced. This branch now
 uses the existing Jinja content templates during the export, and Hugo supplies
 the document shell, routes, assets, aliases, and output. **This is a hybrid build,
 not a completed conversion to native Hugo templates.** No Flask server runs in
-production for the prebuilt pages. Vogel work is outside this experiment.
+production for the prebuilt pages.
 
 ## Build and verify
 
@@ -37,18 +37,19 @@ Hugo 0.161.1. The generated catalogue, including page content, is about 32 MB.
 | Home page | Original periodic table, classifications, colours, information toggle, hover panel, and cross-highlighting |
 | 862 Grassmannians | Marked clickable Dynkin diagrams, alternative realisations, vertical Betti sidebar, automorphisms, projective geometry and duality, exceptional constructions, quantum spectra and multiplicities, visual Lefschetz grids, HPD, higher Fano properties, and citations |
 | 191 horospherical varieties | Original overview and colour controls, orbit data, marked diagrams, blowups and projections, exceptional collections, quantum spectra, and HPD boxes |
-| 81 prebuilt root systems | Original root descriptions, Weyl data, Cartan matrices, diagrams, and rank navigation |
+| 85 prebuilt root systems | Original root descriptions, Weyl data, Cartan matrices, diagrams, and rank navigation; all Vogel point targets included |
 | Freudenthal | Both squares, marked diagrams, Lie algebras, all five tabs, and the information toggle |
-| Bibliography | Overview, chronological entries, topic filter, published links, arXiv and MR identifiers, and summaries |
+| Vogel plane | Current Flask template, diagram, point links, invariant tooltips, and references |
+| Bibliography | Chronological entries, topic filter, published links, arXiv and MR identifiers, and summaries |
 | Other pages and assets | About, explanation, site navigation, website icons, MathJax/Xy-pic, and quantum-certificate download |
 | Legacy aliases | B1/1 and C1/1 redirect to A1/1 |
 
-`verify.py` compares all 1,141 generated page bodies with independent Flask
+`verify.py` compares all 1,146 generated page bodies with independent Flask
 responses, including markup, text, SVG, scripts, and citation targets. This
 would reject the earlier abbreviated layouts. It also round-trips all model
-records, checks the aliases and certificate bytes, and compares browser
+records, checks all Vogel point links, aliases and certificate bytes, and compares browser
 root-system calculations with Python in 88 cases through rank 100. Exact
-integers remain strings across JSON/Hugo: 10,427 invariant entries exceed
+integers remain strings across JSON/Hugo: 10,428 invariant entries exceed
 `2**53 - 1`, and the largest has 255 digits.
 
 Safari checks cover the C6/3 diagram, vertical Betti numbers, spectrum and HPD
@@ -59,7 +60,7 @@ formulas were corrected in a separate commit, also applied to Flask.
 ## Unbounded root-system URLs
 
 Flask generates classical root-system pages beyond the stored catalogue, such
-as `/A21`. A finite export cannot enumerate all such URLs. The static fallback
+as `/A22`. A finite export cannot enumerate all such URLs. The static fallback
 uses the original root-description templates and a small browser calculation
 with `BigInt` for Weyl orders. It retains diagrams, Cartan matrices and rank
 navigation. Ordinary catalogue pages do not need this calculation.
