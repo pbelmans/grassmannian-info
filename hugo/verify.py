@@ -83,7 +83,7 @@ def verify_dynamic_types():
              for n in (*range(minimum, 22), 37, 100)]
     script = """
       const fs = require('node:fs');
-      const {model} = require('./hugo-spike/static/static/dynkin-page.js');
+      const {model} = require('./hugo/static/static/dynkin-page.js');
       const cases = JSON.parse(fs.readFileSync(0, 'utf8'));
       process.stdout.write(JSON.stringify(cases.map(([T, n]) => model(T, n))));
     """

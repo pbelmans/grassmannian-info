@@ -16,10 +16,10 @@ production for the prebuilt pages.
 From the repository root, with the Python dependencies and Hugo installed:
 
 ```sh
-.venv/bin/python hugo-spike/export.py
-hugo --source hugo-spike
-.venv/bin/python hugo-spike/verify.py
-hugo server --source hugo-spike --port 1317
+.venv/bin/python hugo/export.py
+hugo --source hugo
+.venv/bin/python hugo/verify.py
+hugo server --source hugo --port 1317
 ```
 
 In a separate worktree, use the main checkout's Python executable if needed.
@@ -91,8 +91,8 @@ No Python or Sage server runs on GitHub Pages.
 To check a project-path build locally:
 
 ```sh
-hugo --source hugo-spike --baseURL https://pbelmans.github.io/grassmannian-info/
-.venv/bin/python hugo-spike/verify.py --base-url https://pbelmans.github.io/grassmannian-info/
+hugo --source hugo --baseURL https://pbelmans.github.io/grassmannian-info/
+.venv/bin/python hugo/verify.py --base-url https://pbelmans.github.io/grassmannian-info/
 ```
 
 ## Finishing the native Hugo conversion

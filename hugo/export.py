@@ -1,7 +1,6 @@
 """Export the existing mathematical models without porting their arithmetic.
 
-This prototype imports application.py, so Flask is a build dependency for now.
-A production migration should first move the models to a Flask-free module.
+Flask/Jinja render at build time; the deployed website is static.
 """
 
 import json

@@ -38,11 +38,11 @@ The legacy Flask deployment is available with
 ```shell
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python hugo-spike/export.py
-hugo server --source hugo-spike --port 1317
+.venv/bin/python hugo/export.py
+hugo server --source hugo --port 1317
 ```
 
-See [the Hugo build notes](hugo-spike/README.md) for verification and browser
+See [the Hugo build notes](hugo/README.md) for verification and browser
 fallback details. Regenerate the export after changing Python, Jinja or data.
 
 The compiled stylesheet is included for deployment. After changing Sass, rebuild it with:
