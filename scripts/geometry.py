@@ -389,6 +389,7 @@ class Grassmannian:
         if self.D.T == "C":
             if self.k == 1: result.extend([("A" + str(2*self.D.n - 1), 1), ("A" + str(2*self.D.n - 1), 2*self.D.n - 1)])
             if self.D.n == 2 and self.k == 1: result.extend([("B2", 2), ("D3", 2), ("D3", 3)])
+            if self.D.n == 2 and self.k == 2: result.append(("B2", 1),)
         if self.D.T == "D":
             if self.D.n == 3 and self.k in [2, 3]: result.extend([("A3", 1), ("A3", 3), ("C2", 1)])
             if self.D.n == 3 and self.k == 1: result.append(("A3", 2),)
